@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="VirtualMuseum" Class="VirtualMuseumDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=WIN2012TEMPLATE;Initial Catalog=VirtualMuseum;Integrated Security=False;User ID=VirtualMuseum" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="VirtualMuseumConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Artists" Member="Artists">
+    <Type Name="Artist">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="UID" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Artist_Artwork" Member="Artworks" ThisKey="ID" OtherKey="ArtistID" Type="Artwork" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Artworks" Member="Artworks">
+    <Type Name="Artwork">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ArtistID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Artwork_ArtworkRepresentation" Member="ArtworkRepresentations" ThisKey="ID" OtherKey="ArtworkID" Type="ArtworkRepresentation" />
+      <Association Name="Artwork_UsersXArtwork" Member="UsersXArtworks" ThisKey="ID" OtherKey="ArtworkID" Type="UsersXArtwork" />
+      <Association Name="Artist_Artwork" Member="Artist" ThisKey="ArtistID" OtherKey="ID" Type="Artist" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArtworkKeys" Member="ArtworkKeys">
+    <Type Name="ArtworkKey">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ArtworkKey_ArtworkMetadata" Member="ArtworkMetadatas" ThisKey="ID" OtherKey="KeyID" Type="ArtworkMetadata" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArtworkMetadata" Member="ArtworkMetadatas">
+    <Type Name="ArtworkMetadata">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArtworkID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="KeyID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ArtworkMetadata_ArtworkMetadata" Member="ArtworkMetadata2" ThisKey="ID" OtherKey="ID" Type="ArtworkMetadata" Cardinality="One" />
+      <Association Name="ArtworkKey_ArtworkMetadata" Member="ArtworkKey" ThisKey="KeyID" OtherKey="ID" Type="ArtworkKey" IsForeignKey="true" />
+      <Association Name="ArtworkMetadata_ArtworkMetadata" Member="ArtworkMetadata1" ThisKey="ID" OtherKey="ID" Type="ArtworkMetadata" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArtworkRepresentations" Member="ArtworkRepresentations">
+    <Type Name="ArtworkRepresentation">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArtworkID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Size" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Data" Type="System.Data.Linq.Binary" DbType="Image NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="Artwork_ArtworkRepresentation" Member="Artwork" ThisKey="ArtworkID" OtherKey="ID" Type="Artwork" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UsersXArtworks" Member="UsersXArtworks">
+    <Type Name="UsersXArtwork">
+      <Column Name="UID" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ArtworkID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Artwork_UsersXArtwork" Member="Artwork" ThisKey="ArtworkID" OtherKey="ID" Type="Artwork" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
