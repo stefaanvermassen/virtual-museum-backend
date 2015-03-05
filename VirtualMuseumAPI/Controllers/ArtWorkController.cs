@@ -8,12 +8,16 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using VirtualMuseumAPI.Models;
+using Microsoft.AspNet.Identity;
 
 namespace VirtualMuseumAPI.Controllers
 {
     //[Authorize]
     public class ArtWorkController : ApiController
     {
+
+     
         // GET api/ArtWork
         public IEnumerable<string> Get()
         {
@@ -33,17 +37,38 @@ namespace VirtualMuseumAPI.Controllers
         {
             if (Request.Content.IsMimeMultipartContent())
             {
-                string uploadPath = HttpContext.Current.Server.MapPath("~");
-
-                ArtWorkStreamProvider streamProvider = new ArtWorkStreamProvider(uploadPath);
-
-                await Request.Content.ReadAsMultipartAsync(streamProvider);
+                var provider = new MultipartMemoryStreamProvider();
+                await Request.Content.ReadAsMultipartAsync(provider);
 
                 List<string> messages = new List<string>();
-                foreach (var file in streamProvider.FileData)
+                foreach (var file in provider.Contents)
                 {
-                    FileInfo fi = new FileInfo(file.LocalFileName);
-                    messages.Add("File uploaded as " + fi.FullName + " (" + fi.Length + " bytes)");
+                    var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
+                    var buffer = await file.ReadAsByteArrayAsync();
+                    using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
+                    {
+                        Artwork artwork = new Artwork
+                        {
+                            ArtistID = 1,
+                            name = "test",
+                            ModiBy = "01732c65-2af1-44a4-93ae-1200745678ae",
+                            ModiDate = DateTime.Now
+                        };
+                        dc.Artworks.InsertOnSubmit(artwork);
+                        dc.SubmitChanges();
+                        ArtworkRepresentation representation = new ArtworkRepresentation
+                        {
+                            ArtworkID = artwork.ID,
+                            DataGUID = Guid.NewGuid(),
+                            Data  = new System.Data.Linq.Binary(buffer),
+                            Size = 1
+                        };
+                        dc.ArtworkRepresentations.InsertOnSubmit(representation);
+                        dc.SubmitChanges();
+                    }         
+
+                    messages.Add("File uploaded");
+
                 }
 
                 return messages;
@@ -65,23 +90,6 @@ namespace VirtualMuseumAPI.Controllers
         {
         }
 
-        public class ArtWorkStreamProvider : MultipartFormDataStreamProvider
-        {
-            public ArtWorkStreamProvider(string uploadPath)
-                : base(uploadPath)
-            {
-
-            }
-
-            public override string GetLocalFileName(HttpContentHeaders headers)
-            {
-                string fileName = headers.ContentDisposition.FileName;
-                if (string.IsNullOrWhiteSpace(fileName))
-                {
-                    fileName = Guid.NewGuid().ToString() + ".data";
-                }
-                return fileName.Replace("\"", string.Empty);
-            }
-        }
+        
     }
 }
