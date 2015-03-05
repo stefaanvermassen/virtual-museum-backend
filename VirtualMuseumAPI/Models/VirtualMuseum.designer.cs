@@ -1040,6 +1040,8 @@ namespace VirtualMuseumAPI.Models
 		
 		private int _Size;
 		
+		private System.Guid _DataGUID;
+		
 		private System.Data.Linq.Binary _Data;
 		
 		private EntityRef<Artwork> _Artwork;
@@ -1054,6 +1056,8 @@ namespace VirtualMuseumAPI.Models
     partial void OnArtworkIDChanged();
     partial void OnSizeChanging(int value);
     partial void OnSizeChanged();
+    partial void OnDataGUIDChanging(System.Guid value);
+    partial void OnDataGUIDChanged();
     partial void OnDataChanging(System.Data.Linq.Binary value);
     partial void OnDataChanged();
     #endregion
@@ -1128,7 +1132,27 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Data", DbType="Image NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DataGUID", DbType="UniqueIdentifier NOT NULL")]
+		public System.Guid DataGUID
+		{
+			get
+			{
+				return this._DataGUID;
+			}
+			set
+			{
+				if ((this._DataGUID != value))
+				{
+					this.OnDataGUIDChanging(value);
+					this.SendPropertyChanging();
+					this._DataGUID = value;
+					this.SendPropertyChanged("DataGUID");
+					this.OnDataGUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Data", DbType="VarBinary(MAX)", UpdateCheck=UpdateCheck.Never)]
 		public System.Data.Linq.Binary Data
 		{
 			get

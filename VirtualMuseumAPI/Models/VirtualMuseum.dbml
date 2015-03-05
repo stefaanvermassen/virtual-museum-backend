@@ -49,7 +49,8 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="ArtworkID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Size" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="Data" Type="System.Data.Linq.Binary" DbType="Image NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="DataGUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Data" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
       <Association Name="Artwork_ArtworkRepresentation" Member="Artwork" ThisKey="ArtworkID" OtherKey="ID" Type="Artwork" IsForeignKey="true" />
     </Type>
   </Table>
