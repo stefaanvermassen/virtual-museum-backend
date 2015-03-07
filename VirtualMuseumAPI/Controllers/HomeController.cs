@@ -12,7 +12,7 @@ namespace VirtualMuseumAPI.Controllers
         {
             ViewBag.Title = "Home Page";
 
-            return View();
+            return new RedirectResult("/Help");
         }
     }
 }
