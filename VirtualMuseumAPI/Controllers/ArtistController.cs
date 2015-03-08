@@ -22,13 +22,7 @@ namespace VirtualMuseumAPI.Controllers
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
-                List<ArtistModel> artistModels = new List<ArtistModel>();
-                foreach (var artist in dc.Artists)
-                {
-                    ArtistModel am = new ArtistModel {name = artist.Name, ID = artist.ID};
-                    artistModels.Add(am);
-                }
-                return artistModels;
+                return dc.Artists.Select(artist => new ArtistModel {ArtistID = artist.ID, Name = artist.Name}).ToList();
             }
         }
 
@@ -40,7 +34,7 @@ namespace VirtualMuseumAPI.Controllers
                 var artist = dc.Artists.First(a => a.ID == id);
                 if (artist != null)
                 {
-                    ArtistModel am = new ArtistModel {ID = artist.ID, name = artist.Name};
+                    ArtistModel am = new ArtistModel {ArtistID = artist.ID, Name = artist.Name};
                     return am;
                 }
                 return null;
@@ -50,7 +44,7 @@ namespace VirtualMuseumAPI.Controllers
         // POST: api/Artist
         public void Post([FromBody]ArtistModel value)
         {
-            if (value == null || value.name == null)
+            if (value == null || string.IsNullOrWhiteSpace(value.Name))
             {
                 return;
             }
@@ -58,11 +52,11 @@ namespace VirtualMuseumAPI.Controllers
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
                 Artist artist = new Artist { 
-                    Name = value.name, 
+                    Name = value.Name, 
                     ModiBy = "01732c65-2af1-44a4-93ae-1200745678ae" ,
                     ModiDate = DateTime.Now
                 };
-                if (value.name != null)
+                if (!string.IsNullOrWhiteSpace(value.Name))
                 {
                     dc.Artists.InsertOnSubmit(artist);
                     dc.SubmitChanges();
@@ -80,8 +74,8 @@ namespace VirtualMuseumAPI.Controllers
                 {
                     return;
                 }
-                artist.ID = value.ID;
-                artist.Name = value.name;
+                artist.ID = value.ArtistID;
+                artist.Name = value.Name;
                 artist.ModiBy = "01732c65-2af1-44a4-93ae-1200745678ae";
                 artist.ModiDate = DateTime.Now;
 
@@ -103,11 +97,5 @@ namespace VirtualMuseumAPI.Controllers
                 }
             }
         }
-    }
-
-    public class ArtistModel
-    {
-        public int ID { get; set; }
-        public string name { get; set; }
     }
 }
