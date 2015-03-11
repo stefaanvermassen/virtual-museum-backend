@@ -22,6 +22,7 @@ namespace VirtualMuseumAPI.Controllers
 
 
         // GET api/ArtWork
+        [AllowAnonymous]
         public IEnumerable<ArtWorkModel> Get([FromUri] ArtWorkSearchModel query)
         {
             List<ArtWorkModel> artworks = new List<ArtWorkModel>();
@@ -46,6 +47,7 @@ namespace VirtualMuseumAPI.Controllers
 
 
         // GET api/ArtWork/5
+        [AllowAnonymous]
         public HttpResponseMessage Get(int id)
         {
             VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
@@ -62,7 +64,6 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST api/ArtWork
-
         public async Task<HttpResponseMessage> PostAsync()
         {
             if (ModelState.IsValid)
