@@ -12,6 +12,7 @@ using VirtualMuseumAPI.Helpers;
 
 namespace VirtualMuseumAPI.Controllers
 {
+    [Authorize]
     public class ArtistController : ApiController
     {
         // GET: api/Artist
@@ -19,6 +20,8 @@ namespace VirtualMuseumAPI.Controllers
         /// Get all artists in the system
         /// </summary>
         /// <returns></returns>
+        /// 
+        [AllowAnonymous]
         public IEnumerable<ArtistModel> Get()
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
@@ -28,6 +31,7 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // GET: api/Artist/5
+        [AllowAnonymous]
         public ArtistModel Get(int id)
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
