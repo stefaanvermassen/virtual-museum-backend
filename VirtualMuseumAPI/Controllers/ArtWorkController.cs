@@ -12,10 +12,11 @@ using VirtualMuseumAPI.Models;
 using Microsoft.AspNet.Identity;
 using VirtualMuseumAPI.Helpers.Filters;
 using System.Data.Linq;
+using VirtualMuseumAPI.Helpers;
 
 namespace VirtualMuseumAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ArtWorkController : ApiController
     {
 
@@ -48,8 +49,11 @@ namespace VirtualMuseumAPI.Controllers
         public HttpResponseMessage Get(int id)
         {
             VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+            if (dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artwork doesn't exist.");
+            }
             HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-
             Binary bin = dc.ArtworkRepresentations.FirstOrDefault(p => p.ArtworkID == id).Data;
             MemoryStream stream = new MemoryStream(bin.ToArray());
             result.Content = new StreamContent(stream);
@@ -74,28 +78,9 @@ namespace VirtualMuseumAPI.Controllers
                     {
                         var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                         var buffer = await file.ReadAsByteArrayAsync();
-                        using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
-                        {
-                            Artwork artwork = new Artwork
-                            {
-                                ArtistID = 1,
-                                name = "",
-                                ModiBy = "01732c65-2af1-44a4-93ae-1200745678ae",
-                                ModiDate = DateTime.Now
-                            };
-                            dc.Artworks.InsertOnSubmit(artwork);
-                            dc.SubmitChanges();
-                            ArtworkRepresentation representation = new ArtworkRepresentation
-                            {
-                                ArtworkID = artwork.ID,
-                                DataGUID = Guid.NewGuid(),
-                                Data = new System.Data.Linq.Binary(buffer),
-                                Size = 1
-                            };
-                            dc.ArtworkRepresentations.InsertOnSubmit(representation);
-                            dc.SubmitChanges();
-                            messages.Add(artwork.ID);
-                        }
+                        VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
+                        Artwork artwork = VMFactory.createArtWork(User.Identity, buffer);
+                        messages.Add(artwork.ID);
                     }
                     return Request.CreateResponse(HttpStatusCode.OK, messages);
                 }
@@ -120,7 +105,7 @@ namespace VirtualMuseumAPI.Controllers
                 {
                     Artwork artWork = dc.Artworks.FirstOrDefault(a => a.ID == work.ArtWorkID);
                     artWork.name = work.Name;
-                    artWork.ModiBy = "01732c65-2af1-44a4-93ae-1200745678ae";
+                    artWork.ModiBy = User.Identity.GetUserId();
                     artWork.ModiDate = DateTime.Now;
                     dc.SubmitChanges();
 
