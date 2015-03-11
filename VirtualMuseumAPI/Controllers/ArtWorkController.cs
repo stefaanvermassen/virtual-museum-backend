@@ -22,6 +22,7 @@ namespace VirtualMuseumAPI.Controllers
 
 
         // GET api/ArtWork
+        [AllowAnonymous]
         public IEnumerable<ArtWorkModel> Get([FromUri] ArtWorkSearchModel query)
         {
             List<ArtWorkModel> artworks = new List<ArtWorkModel>();
@@ -46,23 +47,27 @@ namespace VirtualMuseumAPI.Controllers
 
 
         // GET api/ArtWork/5
+        [AllowAnonymous]
         public HttpResponseMessage Get(int id)
         {
             VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
-            if (dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
+            if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artwork doesn't exist.");
             }
-            HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-            Binary bin = dc.ArtworkRepresentations.FirstOrDefault(p => p.ArtworkID == id).Data;
-            MemoryStream stream = new MemoryStream(bin.ToArray());
-            result.Content = new StreamContent(stream);
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpg");
-            return result;
+            else
+            {
+                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
+                Binary bin = dc.ArtworkRepresentations.FirstOrDefault(p => p.ArtworkID == id).Data;
+                MemoryStream stream = new MemoryStream(bin.ToArray());
+                result.Content = new StreamContent(stream);
+                result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpg");
+                return result;
+            }
+            
         }
 
         // POST api/ArtWork
-
         public async Task<HttpResponseMessage> PostAsync()
         {
             if (ModelState.IsValid)
