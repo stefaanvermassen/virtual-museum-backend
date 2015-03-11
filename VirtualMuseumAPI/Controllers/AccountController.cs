@@ -17,6 +17,7 @@ using VirtualMuseumAPI.Models;
 using VirtualMuseumAPI.Providers;
 using VirtualMuseumAPI.Results;
 using VirtualMuseumAPI.Helpers;
+using System.Security.Principal;
 
 namespace VirtualMuseumAPI.Controllers
 {
@@ -329,10 +330,19 @@ namespace VirtualMuseumAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName =model.UserName, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-            VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
+            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+            Artist artist = new Artist
+            {
+                Name = user.UserName,
+                UID = user.Id,
+                ModiBy = user.Id,
+                ModiDate = DateTime.Now
+            };
+            dc.Artists.InsertOnSubmit(artist);
+            dc.SubmitChanges();
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
