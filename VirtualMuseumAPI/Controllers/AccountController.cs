@@ -16,6 +16,7 @@ using Microsoft.Owin.Security.OAuth;
 using VirtualMuseumAPI.Models;
 using VirtualMuseumAPI.Providers;
 using VirtualMuseumAPI.Results;
+using VirtualMuseumAPI.Helpers;
 
 namespace VirtualMuseumAPI.Controllers
 {
@@ -331,7 +332,7 @@ namespace VirtualMuseumAPI.Controllers
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
+            VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);

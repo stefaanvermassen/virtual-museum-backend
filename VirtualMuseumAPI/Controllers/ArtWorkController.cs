@@ -79,7 +79,7 @@ namespace VirtualMuseumAPI.Controllers
                         var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                         var buffer = await file.ReadAsByteArrayAsync();
                         VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
-                        Artwork artwork = VMFactory.createArtWork(User.Identity, buffer);
+                        Artwork artwork = VMFactory.createArtWork(buffer, User.Identity);
                         messages.Add(artwork.ID);
                     }
                     return Request.CreateResponse(HttpStatusCode.OK, messages);

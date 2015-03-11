@@ -11,14 +11,15 @@ namespace VirtualMuseumAPI.Helpers
 {
     public class VirtualMuseumFactory
     {
-        public Artwork createArtWork(IIdentity user, byte[] buffer)
-        {
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+        VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+
+        public Artwork createArtWork(byte[] buffer, IIdentity modiByUser)
+        {            
             Artwork artwork = new Artwork
             {
                 ArtistID = 1,
                 name = "",
-                ModiBy = IdentityExtensions.GetUserId(user),
+                ModiBy = IdentityExtensions.GetUserId(modiByUser),
                 ModiDate = DateTime.Now
             };
             dc.Artworks.InsertOnSubmit(artwork);
@@ -33,6 +34,20 @@ namespace VirtualMuseumAPI.Helpers
             dc.ArtworkRepresentations.InsertOnSubmit(representation);
             dc.SubmitChanges();
             return artwork;
-        } 
+        }
+
+        public Artist createArtist(String name, IIdentity modiByUser, IIdentity artistUser = null)
+        {
+            Artist artist = new Artist
+            {
+                Name = name,
+                UID = (artistUser != null)? IdentityExtensions.GetUserId(modiByUser): null,
+                ModiBy = IdentityExtensions.GetUserId(modiByUser),
+                ModiDate = DateTime.Now
+            };
+            dc.Artists.InsertOnSubmit(artist);
+            dc.SubmitChanges();
+            return artist;
+        }
     }
 }
