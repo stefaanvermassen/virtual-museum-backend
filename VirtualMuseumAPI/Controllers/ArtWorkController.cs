@@ -102,20 +102,28 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // PUT api/ArtWork/5
-        public HttpResponseMessage Put(ArtWorkModel work)
+        public HttpResponseMessage Put(int id, ArtWorkModel work)
         {
             if (ModelState.IsValid)
             {
-                using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
+                VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+                if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
                 {
-                    Artwork artWork = dc.Artworks.FirstOrDefault(a => a.ID == work.ArtWorkID);
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artwork doesn't exist.");
+                }
+                else
+                {
+                    if (!dc.Artists.Any(a => a.ID == work.ArtistID))
+                    {
+                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
+                    }
+                    Artwork artWork = dc.Artworks.FirstOrDefault(a => a.ID == id);
                     artWork.name = work.Name;
                     artWork.ModiBy = User.Identity.GetUserId();
                     artWork.ModiDate = DateTime.Now;
                     dc.SubmitChanges();
-
-                }
-                return Request.CreateResponse(HttpStatusCode.OK);
+                    return Request.CreateResponse(HttpStatusCode.OK);
+                } 
             }
             else
             {
