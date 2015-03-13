@@ -17,7 +17,7 @@ namespace VirtualMuseumAPI.Helpers
         {            
             Artwork artwork = new Artwork
             {
-                ArtistID = 1,
+                ArtistID = dc.ArtistsXUsers.Where(a => a.UID == IdentityExtensions.GetUserId(modiByUser)).First().ArtistID,
                 name = "",
                 ModiBy = IdentityExtensions.GetUserId(modiByUser),
                 ModiDate = DateTime.Now
@@ -36,18 +36,54 @@ namespace VirtualMuseumAPI.Helpers
             return artwork;
         }
 
-        public Artist createArtist(String name, IIdentity modiByUser, IIdentity artistUser = null)
+        public Artist createPublicArtist(String name, IIdentity modiByUser, IIdentity artistUser = null)
         {
             Artist artist = new Artist
             {
                 Name = name,
-                UID = (artistUser != null)? IdentityExtensions.GetUserId(modiByUser): null,
                 ModiBy = IdentityExtensions.GetUserId(modiByUser),
                 ModiDate = DateTime.Now
             };
             dc.Artists.InsertOnSubmit(artist);
             dc.SubmitChanges();
+            if (artistUser != null)
+            {
+                ArtistsXUser artistUserEntry = new ArtistsXUser
+                {
+                    ArtistID = artist.ID,
+                    UID = IdentityExtensions.GetUserId(artistUser)
+                };
+                dc.ArtistsXUsers.InsertOnSubmit(artistUserEntry);
+                dc.SubmitChanges();
+            }
+            
             return artist;
+        }
+
+        public Artist createPrivateArtist(String name, String justRegisteredUserID)
+        {
+            if (dc.AspNetUsers.Any(a => a.Id == justRegisteredUserID))
+            {
+                Artist artist = new Artist
+                {
+                    Name = name,
+                    ModiBy = justRegisteredUserID,
+                    ModiDate = DateTime.Now
+                };
+                dc.Artists.InsertOnSubmit(artist);
+                dc.SubmitChanges();
+
+                    ArtistsXUser artistUserEntry = new ArtistsXUser
+                    {
+                        ArtistID = artist.ID,
+                        UID = justRegisteredUserID
+                    };
+                    dc.ArtistsXUsers.InsertOnSubmit(artistUserEntry);
+                    dc.SubmitChanges();
+              
+                return artist;
+            }
+            return null;
         }
     }
 }

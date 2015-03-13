@@ -333,16 +333,8 @@ namespace VirtualMuseumAPI.Controllers
             var user = new ApplicationUser() { UserName =model.UserName, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
-            Artist artist = new Artist
-            {
-                Name = user.UserName,
-                UID = user.Id,
-                ModiBy = user.Id,
-                ModiDate = DateTime.Now
-            };
-            dc.Artists.InsertOnSubmit(artist);
-            dc.SubmitChanges();
+            VirtualMuseumFactory factory = new VirtualMuseumFactory();
+            factory.createPrivateArtist(model.UserName, user.Id);
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
