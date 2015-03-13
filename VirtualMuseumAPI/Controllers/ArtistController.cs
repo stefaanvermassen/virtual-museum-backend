@@ -8,9 +8,11 @@ using System.Web.Http;
 using Antlr.Runtime;
 using Microsoft.AspNet.Identity;
 using VirtualMuseumAPI.Models;
+using VirtualMuseumAPI.Helpers;
 
 namespace VirtualMuseumAPI.Controllers
 {
+    [Authorize]
     public class ArtistController : ApiController
     {
         // GET: api/Artist
@@ -18,6 +20,8 @@ namespace VirtualMuseumAPI.Controllers
         /// Get all artists in the system
         /// </summary>
         /// <returns></returns>
+        /// 
+        [AllowAnonymous]
         public IEnumerable<ArtistModel> Get()
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
@@ -27,6 +31,7 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // GET: api/Artist/5
+        [AllowAnonymous]
         public ArtistModel Get(int id)
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
@@ -42,26 +47,19 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST: api/Artist
-        public void Post([FromBody]ArtistModel value)
+        public HttpResponseMessage Post([FromBody]ArtistModel value)
         {
-            if (value == null || string.IsNullOrWhiteSpace(value.Name))
+            if (ModelState.IsValid)
             {
-                return;
+                VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
+                Artist artist = VMFactory.createArtist(value.Name, User.Identity, User.Identity);
+                return Request.CreateResponse(HttpStatusCode.OK, artist.ID);
             }
-            //TODO: add some test to know the artist is valid
-            using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
+            else
             {
-                Artist artist = new Artist { 
-                    Name = value.Name, 
-                    ModiBy = "01732c65-2af1-44a4-93ae-1200745678ae" ,
-                    ModiDate = DateTime.Now
-                };
-                if (!string.IsNullOrWhiteSpace(value.Name))
-                {
-                    dc.Artists.InsertOnSubmit(artist);
-                    dc.SubmitChanges();
-                }
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
+            
         }
 
         // PUT: api/Artist/5
