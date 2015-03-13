@@ -8,5 +8,6 @@ namespace VirtualMuseumAPI.Models
     public class ArtWorkSearchModel
     {
         public string Name { get; set; }
+        public int ArtistID { get; set; }
     }
 }
