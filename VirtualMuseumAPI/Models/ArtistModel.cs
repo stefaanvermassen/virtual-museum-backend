@@ -8,7 +8,7 @@ namespace VirtualMuseumAPI.Models
 {
     public class ArtistModel
     {
-        [Required]
+
         public int ArtistID { get; set; }
         [Required]
         public string Name { get; set; }

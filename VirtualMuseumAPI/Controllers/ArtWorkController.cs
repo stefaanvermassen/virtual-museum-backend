@@ -53,7 +53,6 @@ namespace VirtualMuseumAPI.Controllers
          
             return result;
 
-           
         }
 
 
@@ -90,14 +89,20 @@ namespace VirtualMuseumAPI.Controllers
                     var provider = new MultipartMemoryStreamProvider();
                     await Request.Content.ReadAsMultipartAsync(provider);
 
-                    List<int> messages = new List<int>();
+                    List<ArtWorkModel> messages = new List<ArtWorkModel>();
                     foreach (var file in provider.Contents)
                     {
                         var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                         var buffer = await file.ReadAsByteArrayAsync();
                         VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
-                        Artwork artwork = VMFactory.createArtWork(User.Identity, buffer);
-                        messages.Add(artwork.ID);
+                        Artwork artwork = VMFactory.createArtWork(buffer, User.Identity);
+                        ArtWorkModel artworkModel = new ArtWorkModel()
+                        {
+                            ArtistID = artwork.ArtistID,
+                            ArtWorkID = artwork.ID,
+                            Name = artwork.name
+                        };
+                        messages.Add(artworkModel);
                     }
                     return Request.CreateResponse(HttpStatusCode.OK, messages);
                 }
@@ -130,11 +135,12 @@ namespace VirtualMuseumAPI.Controllers
                         return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
                     }
                     Artwork artWork = dc.Artworks.FirstOrDefault(a => a.ID == id);
+                    work.ArtWorkID = id;
                     artWork.name = work.Name;
                     artWork.ModiBy = User.Identity.GetUserId();
                     artWork.ModiDate = DateTime.Now;
                     dc.SubmitChanges();
-                    return Request.CreateResponse(HttpStatusCode.OK);
+                    return Request.CreateResponse(HttpStatusCode.OK, work);
                 } 
             }
             else
@@ -149,6 +155,6 @@ namespace VirtualMuseumAPI.Controllers
         {
         }
 
-
+       
     }
 }

@@ -16,6 +16,8 @@ using Microsoft.Owin.Security.OAuth;
 using VirtualMuseumAPI.Models;
 using VirtualMuseumAPI.Providers;
 using VirtualMuseumAPI.Results;
+using VirtualMuseumAPI.Helpers;
+using System.Security.Principal;
 
 namespace VirtualMuseumAPI.Controllers
 {
@@ -328,10 +330,11 @@ namespace VirtualMuseumAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new ApplicationUser() { UserName =model.UserName, Email = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
+            VirtualMuseumFactory factory = new VirtualMuseumFactory();
+            factory.createPrivateArtist(model.UserName, user.Id);
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);

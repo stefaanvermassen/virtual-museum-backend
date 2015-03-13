@@ -11,14 +11,15 @@ namespace VirtualMuseumAPI.Helpers
 {
     public class VirtualMuseumFactory
     {
-        public Artwork createArtWork(IIdentity user, byte[] buffer)
-        {
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+        VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+
+        public Artwork createArtWork(byte[] buffer, IIdentity modiByUser)
+        {            
             Artwork artwork = new Artwork
             {
-                ArtistID = 1,
+                ArtistID = dc.ArtistsXUsers.Where(a => a.UID == IdentityExtensions.GetUserId(modiByUser)).First().ArtistID,
                 name = "",
-                ModiBy = IdentityExtensions.GetUserId(user),
+                ModiBy = IdentityExtensions.GetUserId(modiByUser),
                 ModiDate = DateTime.Now
             };
             dc.Artworks.InsertOnSubmit(artwork);
@@ -33,6 +34,56 @@ namespace VirtualMuseumAPI.Helpers
             dc.ArtworkRepresentations.InsertOnSubmit(representation);
             dc.SubmitChanges();
             return artwork;
-        } 
+        }
+
+        public Artist createPublicArtist(String name, IIdentity modiByUser, IIdentity artistUser = null)
+        {
+            Artist artist = new Artist
+            {
+                Name = name,
+                ModiBy = IdentityExtensions.GetUserId(modiByUser),
+                ModiDate = DateTime.Now
+            };
+            dc.Artists.InsertOnSubmit(artist);
+            dc.SubmitChanges();
+            if (artistUser != null)
+            {
+                ArtistsXUser artistUserEntry = new ArtistsXUser
+                {
+                    ArtistID = artist.ID,
+                    UID = IdentityExtensions.GetUserId(artistUser)
+                };
+                dc.ArtistsXUsers.InsertOnSubmit(artistUserEntry);
+                dc.SubmitChanges();
+            }
+            
+            return artist;
+        }
+
+        public Artist createPrivateArtist(String name, String justRegisteredUserID)
+        {
+            if (dc.AspNetUsers.Any(a => a.Id == justRegisteredUserID))
+            {
+                Artist artist = new Artist
+                {
+                    Name = name,
+                    ModiBy = justRegisteredUserID,
+                    ModiDate = DateTime.Now
+                };
+                dc.Artists.InsertOnSubmit(artist);
+                dc.SubmitChanges();
+
+                    ArtistsXUser artistUserEntry = new ArtistsXUser
+                    {
+                        ArtistID = artist.ID,
+                        UID = justRegisteredUserID
+                    };
+                    dc.ArtistsXUsers.InsertOnSubmit(artistUserEntry);
+                    dc.SubmitChanges();
+              
+                return artist;
+            }
+            return null;
+        }
     }
 }
