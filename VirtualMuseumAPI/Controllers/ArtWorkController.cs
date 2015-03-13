@@ -20,10 +20,14 @@ namespace VirtualMuseumAPI.Controllers
     public class ArtWorkController : ApiController
     {
 
+        public class ArtworkResults
+        {
+            public IEnumerable<ArtWorkModel> ArtWorks { get; set; }
+        }
 
         // GET api/ArtWork
         [AllowAnonymous]
-        public IEnumerable<ArtWorkModel> Get([FromUri] ArtWorkSearchModel query)
+        public ArtworkResults Get([FromUri] ArtWorkSearchModel query)
         {
             List<ArtWorkModel> artworks = new List<ArtWorkModel>();
             VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
@@ -34,15 +38,21 @@ namespace VirtualMuseumAPI.Controllers
                 model.Name = work.name;
                 artworks.Add(model);
             }
-            IEnumerable<ArtWorkModel> result = artworks;
+
+            IEnumerable<ArtWorkModel> filteredArtworks = artworks;
 
             if (!String.IsNullOrEmpty(query.Name))
-                result = result.Where(p => p.Name == query.Name);
+                filteredArtworks = filteredArtworks.Where(p => p.Name == query.Name);
 
             if (query.ArtistID != 0)
-                result = result.Where(p => p.ArtistID == query.ArtistID);
+                filteredArtworks = filteredArtworks.Where(p => p.ArtistID == query.ArtistID);
+            ArtworkResults result = new ArtworkResults()
+            {
+                ArtWorks = filteredArtworks
+            };
+         
             return result;
-           
+
         }
 
 
