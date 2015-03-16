@@ -26,6 +26,11 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // GET api/ArtWork
+        /// <summary>
+        /// Get all the artworks that match the specified fields via the query arguments
+        /// </summary>
+        /// <param name="query">Filter fields</param>
+        /// <returns></returns>
         [AllowAnonymous]
         public ArtworkResults Get([FromUri] ArtWorkSearchModel query)
         {
@@ -58,6 +63,11 @@ namespace VirtualMuseumAPI.Controllers
 
 
         // GET api/ArtWork/5
+        /// <summary>
+        /// Get an JPG image file that is assigned to the artwork with the specified id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public HttpResponseMessage Get(int id)
         {
@@ -79,6 +89,10 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST api/ArtWork
+        /// <summary>
+        /// Create a new Artwork and add an JPEG image file to it
+        /// </summary>
+        /// <returns>The ID of the newly created artwork. You can edit the properties via the PUT method</returns>
         public async Task<HttpResponseMessage> PostAsync()
         {
             if (ModelState.IsValid)
@@ -119,6 +133,12 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // PUT api/ArtWork/5
+        /// <summary>
+        /// Edit the ArtWork properties
+        /// </summary>
+        /// <param name="id">The ArtWork's unique ID</param>
+        /// <param name="work"></param>
+        /// <returns></returns>
         public HttpResponseMessage Put(int id, ArtWorkModel work)
         {
             if (ModelState.IsValid)
@@ -151,9 +171,9 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // DELETE api/ArtWork/5
-        public void Delete(int id)
-        {
-        }
+        //public void Delete(int id)
+        //{
+        //}
 
        
     }

@@ -31,6 +31,11 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // GET: api/Artist/5
+        /// <summary>
+        /// Get the properties of the artist with the specified id
+        /// </summary>
+        /// <param name="id">The artist's unique ID</param>
+        /// <returns></returns>
         [AllowAnonymous]
         public ArtistModel Get(int id)
         {
@@ -47,6 +52,11 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST: api/Artist
+        /// <summary>
+        /// Create a new public Artist
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public HttpResponseMessage Post([FromBody]ArtistModel value)
         {
             if (ModelState.IsValid)
@@ -63,6 +73,11 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // PUT: api/Artist/5
+        /// <summary>
+        /// Edit the Artist's properties
+        /// </summary>
+        /// <param name="id">The Artist's unique ID</param>
+        /// <param name="value"></param>
         public void Put(int id, [FromBody]ArtistModel value)
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
@@ -83,6 +98,10 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // DELETE: api/Artist/5
+        /// <summary>
+        /// Deletes the specified Artist
+        /// </summary>
+        /// <param name="id">The Artist's unique ID</param>
         public void Delete(int id)
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
