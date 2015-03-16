@@ -18,6 +18,7 @@ using VirtualMuseumAPI.Providers;
 using VirtualMuseumAPI.Results;
 using VirtualMuseumAPI.Helpers;
 using System.Security.Principal;
+using System.Web.Http.Description;
 
 namespace VirtualMuseumAPI.Controllers
 {
@@ -54,6 +55,10 @@ namespace VirtualMuseumAPI.Controllers
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         // GET api/Account/UserInfo
+        /// <summary>
+        /// Get authenticated user's UserName an Email
+        /// </summary>
+        /// <returns></returns>
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
         public UserInfoViewModel GetUserInfo()
@@ -70,6 +75,10 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST api/Account/Logout
+        /// <summary>
+        /// Make token invalid
+        /// </summary>
+        /// <returns></returns>
         [Route("Logout")]
         public IHttpActionResult Logout()
         {
@@ -79,6 +88,7 @@ namespace VirtualMuseumAPI.Controllers
 
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
         [Route("ManageInfo")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
             IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -118,6 +128,11 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST api/Account/ChangePassword
+        /// <summary>
+        /// Change the password of the authenticated user
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
@@ -138,6 +153,12 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST api/Account/SetPassword
+        /// <summary>
+        /// Sets the password of the authenticated user. SetPassword requires one password (the new one), whereas ChangePassword requires two passwords (the old one, and the new one).
+        /// This method can be used for resetting the user's password to a random one.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
@@ -158,6 +179,7 @@ namespace VirtualMuseumAPI.Controllers
 
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -196,6 +218,7 @@ namespace VirtualMuseumAPI.Controllers
 
         // POST api/Account/RemoveLogin
         [Route("RemoveLogin")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
         {
             if (!ModelState.IsValid)
@@ -228,6 +251,7 @@ namespace VirtualMuseumAPI.Controllers
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
         [AllowAnonymous]
         [Route("ExternalLogin", Name = "ExternalLogin")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IHttpActionResult> GetExternalLogin(string provider, string error = null)
         {
             if (error != null)
@@ -283,6 +307,7 @@ namespace VirtualMuseumAPI.Controllers
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
         [AllowAnonymous]
         [Route("ExternalLogins")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IEnumerable<ExternalLoginViewModel> GetExternalLogins(string returnUrl, bool generateState = false)
         {
             IEnumerable<AuthenticationDescription> descriptions = Authentication.GetExternalAuthenticationTypes();
@@ -322,6 +347,11 @@ namespace VirtualMuseumAPI.Controllers
         }
 
         // POST api/Account/Register
+        /// <summary>
+        /// Register a new user. An private artist will be made as well.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         [Route("Register")]
         public async Task<IHttpActionResult> Register(RegisterBindingModel model)
@@ -348,6 +378,7 @@ namespace VirtualMuseumAPI.Controllers
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("RegisterExternal")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IHttpActionResult> RegisterExternal(RegisterExternalBindingModel model)
         {
             if (!ModelState.IsValid)

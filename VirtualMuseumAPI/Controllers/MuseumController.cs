@@ -14,10 +14,10 @@ using System.Net.Http.Headers;
 
 namespace VirtualMuseumAPI.Controllers
 {
-
+    [Authorize]
     public class MuseumController : ApiController
     {
-        [Authorize]
+        
         /// <summary>
         /// Get the serialized binary file that is assigned to the museum with the specified id
         /// </summary>
@@ -42,6 +42,22 @@ namespace VirtualMuseumAPI.Controllers
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Get the properties of a random museum. You have to get the binary data via the /data.
+        /// </summary>
+        /// <param name="id">The Museum's unique ID</param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [Route("api/Museum/random")]
+        [HttpGet]
+        public HttpResponseMessage GetMuseumData()
+        {
+            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+            Random rand = new Random();
+            int toSkip = rand.Next(0, dc.Museums.Count());
+            return Get(dc.Museums.Skip(toSkip).Take(1).First().ID);            
         }
 
         // GET api/museum/id
@@ -141,7 +157,7 @@ namespace VirtualMuseumAPI.Controllers
 
         // PUT api/Museum/id
         /// <summary>
-        /// Edit the Museum properties
+        /// Edit the Museum's properties
         /// </summary>
         /// <param name="id">The Museum's unique ID</param>
         /// <param name="model"></param>
