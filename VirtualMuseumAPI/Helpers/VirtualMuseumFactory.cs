@@ -85,5 +85,21 @@ namespace VirtualMuseumAPI.Helpers
             }
             return null;
         }
+
+        public Museum createMuseum(String description, IIdentity ownerID, IIdentity modiByUser)
+        {
+            Museum museum = new Museum()
+            {
+                Description = description,
+                OwnerID = IdentityExtensions.GetUserId(modiByUser),
+                ModiBy = IdentityExtensions.GetUserId(modiByUser),
+                ModiDate = DateTime.Now
+            };
+            dc.Museums.InsertOnSubmit(museum);
+            dc.SubmitChanges();
+            return museum;
+        }
     }
+
+   
 }
