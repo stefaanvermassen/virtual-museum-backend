@@ -7,6 +7,6 @@ namespace VirtualMuseumAPI.Helpers
 {
     public class Privacy
     {
-        public enum Levels { Private, Public };
+        public enum Levels { PRIVATE, PUBLIC };
     }
 }

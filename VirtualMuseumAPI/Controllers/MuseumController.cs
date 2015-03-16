@@ -55,10 +55,24 @@ namespace VirtualMuseumAPI.Controllers
         public HttpResponseMessage GetMuseumData()
         {
             VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
-            Random rand = new Random();
-            int toSkip = rand.Next(0, dc.Museums.Count());
-            return Get(dc.Museums.Skip(toSkip).Take(1).First().ID);            
+            if (dc.Museums.Where(a=> a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First()).Count() > 0)
+            {
+                Random rand = new Random();
+                int toSkip = rand.Next(0, dc.Museums.Count());
+                return Get(
+                    VirtualMuseumUtils.RandomIEnumerableElement(
+                    dc.Museums.Where(a => a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First()), rand).ID
+                    );
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No museums available");
+            }
+
+                       
         }
+
+        
 
         // GET api/museum/id
         /// <summary>
@@ -81,6 +95,7 @@ namespace VirtualMuseumAPI.Controllers
                 model.Description = museum.Description;
                 model.LastModified = museum.ModiDate;
                 model.MuseumID = museum.ID;
+                model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);
                 return Request.CreateResponse(HttpStatusCode.OK, model);
             }
         }
@@ -98,9 +113,10 @@ namespace VirtualMuseumAPI.Controllers
             {
                 VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
                 VirtualMuseumFactory factory = new VirtualMuseumFactory();
-                Museum museum = factory.createMuseum(model.Description, Privacy.Levels.Private, User.Identity, User.Identity);
+                Museum museum = factory.createMuseum(model.Description, model.Privacy, User.Identity, User.Identity);
                 model.MuseumID = museum.ID;
                 model.LastModified = museum.ModiDate;
+                model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);
                 return Request.CreateResponse(HttpStatusCode.OK, model);
             }
             else

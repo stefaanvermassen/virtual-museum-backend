@@ -22,7 +22,7 @@ namespace VirtualMuseumAPI.Models
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="VirtualMuseum_PROD")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="VirtualMuseum_DEV")]
 	public partial class VirtualMuseumDataContext : System.Data.Linq.DataContext
 	{
 		
