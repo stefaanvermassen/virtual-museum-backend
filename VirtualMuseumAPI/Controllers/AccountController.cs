@@ -59,10 +59,11 @@ namespace VirtualMuseumAPI.Controllers
         public UserInfoViewModel GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-
+            IdentityUser user = UserManager.FindById(User.Identity.GetUserId());
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
+                UserName = user.UserName,
+                Email = user.Email,
                 HasRegistered = externalLogin == null,
                 LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
             };

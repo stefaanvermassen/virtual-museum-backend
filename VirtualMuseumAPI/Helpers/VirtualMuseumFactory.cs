@@ -86,11 +86,17 @@ namespace VirtualMuseumAPI.Helpers
             return null;
         }
 
-        public Museum createMuseum(String description, IIdentity ownerID, IIdentity modiByUser)
+        public Museum createMuseum(String description, Privacy.Levels level, IIdentity ownerID, IIdentity modiByUser)
         {
+            PrivacyLevel privacyLevel = dc.PrivacyLevels.Where(a=>a.Name == "PRIVATE").First();
+            if (dc.PrivacyLevels.Any(a => a.Name == Enum.GetName(typeof(Privacy.Levels), (int) level))){
+                privacyLevel = dc.PrivacyLevels.Where(a=>a.Name == Enum.GetName(typeof(Privacy.Levels), (int) level)).First();
+            }
+           
             Museum museum = new Museum()
             {
                 Description = description,
+                PrivacyLevelID = privacyLevel.ID,
                 OwnerID = IdentityExtensions.GetUserId(modiByUser),
                 ModiBy = IdentityExtensions.GetUserId(modiByUser),
                 ModiDate = DateTime.Now

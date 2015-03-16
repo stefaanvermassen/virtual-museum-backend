@@ -8,10 +8,18 @@ namespace VirtualMuseumAPI.Models
 {
     public class ArtWorkModel
     {
-        
+        /// <summary>
+        /// The Artworks's unique ID
+        /// </summary>
         public int ArtWorkID { get; set; }
+        /// <summary>
+        /// The Artist's unique id, this is an integer.
+        /// </summary>
         [Required]
         public int ArtistID { get; set; }
+        /// <summary>
+        /// The Artworks's name
+        /// </summary>
         [Required]
         public string Name { get; set; }
     }
