@@ -64,7 +64,7 @@ namespace VirtualMuseumAPI.Controllers
         public UserInfoViewModel GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
-            IdentityUser user = UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(User.Identity.GetUserId());
             return new UserInfoViewModel
             {
                 UserName = user.UserName,
@@ -91,16 +91,15 @@ namespace VirtualMuseumAPI.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
-            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
+            ApplicationUser user =
+                await UserManager.FindByIdAsync(User.Identity.GetUserId());
             if (user == null)
             {
                 return null;
             }
 
             List<UserLoginInfoViewModel> logins = new List<UserLoginInfoViewModel>();
-
-            foreach (IdentityUserLogin linkedAccount in user.Logins)
+            foreach (ApplicationUserLogin linkedAccount in user.Logins)
             {
                 logins.Add(new UserLoginInfoViewModel
                 {
