@@ -105,6 +105,28 @@ namespace VirtualMuseumAPI.Helpers
             dc.SubmitChanges();
             return museum;
         }
+
+        public PrivacyLevel createPrivacyLevel(String name, String description, String modiByUserID)
+        {
+            if (dc.AspNetUsers.Any(a => a.Id == modiByUserID))
+            {
+                PrivacyLevel level = new PrivacyLevel()
+                {
+                    Description = description,
+                    Name = name,
+                    ModiBy = modiByUserID,
+                    ModiDate = DateTime.Now
+                };
+                dc.PrivacyLevels.InsertOnSubmit(level);
+                dc.SubmitChanges();
+                return level;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
     }
 
    
