@@ -83,9 +83,52 @@ namespace VirtualMuseumAPI
     {
         protected override void Seed(ApplicationDbContext context)
         {
+            InitializeIdentityRolesForEF(context);
             InitializeIdentityForEF(context);
             InitializePrivacyRoles(context);
             base.Seed(context);
+        }
+
+        public static void InitializeIdentityRolesForEF(ApplicationDbContext db)
+        {
+            var userManager = HttpContext.Current
+               .GetOwinContext().GetUserManager<ApplicationUserManager>();
+
+            var roleManager = HttpContext.Current
+                .GetOwinContext().Get<ApplicationRoleManager>();
+
+            //Create Role Admin if it does not exist
+            var role = roleManager.FindByName("Admin");
+            if (role == null)
+            {
+                role = new VirtualMuseumAPI.Models.ApplicationRole("Admin");
+                roleManager.Create(role);
+            }
+
+            //Create Role Manager if it does not exist
+            role = roleManager.FindByName("Manager");
+            if (role == null)
+            {
+                role = new VirtualMuseumAPI.Models.ApplicationRole("Manager");
+                roleManager.Create(role);
+            }
+
+            //Create Role Curator if it does not exist
+            role = roleManager.FindByName("Curator");
+            if (role == null)
+            {
+                role = new VirtualMuseumAPI.Models.ApplicationRole("Curator");
+                roleManager.Create(role);
+            }
+
+            //Create Role Visitor if it does not exist
+            role = roleManager.FindByName("Curator");
+            if (role == null)
+            {
+                role = new VirtualMuseumAPI.Models.ApplicationRole("Visitor");
+                roleManager.Create(role);
+            }
+
         }
  
         public static void InitializeIdentityForEF(ApplicationDbContext db)
@@ -100,14 +143,6 @@ namespace VirtualMuseumAPI
             const string email = "museum@awesomepeople.tv";
             const string password = "@wesomePeople_20";
             const string roleName = "Admin";
-
-            //Create Role Admin if it does not exist
-            var role = roleManager.FindByName(roleName);
-            if (role == null)
-            {
-                role = new VirtualMuseumAPI.Models.ApplicationRole(roleName);
-                var roleresult = roleManager.Create(role);
-            }
 
             var user = userManager.FindByName(userName);
             if (user == null)
