@@ -11,13 +11,20 @@ using Microsoft.AspNet.Identity;
 using System.Data.Linq;
 using System.IO;
 using System.Net.Http.Headers;
+using Ploeh.AutoFixture;
+using System.Web.Http.Hosting;
 
 namespace VirtualMuseumAPI.Controllers
 {
     [Authorize]
     public class MuseumController : ApiController
     {
-        
+        VirtualMuseumDataContext dc;
+
+        public MuseumController()
+        {
+            dc = new VirtualMuseumDataContext();
+        }
         /// <summary>
         /// Get the serialized binary file that is assigned to the museum with the specified id
         /// </summary>
@@ -28,7 +35,7 @@ namespace VirtualMuseumAPI.Controllers
         [HttpGet]
         public HttpResponseMessage GetMuseumData(int id)
         {
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+
             if (!dc.Museums.Any(a => a.ID == id))
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The museum doesn't exist.");
@@ -52,9 +59,9 @@ namespace VirtualMuseumAPI.Controllers
         [AllowAnonymous]
         [Route("api/Museum/random")]
         [HttpGet]
-        public HttpResponseMessage GetMuseumData()
+        public IHttpActionResult GetMuseumData()
         {
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+
             if (dc.Museums.Where(a=> a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First()).Count() > 0)
             {
                 Random rand = new Random();
@@ -66,7 +73,7 @@ namespace VirtualMuseumAPI.Controllers
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "No museums available");
+                return NotFound();
             }
 
                        
@@ -81,12 +88,12 @@ namespace VirtualMuseumAPI.Controllers
         /// <param name="id">The Museum's unique ID</param>
         /// <returns>The museum object with the specified id</returns>
         [AllowAnonymous]
-        public HttpResponseMessage Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+
             if (!dc.Museums.Any(a => a.ID == id))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The museum doesn't exist.");
+                return NotFound();
             }
             else
             {
@@ -96,7 +103,7 @@ namespace VirtualMuseumAPI.Controllers
                 model.LastModified = museum.ModiDate;
                 model.MuseumID = museum.ID;
                 model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);
-                return Request.CreateResponse(HttpStatusCode.OK, model);
+                return Ok(model);
             }
         }
 
@@ -107,21 +114,21 @@ namespace VirtualMuseumAPI.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns>The newly created museum object</returns>
-        public HttpResponseMessage Post(MuseumModel model)
+        public IHttpActionResult Post(MuseumModel model)
         {
             if (ModelState.IsValid)
             {
-                VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
-                VirtualMuseumFactory factory = new VirtualMuseumFactory();
+    
+                VirtualMuseumFactory factory = new VirtualMuseumFactory(dc);
                 Museum museum = factory.createMuseum(model.Description, model.Privacy, User.Identity, User.Identity);
                 model.MuseumID = museum.ID;
                 model.LastModified = museum.ModiDate;
                 model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);
-                return Request.CreateResponse(HttpStatusCode.OK, model);
+                return Ok(model);
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
             }
         }
 
@@ -133,7 +140,7 @@ namespace VirtualMuseumAPI.Controllers
         /// <returns>The museum object with the specified id, the file has been assigned.</returns>
         public async Task<HttpResponseMessage> PostAsync(int id)
         {
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+
             if (!dc.Museums.Any(a => a.ID == id))
             {
                 return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The museum doesn't exist.");
@@ -182,7 +189,7 @@ namespace VirtualMuseumAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+    
                 if (!dc.Museums.Any(a => a.ID == id))
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The museum doesn't exist.");
@@ -212,5 +219,12 @@ namespace VirtualMuseumAPI.Controllers
             }
 
         }
+
+
+        
     }
+
+ 
+
+   
 }

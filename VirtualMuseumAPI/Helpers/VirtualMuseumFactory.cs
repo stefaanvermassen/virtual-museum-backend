@@ -5,6 +5,7 @@ using System.Web;
 using VirtualMuseumAPI.Models;
 using System.Security.Principal;
 using Microsoft.AspNet.Identity;
+using VirtualMuseumAPI.Controllers;
 
 
 namespace VirtualMuseumAPI.Helpers
@@ -12,6 +13,19 @@ namespace VirtualMuseumAPI.Helpers
     public class VirtualMuseumFactory
     {
         VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+
+        public VirtualMuseumFactory(VirtualMuseumDataContext context)
+        {
+            dc = context;
+        }
+
+        public VirtualMuseumFactory()
+        {
+            dc = new VirtualMuseumDataContext();
+        }
+
+       
+
 
         public Artwork createArtWork(byte[] buffer, IIdentity modiByUser)
         {            
@@ -127,6 +141,8 @@ namespace VirtualMuseumAPI.Helpers
             }
             
         }
+
+        
     }
 
    
