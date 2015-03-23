@@ -120,7 +120,7 @@ namespace VirtualMuseumAPI.Controllers
                     {
                         ArtWorks = messages
                     };
-                    return Ok(messages);
+                    return Ok(result);
                 }
                 else
                 {
