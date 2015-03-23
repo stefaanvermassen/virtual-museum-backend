@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualMuseumAPI", "VirtualMuseumAPI\VirtualMuseumAPI.csproj", "{2765FD1D-0D78-4C95-9C39-46C45D4B3496}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtualMuseumAPI.Tests", "VirtualMuseumAPI.Tests\VirtualMuseumAPI.Tests.csproj", "{7D9A2F1E-3269-44B0-B9B1-5A41727B9397}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2765FD1D-0D78-4C95-9C39-46C45D4B3496}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2765FD1D-0D78-4C95-9C39-46C45D4B3496}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2765FD1D-0D78-4C95-9C39-46C45D4B3496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D9A2F1E-3269-44B0-B9B1-5A41727B9397}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D9A2F1E-3269-44B0-B9B1-5A41727B9397}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D9A2F1E-3269-44B0-B9B1-5A41727B9397}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D9A2F1E-3269-44B0-B9B1-5A41727B9397}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
