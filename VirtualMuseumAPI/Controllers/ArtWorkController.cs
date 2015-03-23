@@ -69,21 +69,19 @@ namespace VirtualMuseumAPI.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [AllowAnonymous]
-        public HttpResponseMessage Get(int id)
+        public IHttpActionResult Get(int id)
         {
             VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
             if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artwork doesn't exist.");
+                return NotFound();
             }
             else
             {
                 HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
                 Binary bin = dc.ArtworkRepresentations.FirstOrDefault(p => p.ArtworkID == id).Data;
                 MemoryStream stream = new MemoryStream(bin.ToArray());
-                result.Content = new StreamContent(stream);
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpg");
-                return result;
+                return new VirtualMuseumDataResult(stream, ("image/jpg"));
             }
             
         }
@@ -93,7 +91,7 @@ namespace VirtualMuseumAPI.Controllers
         /// Create a new Artwork and add an JPEG image file to it
         /// </summary>
         /// <returns>The ID of the newly created artwork. You can edit the properties via the PUT method</returns>
-        public async Task<HttpResponseMessage> PostAsync()
+        public async Task<IHttpActionResult> PostAsync()
         {
             if (ModelState.IsValid)
             {
@@ -118,16 +116,20 @@ namespace VirtualMuseumAPI.Controllers
                         };
                         messages.Add(artworkModel);
                     }
-                    return Request.CreateResponse(HttpStatusCode.OK, messages);
+                    ArtworkResults result = new ArtworkResults()
+                    {
+                        ArtWorks = messages
+                    };
+                    return Ok(messages);
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest);
+                    return BadRequest();
                 }
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
             }
 
         }
@@ -139,20 +141,20 @@ namespace VirtualMuseumAPI.Controllers
         /// <param name="id">The ArtWork's unique ID</param>
         /// <param name="work"></param>
         /// <returns></returns>
-        public HttpResponseMessage Put(int id, ArtWorkModel work)
+        public IHttpActionResult Put(int id, ArtWorkModel work)
         {
             if (ModelState.IsValid)
             {
                 VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
                 if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artwork doesn't exist.");
+                    return NotFound();
                 }
                 else
                 {
                     if (!dc.Artists.Any(a => a.ID == work.ArtistID))
                     {
-                        return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
+                        return NotFound();
                     }
                     Artwork artWork = dc.Artworks.FirstOrDefault(a => a.ID == id);
                     work.ArtWorkID = id;
@@ -160,20 +162,50 @@ namespace VirtualMuseumAPI.Controllers
                     artWork.ModiBy = User.Identity.GetUserId();
                     artWork.ModiDate = DateTime.Now;
                     dc.SubmitChanges();
-                    return Request.CreateResponse(HttpStatusCode.OK, work);
+                    return Ok(work);
                 } 
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
             }
 
         }
 
-        // DELETE api/ArtWork/5
-        //public void Delete(int id)
-        //{
-        //}
+         //DELETE api/ArtWork/5
+        public IHttpActionResult Delete(int id)
+        {
+
+            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
+            if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                var artWorkMetaData = dc.ArtworkMetadatas.Where(a => a.ArtworkID == id);
+                foreach (var metaDataItem in artWorkMetaData)
+                {
+                    dc.ArtworkMetadatas.DeleteOnSubmit(metaDataItem);
+                }
+                var artWorkRepresentations = dc.ArtworkRepresentations.Where(a => a.ArtworkID == id);
+                foreach (var representationItem in artWorkRepresentations)
+                {
+                    dc.ArtworkRepresentations.DeleteOnSubmit(representationItem);
+                }
+
+                var artWorkInMuseums = dc.MuseumsXArtworks.Where(a => a.ArtworkID == id);
+                foreach (var museumItem in artWorkInMuseums)
+                {
+                    dc.MuseumsXArtworks.DeleteOnSubmit(museumItem);
+                }
+
+                Artwork artWork = dc.Artworks.First(a => a.ID == id);
+                dc.Artworks.DeleteOnSubmit(artWork);
+                dc.SubmitChanges();
+                return Ok();
+            } 
+        }
 
        
     }
