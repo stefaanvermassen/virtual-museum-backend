@@ -45,8 +45,7 @@ namespace VirtualMuseumAPI.Controllers
                 HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
                 Binary bin = dc.Museums.First(p => p.ID == id).Data;
                 MemoryStream stream = new MemoryStream(bin.ToArray());
-                return new MuseumDataResult(stream);
-
+                return new VirtualMuseumDataResult(stream, "application/octet-stream");
             }
         }
 

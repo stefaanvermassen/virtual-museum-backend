@@ -11,15 +11,17 @@ using System.Web.Http;
 
 namespace VirtualMuseumAPI.Helpers
 {
-    public class MuseumDataResult : IHttpActionResult
+    public class VirtualMuseumDataResult : IHttpActionResult
     {
         private readonly MemoryStream _stream;
+        private readonly string _mediaType;
 
-        public MuseumDataResult(MemoryStream stream)
+        public VirtualMuseumDataResult(MemoryStream stream, string mediaType)
         {
             if (stream == null) throw new ArgumentNullException("stream");
-
+            if (mediaType == null) throw new ArgumentNullException("mediaType");
             _stream = stream;
+            _mediaType = mediaType;
 
         }
 
@@ -32,7 +34,7 @@ namespace VirtualMuseumAPI.Helpers
                     Content = new StreamContent(_stream)
                 };
 
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(_mediaType);
 
                 return response;
 
