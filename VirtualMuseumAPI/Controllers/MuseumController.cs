@@ -33,21 +33,20 @@ namespace VirtualMuseumAPI.Controllers
         [AllowAnonymous]
         [Route("api/Museum/{id}/data")]
         [HttpGet]
-        public HttpResponseMessage GetMuseumData(int id)
+        public IHttpActionResult GetMuseumData(int id)
         {
 
-            if (!dc.Museums.Any(a => a.ID == id))
+            if (!dc.Museums.Any(a => a.ID == id  && a.Data != null))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The museum doesn't exist.");
+                return NotFound();
             }
             else
             {
                 HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
                 Binary bin = dc.Museums.First(p => p.ID == id).Data;
                 MemoryStream stream = new MemoryStream(bin.ToArray());
-                result.Content = new StreamContent(stream);
-                result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                return result;
+                return new MuseumDataResult(stream);
+
             }
         }
 
@@ -59,7 +58,7 @@ namespace VirtualMuseumAPI.Controllers
         [AllowAnonymous]
         [Route("api/Museum/random")]
         [HttpGet]
-        public IHttpActionResult GetMuseumData()
+        public IHttpActionResult GetRandomMuseum()
         {
 
             if (dc.Museums.Where(a=> a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First()).Count() > 0)
@@ -138,12 +137,12 @@ namespace VirtualMuseumAPI.Controllers
         /// </summary>
         /// <param name="id">The Museum's unique ID</param>
         /// <returns>The museum object with the specified id, the file has been assigned.</returns>
-        public async Task<HttpResponseMessage> PostAsync(int id)
+        public async Task<IHttpActionResult> PostAsync(int id)
         {
 
             if (!dc.Museums.Any(a => a.ID == id))
             {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The museum doesn't exist.");
+                return NotFound();
             }
             if (ModelState.IsValid)
             {
@@ -165,16 +164,16 @@ namespace VirtualMuseumAPI.Controllers
                         MuseumID = museum.ID
                     };
 
-                    return Request.CreateResponse(HttpStatusCode.OK, MuseumModel);
+                    return Ok(MuseumModel);
                 }
                 else
                 {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest);
+                    return BadRequest(ModelState);
                 }
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
             }
         }
 
@@ -185,14 +184,14 @@ namespace VirtualMuseumAPI.Controllers
         /// <param name="id">The Museum's unique ID</param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public HttpResponseMessage Put(int id, MuseumModel model)
+        public IHttpActionResult Put(int id, MuseumModel model)
         {
             if (ModelState.IsValid)
             {
     
                 if (!dc.Museums.Any(a => a.ID == id))
                 {
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The museum doesn't exist.");
+                    return NotFound();
                 }
                 else
                 {
@@ -209,13 +208,13 @@ namespace VirtualMuseumAPI.Controllers
                     museum.ModiDate =  DateTime.Now;
                     dc.SubmitChanges();
                     model.LastModified = museum.ModiDate;
-                    model.MuseumID = museum.ID;               
-                    return Request.CreateResponse(HttpStatusCode.OK, model);
+                    model.MuseumID = museum.ID;
+                    return Ok(model);
                 }
             }
             else
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
             }
 
         }
