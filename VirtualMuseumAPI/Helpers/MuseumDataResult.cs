@@ -25,6 +25,11 @@ namespace VirtualMuseumAPI.Helpers
 
         }
 
+        public MemoryStream getStream()
+        {
+            return _stream;
+        }
+
         public Task<System.Net.Http.HttpResponseMessage> ExecuteAsync(System.Threading.CancellationToken cancellationToken)
         {
             return Task.Run(() =>
