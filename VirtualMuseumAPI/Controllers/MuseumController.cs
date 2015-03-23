@@ -60,7 +60,7 @@ namespace VirtualMuseumAPI.Controllers
         public IHttpActionResult GetRandomMuseum()
         {
 
-            if (dc.Museums.Where(a=> a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First()).Count() > 0)
+            if (dc.Museums.Any(a=> a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First() && a.Data != null) )
             {
                 Random rand = new Random();
                 int toSkip = rand.Next(0, dc.Museums.Count());
