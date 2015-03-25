@@ -16,6 +16,37 @@ namespace VirtualMuseumAPI.Controllers
     [Authorize]
     public class ArtistController : ApiController
     {
+
+        public class ArtistResults
+        {
+            public IEnumerable<ArtistModel> Artists { get; set; }
+        }
+
+        // GET api/Artist/connected
+        /// <summary>
+        /// Get the artists connected to the user.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/Artist/connected")]
+        [HttpGet]
+        public HttpResponseMessage GetConnectedArtists()
+        {
+            string userid = User.Identity.GetUserId();
+
+            using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
+            {
+                if (!dc.ArtistsXUsers.Any(a => a.AspNetUser.Id == userid))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
+                }
+                var artists = dc.Artists.Where(artist => artist.AspNetUser.Id == userid).
+                    Select(a => new ArtistModel { ArtistID = a.ID, Name = a.Name }).ToList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, new ArtistResults(){Artists = artists});
+            }
+        }
+
         // GET: api/Artist
         /// <summary>
         /// Get all artists in the system
@@ -23,11 +54,12 @@ namespace VirtualMuseumAPI.Controllers
         /// <returns></returns>
         /// 
         [AllowAnonymous]
-        public IEnumerable<ArtistModel> Get()
+        public HttpResponseMessage Get()
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
-                return dc.Artists.Select(artist => new ArtistModel {ArtistID = artist.ID, Name = artist.Name}).ToList();
+                var artists = dc.Artists.Select(artist => new ArtistModel {ArtistID = artist.ID, Name = artist.Name}).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, new ArtistResults() {Artists = artists});
             }
         }
 
