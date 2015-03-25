@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using Antlr.Runtime;
 using Microsoft.AspNet.Identity;
@@ -15,6 +16,37 @@ namespace VirtualMuseumAPI.Controllers
     [Authorize]
     public class ArtistController : ApiController
     {
+
+        public class ArtistResults
+        {
+            public IEnumerable<ArtistModel> Artists { get; set; }
+        }
+
+        // GET api/Artist/connected
+        /// <summary>
+        /// Get the artists connected to the user.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/Artist/connected")]
+        [HttpGet]
+        public HttpResponseMessage GetConnectedArtists()
+        {
+            string userid = User.Identity.GetUserId();
+
+            using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
+            {
+                if (!dc.ArtistsXUsers.Any(a => a.AspNetUser.Id == userid))
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
+                }
+                var artists = dc.Artists.Where(artist => artist.AspNetUser.Id == userid).
+                    Select(a => new ArtistModel { ArtistID = a.ID, Name = a.Name }).ToList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, new ArtistResults(){Artists = artists});
+            }
+        }
+
         // GET: api/Artist
         /// <summary>
         /// Get all artists in the system
@@ -22,11 +54,12 @@ namespace VirtualMuseumAPI.Controllers
         /// <returns></returns>
         /// 
         [AllowAnonymous]
-        public IEnumerable<ArtistModel> Get()
+        public HttpResponseMessage Get()
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
-                return dc.Artists.Select(artist => new ArtistModel {ArtistID = artist.ID, Name = artist.Name}).ToList();
+                var artists = dc.Artists.Select(artist => new ArtistModel {ArtistID = artist.ID, Name = artist.Name}).ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, new ArtistResults() {Artists = artists});
             }
         }
 
@@ -37,17 +70,18 @@ namespace VirtualMuseumAPI.Controllers
         /// <param name="id">The artist's unique ID</param>
         /// <returns></returns>
         [AllowAnonymous]
-        public ArtistModel Get(int id)
+        public HttpResponseMessage Get(int id)
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
-                var artist = dc.Artists.First(a => a.ID == id);
-                if (artist != null)
+                if (!dc.Artists.Any(a => a.ID == id))
                 {
-                    ArtistModel am = new ArtistModel {ArtistID = artist.ID, Name = artist.Name};
-                    return am;
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
                 }
-                return null;
+
+                var artist = dc.Artists.First(a => a.ID == id);
+                ArtistModel am = new ArtistModel {ArtistID = artist.ID, Name = artist.Name};
+                return Request.CreateResponse(HttpStatusCode.OK, am);               
             }
         }
 
@@ -78,22 +112,29 @@ namespace VirtualMuseumAPI.Controllers
         /// </summary>
         /// <param name="id">The Artist's unique ID</param>
         /// <param name="value"></param>
-        public void Put(int id, [FromBody]ArtistModel value)
+        public HttpResponseMessage Put(int id, [FromBody]ArtistModel value)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
-                var artist = dc.Artists.First(a => a.ID == id);
-                if (artist == null)
+                if (!dc.Artists.Any(a => a.ID == id))
                 {
-                    return;
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
                 }
-                artist.ID = value.ArtistID;
+                var artist = dc.Artists.FirstOrDefault(a => a.ID == id);
                 artist.Name = value.Name;
-                artist.ModiBy = "01732c65-2af1-44a4-93ae-1200745678ae";
+                artist.ModiBy = User.Identity.GetUserId();
                 artist.ModiDate = DateTime.Now;
 
-                //dc.Artists.Attach(artist);
                 dc.SubmitChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, new ArtistModel()
+                {
+                    ArtistID = artist.ID, Name = artist.Name
+                });
             }
         }
 
@@ -102,7 +143,7 @@ namespace VirtualMuseumAPI.Controllers
         /// Deletes the specified Artist
         /// </summary>
         /// <param name="id">The Artist's unique ID</param>
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
@@ -111,7 +152,9 @@ namespace VirtualMuseumAPI.Controllers
                 {
                     dc.Artists.DeleteOnSubmit(entity: artistToDelete);
                     dc.SubmitChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK);
                 }
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
             }
         }
     }
