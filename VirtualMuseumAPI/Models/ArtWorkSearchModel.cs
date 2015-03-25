@@ -9,6 +9,7 @@ namespace VirtualMuseumAPI.Models
     {
         public string Name { get; set; }
         public int ArtistID { get; set; }
-        public List<KeyValuePair> keys { get; set; }
+        public List<KeyValuePair> Filter { get; set; }
+        public int ArtWorkFilterID { get; set; }
     }
 }

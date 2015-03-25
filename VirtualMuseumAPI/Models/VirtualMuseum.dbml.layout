@@ -1,262 +1,269 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.25, 17.5" name="VirtualMuseum">
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.25, 16.125" name="VirtualMuseum">
   <DataContextMoniker Name="/VirtualMuseumDataContext" />
   <nestedChildShapes>
-    <classShape Id="58cc9588-ee12-4d10-823c-5ae485dd00f6" absoluteBounds="0.75, 15.375, 2, 1.3862939453125005">
-      <DataClassMoniker Name="/VirtualMuseumDataContext/PrivacyLevel" />
-      <nestedChildShapes>
-        <elementListCompartment Id="9d9ac3bf-4271-4d16-a46a-cc5c39d69d6b" absoluteBounds="0.765, 15.835, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
-      </nestedChildShapes>
-    </classShape>
-    <classShape Id="e45036c5-4122-43f3-8ce1-3ae8537c1ed0" absoluteBounds="3.5, 10.125, 2, 1.5785953776041666">
+    <classShape Id="00adb5f7-16ce-4572-99f4-6f3ed74d7de3" absoluteBounds="3.5, 10.125, 2, 1.5785953776041666">
       <DataClassMoniker Name="/VirtualMuseumDataContext/Artist" />
       <nestedChildShapes>
-        <elementListCompartment Id="3e9e6dcf-7f80-4058-9475-4c92ee84d4ea" absoluteBounds="3.515, 10.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="00674100-702f-4454-a87b-e33fc3712236" absoluteBounds="3.515, 10.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="885ef771-e052-4821-8000-984df404f582" absoluteBounds="3.5, 8.125, 2, 1.1939925130208344">
+    <classShape Id="8874f1c7-b8e0-4d93-a7d1-981e0168b12a" absoluteBounds="0.75, 5.375, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/VirtualMuseumDataContext/PrivacyLevel" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bdb86319-4138-475a-ad6e-729a45ebe01a" absoluteBounds="0.765, 5.835, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d77a66d3-3e9a-4be2-bb69-d956bc58d07a" absoluteBounds="3.5, 8.125, 2, 1.1939925130208344">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ArtistsXUser" />
       <nestedChildShapes>
-        <elementListCompartment Id="1739c91c-9391-4125-b1c6-1b0b41b8a945" absoluteBounds="3.515, 8.585, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="da8288bd-1913-4b36-bf29-c1dc01b7c681" absoluteBounds="3.515, 8.585, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="904db7e6-d16b-4cf0-a0a4-60101043484f" absoluteBounds="6.5, 7.25, 2, 1.7708968098958335">
+    <classShape Id="edb1fa2f-20ca-4685-ba36-7d41e0e625e4" absoluteBounds="6.5, 7.25, 2, 1.7708968098958335">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ArtworkFilter" />
       <nestedChildShapes>
-        <elementListCompartment Id="ce40fa35-d5b3-4322-a87d-7111de912425" absoluteBounds="6.515, 7.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="d0015eaf-ec1a-4e37-8b31-25c0bce232d7" absoluteBounds="6.515, 7.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="ff22d276-ae04-4cb7-bece-e43dc630cbdf" absoluteBounds="9.25, 9.375, 2, 1.1939925130208344">
+    <classShape Id="413a15b3-7142-495a-b0a5-24b93bc06fd7" absoluteBounds="9.25, 9.375, 2, 1.1939925130208344">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ArtworkFiltersXUser" />
       <nestedChildShapes>
-        <elementListCompartment Id="8e1d332a-5b2f-4917-aa24-03b4b2acd31c" absoluteBounds="9.265, 9.835, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="a981b1f7-b905-49ef-8596-b7fcae44c276" absoluteBounds="9.265, 9.835, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="83c20b56-d511-4d04-a66a-91f39e885d08" absoluteBounds="0.75, 5.5, 2, 1.1939925130208344">
+    <classShape Id="438cb92a-6f16-4c8d-8495-794ffff3a897" absoluteBounds="3.75, 2.5, 2, 1.1939925130208335">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ArtworkKey" />
       <nestedChildShapes>
-        <elementListCompartment Id="f3f3eaba-28c5-4efb-8750-7b08510b5af6" absoluteBounds="0.765, 5.96, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="a782da58-5b3a-4120-83d5-45409093e1fc" absoluteBounds="3.765, 2.96, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="298adfc9-cb3c-41d0-93f9-6b0f32fc9e26" absoluteBounds="3.5, 5.125, 2, 1.9631982421875005">
+    <classShape Id="4f736680-0326-4712-8da4-d095e1aa7a7c" absoluteBounds="12, 10.125, 2, 1.9631982421874987">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ArtworkMetadata" />
       <nestedChildShapes>
-        <elementListCompartment Id="f422a34f-2d41-40cd-aaa1-810fb1b3e288" absoluteBounds="3.515, 5.585, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="b8f03139-b1d1-4556-89e3-9d97d779a961" absoluteBounds="12.015, 10.585, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="f6bfffe9-cecd-497a-b852-a4660024679b" absoluteBounds="9, 14.125, 2, 1.7708968098958344">
+    <classShape Id="e4a8360a-77f6-4a21-bd10-427c53c88793" absoluteBounds="9, 14.125, 2, 1.7708968098958344">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ArtworkRepresentation" />
       <nestedChildShapes>
-        <elementListCompartment Id="a9e509eb-2a21-407f-9525-88d503ba92ef" absoluteBounds="9.015, 14.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="0b61ce58-e4d9-40ba-a495-12469fd04ad8" absoluteBounds="9.015, 14.585, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="2bd23fff-33c9-4982-8033-99449a06f7b1" absoluteBounds="6.25, 10.25, 2, 1.7708968098958344">
+    <classShape Id="5f572d44-a819-4255-951c-dbb1a9405ff1" absoluteBounds="6.25, 10.25, 2, 1.7708968098958344">
       <DataClassMoniker Name="/VirtualMuseumDataContext/Artwork" />
       <nestedChildShapes>
-        <elementListCompartment Id="4133e20c-8373-4a83-839c-330a61e2cab9" absoluteBounds="6.265, 10.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="5065fc77-5170-4c3b-931d-de7a72adedad" absoluteBounds="6.265, 10.71, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="a339c9fb-d201-44bf-810f-af5305bde1db" absoluteBounds="9, 11.5, 2, 1.1939925130208344">
+    <classShape Id="cd33a26b-2711-478e-ac9f-1552bb94814c" absoluteBounds="9, 11.5, 2, 1.1939925130208344">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ArtworksXUser" />
       <nestedChildShapes>
-        <elementListCompartment Id="c83d9b63-19a7-49fc-b032-1b33b1144a8f" absoluteBounds="9.015, 11.96, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="6139cfe6-358c-4430-87b0-93f96a7e44b6" absoluteBounds="9.015, 11.96, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" absoluteBounds="0.75, 9.5, 2, 3.1170068359374987">
+    <classShape Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" absoluteBounds="0.75, 9.5, 2, 3.1170068359374987">
       <DataClassMoniker Name="/VirtualMuseumDataContext/AspNetUser" />
       <nestedChildShapes>
-        <elementListCompartment Id="2bef2ad4-a66a-4e55-b251-855f7b3f5298" absoluteBounds="0.765, 9.96, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="2fed9375-3177-49ac-85bb-0868e06fe698" absoluteBounds="0.765, 9.96, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="1358de4d-117f-4eff-8569-96f6777254e4" absoluteBounds="0.75, 0.75, 2, 1.3862939453125">
+    <classShape Id="d29cf6f5-d316-4fd1-a5cd-96183f6f51f9" absoluteBounds="6.75, 0.75, 2, 1.3862939453125003">
       <DataClassMoniker Name="/VirtualMuseumDataContext/ConfigValue" />
       <nestedChildShapes>
-        <elementListCompartment Id="155b6879-960f-4721-8507-e36ffdd7e139" absoluteBounds="0.765, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="faaf0151-8531-4d5d-950f-8ebe4e828a1c" absoluteBounds="6.765, 1.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="80f53166-acb6-4211-a258-12e46d0aab4b" absoluteBounds="3.5, 12.375, 2, 1.5785953776041666">
+    <classShape Id="0e82d69e-bdab-4c92-a615-d75f7b24e37f" absoluteBounds="3.5, 12.375, 2, 1.5785953776041666">
       <DataClassMoniker Name="/VirtualMuseumDataContext/MuseumKey" />
       <nestedChildShapes>
-        <elementListCompartment Id="7a8ddcc1-1259-4d2b-beaf-346da3348b48" absoluteBounds="3.515, 12.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="6267d51f-f6ed-41f6-8f61-4925b747ab5a" absoluteBounds="3.515, 12.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="b5090197-ddf5-495c-a629-d5fe07710423" absoluteBounds="6.25, 12.75, 2, 1.9631982421874987">
+    <classShape Id="7204f550-9a54-4be2-a6cb-e107a53dc1d7" absoluteBounds="6.25, 12.75, 2, 1.9631982421874987">
       <DataClassMoniker Name="/VirtualMuseumDataContext/MuseumMetadata" />
       <nestedChildShapes>
-        <elementListCompartment Id="d6ecb98a-0b8f-42cf-8ba2-25b272891f24" absoluteBounds="6.265, 13.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="149c61ff-9bd7-4acb-a2f0-ee9efdc5c7b5" absoluteBounds="6.265, 13.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="2a6b84e3-f67c-44d2-9bff-79f80801b29b" absoluteBounds="3.5, 14.875, 2, 2.3478011067708326">
+    <classShape Id="0704ec25-98e9-478f-a862-74782023aa7c" absoluteBounds="3.5, 4.875, 2, 2.3478011067708344">
       <DataClassMoniker Name="/VirtualMuseumDataContext/Museum" />
       <nestedChildShapes>
-        <elementListCompartment Id="28f2b4a0-c06d-44e7-a3df-ee4e04517f6e" absoluteBounds="3.515, 15.335, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="eb1920fd-a0e6-4d6e-8af0-a81e104fffc9" absoluteBounds="3.515, 5.335, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="2a5575b5-432f-44c0-bbe0-c8b22e391cf6" absoluteBounds="12, 13.125, 2, 1.1939925130208344">
+    <classShape Id="3f7358e2-336a-4f02-80ad-bac01ec51a3a" absoluteBounds="10, 6.875, 2, 1.1939925130208344">
       <DataClassMoniker Name="/VirtualMuseumDataContext/MuseumsXArtwork" />
       <nestedChildShapes>
-        <elementListCompartment Id="d2dd85c1-53f7-4c2b-aedc-75d11ac5231e" absoluteBounds="12.015, 13.585, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="998dc722-f0b1-4e69-8d2f-614abe97a3bb" absoluteBounds="10.015, 7.335, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(8.5 : 8.13544840494792); (10.25 : 8.13544840494792); (10.25 : 9.375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(8.5 : 8.57619466145833); (9.59375 : 8.57619466145833); (9.59375 : 9.375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/ArtworkFilter/ArtworkFilter_ArtworkFiltersXUser" />
       <nodes>
-        <classShapeMoniker Id="904db7e6-d16b-4cf0-a0a4-60101043484f" />
-        <classShapeMoniker Id="ff22d276-ae04-4cb7-bece-e43dc630cbdf" />
+        <classShapeMoniker Id="edb1fa2f-20ca-4685-ba36-7d41e0e625e4" />
+        <classShapeMoniker Id="413a15b3-7142-495a-b0a5-24b93bc06fd7" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.75 : 6.69399251302083); (1.75 : 7.65625); (3.04166666666667 : 7.65625 : JumpStart); (3.20833333333333 : 7.65625 : JumpEnd); (6.5 : 7.65625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.65625 : 3.69399251302083); (5.65625 : 7.65625); (6.26041666666667 : 7.65625 : JumpStart); (6.42708333333333 : 7.65625 : JumpEnd); (6.5 : 7.65625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/ArtworkKey/ArtworkKey_ArtworkFilter" />
       <nodes>
-        <classShapeMoniker Id="83c20b56-d511-4d04-a66a-91f39e885d08" />
-        <classShapeMoniker Id="904db7e6-d16b-4cf0-a0a4-60101043484f" />
+        <classShapeMoniker Id="438cb92a-6f16-4c8d-8495-794ffff3a897" />
+        <classShapeMoniker Id="edb1fa2f-20ca-4685-ba36-7d41e0e625e4" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 6.09699625651042); (3.5 : 6.09699625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.75 : 3.09699625651042); (13.03125 : 3.09699625651042); (13.03125 : 10.125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/ArtworkKey/ArtworkKey_ArtworkMetadata" />
       <nodes>
-        <classShapeMoniker Id="83c20b56-d511-4d04-a66a-91f39e885d08" />
-        <classShapeMoniker Id="298adfc9-cb3c-41d0-93f9-6b0f32fc9e26" />
+        <classShapeMoniker Id="438cb92a-6f16-4c8d-8495-794ffff3a897" />
+        <classShapeMoniker Id="4f736680-0326-4712-8da4-d095e1aa7a7c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(4.20863627929687 : 7.0881982421875); (4.20863627929687 : 7.3381982421875); (4.80523818359375 : 7.3381982421875); (4.80523818359375 : 7.0881982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(13 : 12.0881982421875); (13 : 12.3381982421875); (13.4439828125 : 12.3381982421875); (13.4439828125 : 12.0881982421875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
       <AssociationMoniker Name="/VirtualMuseumDataContext/ArtworkMetadata/ArtworkMetadata_ArtworkMetadata" />
       <nodes>
-        <classShapeMoniker Id="298adfc9-cb3c-41d0-93f9-6b0f32fc9e26" />
-        <classShapeMoniker Id="298adfc9-cb3c-41d0-93f9-6b0f32fc9e26" />
+        <classShapeMoniker Id="4f736680-0326-4712-8da4-d095e1aa7a7c" />
+        <classShapeMoniker Id="4f736680-0326-4712-8da4-d095e1aa7a7c" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.25 : 11.0344962565104); (12 : 11.0344962565104)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/VirtualMuseumDataContext/Artwork/Artwork_ArtworkMetadata" />
+      <nodes>
+        <classShapeMoniker Id="5f572d44-a819-4255-951c-dbb1a9405ff1" />
+        <classShapeMoniker Id="4f736680-0326-4712-8da4-d095e1aa7a7c" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.25 : 12.0208968098958); (8.625 : 12.3958968098958); (8.625 : 15.0104484049479); (9 : 15.0104484049479)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/Artwork/Artwork_ArtworkRepresentation" />
       <nodes>
-        <classShapeMoniker Id="2bd23fff-33c9-4982-8033-99449a06f7b1" />
-        <classShapeMoniker Id="f6bfffe9-cecd-497a-b852-a4660024679b" />
+        <classShapeMoniker Id="5f572d44-a819-4255-951c-dbb1a9405ff1" />
+        <classShapeMoniker Id="e4a8360a-77f6-4a21-bd10-427c53c88793" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 10.9767976888021); (6.25 : 10.9767976888021)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 10.9767976888021); (5.79166666666667 : 10.9767976888021 : JumpStart); (5.95833333333333 : 10.9767976888021 : JumpEnd); (6.25 : 10.9767976888021)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/Artist/Artist_Artwork" />
       <nodes>
-        <classShapeMoniker Id="e45036c5-4122-43f3-8ce1-3ae8537c1ed0" />
-        <classShapeMoniker Id="2bd23fff-33c9-4982-8033-99449a06f7b1" />
+        <classShapeMoniker Id="00adb5f7-16ce-4572-99f4-6f3ed74d7de3" />
+        <classShapeMoniker Id="5f572d44-a819-4255-951c-dbb1a9405ff1" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(8.25 : 11.7291959049479); (9 : 11.7291959049479)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/Artwork/Artwork_ArtworksXUser" />
       <nodes>
-        <classShapeMoniker Id="2bd23fff-33c9-4982-8033-99449a06f7b1" />
-        <classShapeMoniker Id="a339c9fb-d201-44bf-810f-af5305bde1db" />
+        <classShapeMoniker Id="5f572d44-a819-4255-951c-dbb1a9405ff1" />
+        <classShapeMoniker Id="cd33a26b-2711-478e-ac9f-1552bb94814c" />
       </nodes>
     </associationConnector>
     <associationConnector edgePoints="[(2.75 : 10.9142976888021); (3.5 : 10.9142976888021)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_Artist" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="e45036c5-4122-43f3-8ce1-3ae8537c1ed0" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="00adb5f7-16ce-4572-99f4-6f3ed74d7de3" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.75 : 9.5); (1.75 : 8.72199625651042); (3.04166666666667 : 8.72199625651042 : JumpStart); (3.20833333333333 : 8.72199625651042 : JumpEnd); (3.5 : 8.72199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(1.75 : 9.5); (1.75 : 8.72199625651042); (3.04166666666667 : 8.72199625651042 : JumpStart); (3.20833333333333 : 8.72199625651042 : JumpEnd); (3.22916666666667 : 8.72199625651042 : JumpStart); (3.39583333333333 : 8.72199625651042 : JumpEnd); (3.5 : 8.72199625651042)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_ArtistsXUser" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="885ef771-e052-4821-8000-984df404f582" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="d77a66d3-3e9a-4be2-bb69-d956bc58d07a" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 9.78125); (8.40625 : 9.78125); (8.40625 : 9.02089680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 9.78125); (5.79166666666667 : 9.78125 : JumpStart); (5.95833333333333 : 9.78125 : JumpEnd); (6.26041666666667 : 9.78125 : JumpStart); (6.42708333333333 : 9.78125 : JumpEnd); (8.40625 : 9.78125); (8.40625 : 9.02089680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_ArtworkFilter" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="904db7e6-d16b-4cf0-a0a4-60101043484f" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="edb1fa2f-20ca-4685-ba36-7d41e0e625e4" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 9.984375); (9.25 : 9.984375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 9.984375); (5.79166666666667 : 9.984375 : JumpStart); (5.95833333333333 : 9.984375 : JumpEnd); (6.26041666666667 : 9.984375 : JumpStart); (6.42708333333333 : 9.984375 : JumpEnd); (9.25 : 9.984375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_ArtworkFiltersXUser" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="ff22d276-ae04-4cb7-bece-e43dc630cbdf" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="413a15b3-7142-495a-b0a5-24b93bc06fd7" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 9.50153746153846); (3.125 : 9.12653746153846); (3.125 : 6.62384924934896); (3.5 : 6.62384924934896)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 11.7969042623698); (3.25 : 11.7969042623698); (3.25 : 11.9535953776042); (5.79166666666667 : 11.9535953776042 : JumpStart); (5.95833333333333 : 11.9535953776042 : JumpEnd); (6 : 11.9535953776042); (6 : 12.2708968098958); (8.41666666666667 : 12.2708968098958 : JumpStart); (8.58333333333333 : 12.2708968098958 : JumpEnd); (8.75 : 12.2708968098958); (8.75 : 12.9439925130208); (13 : 12.9439925130208); (13 : 12.0881982421875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_ArtworkMetadata" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="298adfc9-cb3c-41d0-93f9-6b0f32fc9e26" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="4f736680-0326-4712-8da4-d095e1aa7a7c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 11.89349609375); (6.25 : 11.89349609375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 12.2916984049479); (5.79166666666667 : 12.2916984049479 : JumpStart); (5.95833333333333 : 12.2916984049479 : JumpEnd); (7.2187475 : 12.2916984049479); (7.2187475 : 12.0208968098958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_Artwork" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="2bd23fff-33c9-4982-8033-99449a06f7b1" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="5f572d44-a819-4255-951c-dbb1a9405ff1" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 12.1979484049479); (8.34371826171875 : 12.1979484049479 : JumpStart); (8.51038492838542 : 12.1979484049479 : JumpEnd); (9 : 12.1979484049479)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 12.1146468098958); (5.79166666666667 : 12.1146468098958 : JumpStart); (6.08333333333333 : 12.1146468098958 : JumpEnd); (7.13541416666667 : 12.1146468098958 : JumpStart); (7.30208083333333 : 12.1146468098958 : JumpEnd); (8.26041666666667 : 12.1146468098958 : JumpStart); (8.42708333333333 : 12.1146468098958 : JumpEnd); (9 : 12.1146468098958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_ArtworksXUser" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="a339c9fb-d201-44bf-810f-af5305bde1db" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="cd33a26b-2711-478e-ac9f-1552bb94814c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(1.75 : 12.6170068359375); (1.75 : 13.2853016067708); (2.19791916666667 : 13.2853016067708 : JumpStart); (2.36458583333333 : 13.2853016067708 : JumpEnd); (3.04166666666667 : 13.2853016067708 : JumpStart); (3.20833333333333 : 13.2853016067708 : JumpEnd); (3.22916666666667 : 13.2853016067708 : JumpStart); (3.39583333333333 : 13.2853016067708 : JumpEnd); (3.5 : 13.2853016067708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(1.75 : 12.6170068359375); (1.75 : 13.2853016067708); (2.19791916666667 : 13.2853016067708 : JumpStart); (2.36458583333333 : 13.2853016067708 : JumpEnd); (3.5 : 13.2853016067708)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_MuseumKey" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="80f53166-acb6-4211-a258-12e46d0aab4b" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="0e82d69e-bdab-4c92-a615-d75f7b24e37f" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 13.3517976888021); (6.25 : 13.3517976888021)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 13.3517976888021); (5.79166666666667 : 13.3517976888021 : JumpStart); (5.95833333333333 : 13.3517976888021 : JumpEnd); (6.25 : 13.3517976888021)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/MuseumKey/MuseumKey_MuseumMetadata" />
       <nodes>
-        <classShapeMoniker Id="80f53166-acb6-4211-a258-12e46d0aab4b" />
-        <classShapeMoniker Id="b5090197-ddf5-495c-a629-d5fe07710423" />
+        <classShapeMoniker Id="0e82d69e-bdab-4c92-a615-d75f7b24e37f" />
+        <classShapeMoniker Id="7204f550-9a54-4be2-a6cb-e107a53dc1d7" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.2812525 : 12.6170068359375); (2.2812525 : 14.3646468098958); (3.04166666666667 : 14.3646468098958 : JumpStart); (3.20833333333333 : 14.3646468098958 : JumpEnd); (3.22916666666667 : 14.3646468098958 : JumpStart); (3.39583333333333 : 14.3646468098958 : JumpEnd); (6.25 : 14.3646468098958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.2812525 : 12.6170068359375); (2.2812525 : 14.3646468098958); (6.25 : 14.3646468098958)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_MuseumMetadata" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="b5090197-ddf5-495c-a629-d5fe07710423" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="7204f550-9a54-4be2-a6cb-e107a53dc1d7" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 16.0489005533854); (7.25 : 16.0489005533854); (7.25 : 14.7131982421875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 7.22280110677083); (5.59732443490112 : 7.32012554167196 : JumpStart); (5.71517556509888 : 7.43797667186971 : JumpEnd); (5.875 : 7.59780110677083); (5.875 : 13.858222249349); (6.25 : 13.858222249349)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/Museum/Museum_MuseumMetadata" />
       <nodes>
-        <classShapeMoniker Id="2a6b84e3-f67c-44d2-9bff-79f80801b29b" />
-        <classShapeMoniker Id="b5090197-ddf5-495c-a629-d5fe07710423" />
+        <classShapeMoniker Id="0704ec25-98e9-478f-a862-74782023aa7c" />
+        <classShapeMoniker Id="7204f550-9a54-4be2-a6cb-e107a53dc1d7" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.71769230769231 : 12.6170068359375); (3.125 : 13.0243145282452); (3.125 : 16.0489005533854); (3.5 : 16.0489005533854)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 9.59692207692308); (3.3125 : 9.03442207692308); (3.3125 : 6.04890055338542); (3.5 : 6.04890055338542)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_Museum" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="2a6b84e3-f67c-44d2-9bff-79f80801b29b" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="0704ec25-98e9-478f-a862-74782023aa7c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 12.5216212205529); (3.3125 : 13.0841212205529); (3.3125 : 16.0489005533854); (3.5 : 16.0489005533854)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.71769230769231 : 9.5); (3.125 : 9.09269230769231); (3.125 : 6.04890055338542); (3.5 : 6.04890055338542)]" fixedFrom="NotFixed" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/AspNetUser/AspNetUser_Museum1" />
       <nodes>
-        <classShapeMoniker Id="70a26bca-ccf8-48d7-a948-4afab22b6f39" />
-        <classShapeMoniker Id="2a6b84e3-f67c-44d2-9bff-79f80801b29b" />
+        <classShapeMoniker Id="7b24a57f-983a-4031-a7cd-da71d40ca8c8" />
+        <classShapeMoniker Id="0704ec25-98e9-478f-a862-74782023aa7c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(2.75 : 16.467597249349); (3.5 : 16.467597249349)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(2.75 : 6.46759724934896); (3.04166666666667 : 6.46759724934896 : JumpStart); (3.20833333333333 : 6.46759724934896 : JumpEnd); (3.22916666666667 : 6.46759724934896 : JumpStart); (3.39583333333333 : 6.46759724934896 : JumpEnd); (3.5 : 6.46759724934896)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/PrivacyLevel/PrivacyLevel_Museum" />
       <nodes>
-        <classShapeMoniker Id="58cc9588-ee12-4d10-823c-5ae485dd00f6" />
-        <classShapeMoniker Id="2a6b84e3-f67c-44d2-9bff-79f80801b29b" />
+        <classShapeMoniker Id="8874f1c7-b8e0-4d93-a7d1-981e0168b12a" />
+        <classShapeMoniker Id="0704ec25-98e9-478f-a862-74782023aa7c" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(8.25 : 11.0344962565104); (13 : 11.0344962565104); (13 : 13.125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(6.34375 : 10.25); (6.34375 : 7.03125); (10 : 7.03125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/Artwork/Artwork_MuseumsXArtwork" />
       <nodes>
-        <classShapeMoniker Id="2bd23fff-33c9-4982-8033-99449a06f7b1" />
-        <classShapeMoniker Id="2a5575b5-432f-44c0-bbe0-c8b22e391cf6" />
+        <classShapeMoniker Id="5f572d44-a819-4255-951c-dbb1a9405ff1" />
+        <classShapeMoniker Id="3f7358e2-336a-4f02-80ad-bac01ec51a3a" />
       </nodes>
     </associationConnector>
-    <associationConnector edgePoints="[(5.5 : 16.6671033300781); (13 : 16.6671033300781); (13 : 14.3189925130208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+    <associationConnector edgePoints="[(5.5 : 7.19154860677083); (5.57291666666667 : 7.19154860677083 : JumpStart); (5.73958333333333 : 7.19154860677083 : JumpEnd); (6.26041666666667 : 7.19154860677083 : JumpStart); (6.42708333333333 : 7.19154860677083 : JumpEnd); (10 : 7.19154860677083)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/VirtualMuseumDataContext/Museum/Museum_MuseumsXArtwork" />
       <nodes>
-        <classShapeMoniker Id="2a6b84e3-f67c-44d2-9bff-79f80801b29b" />
-        <classShapeMoniker Id="2a5575b5-432f-44c0-bbe0-c8b22e391cf6" />
+        <classShapeMoniker Id="0704ec25-98e9-478f-a862-74782023aa7c" />
+        <classShapeMoniker Id="3f7358e2-336a-4f02-80ad-bac01ec51a3a" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

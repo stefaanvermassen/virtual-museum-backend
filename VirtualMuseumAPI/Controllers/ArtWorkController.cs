@@ -13,6 +13,8 @@ using Microsoft.AspNet.Identity;
 using VirtualMuseumAPI.Helpers.Filters;
 using System.Data.Linq;
 using VirtualMuseumAPI.Helpers;
+using LinqKit;
+using System.Linq.Expressions;
 
 namespace VirtualMuseumAPI.Controllers
 {
@@ -30,34 +32,64 @@ namespace VirtualMuseumAPI.Controllers
             public IEnumerable<ArtWorkModel> ArtWorks { get; set; }
         }
 
-        // GET api/ArtWork
+
         /// <summary>
-        /// Get all the artworks that match the specified fields via the query arguments
+        /// Get all the artworks that match the specified fields via the query arguments. Please use as: <![CDATA[api/artwork?name=UGent&ArtistID=1&filter[0].Name=tag&filter[0].Value=cool]]>
         /// </summary>
         /// <param name="query">Filter fields</param>
         /// <returns></returns>
-        [AllowAnonymous]
         public ArtworkResults Get([FromUri] ArtWorkSearchModel query)
         {
+            string userID = User.Identity.GetUserId();
+            var predicate = PredicateBuilder.True<Artwork>();
+            if (String.IsNullOrEmpty(query.Name) && query.Filter == null && query.ArtistID == 0 && query.ArtWorkFilterID == 0)
+            {
+                //No filters provided, return the union from all your filters
+                predicate = PredicateBuilder.False<Artwork>();
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFiltersXUsers.Any(b => b.UID == userID)))
+                {
+                    predicate = predicate.Or(p => p.ArtworkMetadatas.Any(
+                        q => q.ArtworkKey.ID == filter.ArtworkKeyID && q.Value == filter.Value));
+                }
+            }
+            else
+            {
+                //Search in public art
+                //TODO predicate to public art
+                if (!String.IsNullOrEmpty(query.Name)) predicate = predicate.And(p => p.name == query.Name);
+
+                if (query.ArtistID != 0) predicate = predicate.And(p => p.ArtistID == query.ArtistID);
+
+                if (query.Filter != null)
+                {
+                    foreach (KeyValuePair kv in query.Filter.Where(a => a.Name != null
+                    && dc.ArtworkKeys.Any(k => k.name.ToLower() == a.Name.Trim().ToLower()) && a.Value != null))
+                    {
+                        predicate = predicate.And(p => p.ArtworkMetadatas.Any(
+                            q => q.ArtworkKey.ID == dc.ArtworkKeys.Where(r => r.name == kv.Name).First().ID && q.Value == kv.Value));
+                    }
+                }
+
+                if (query.ArtWorkFilterID != 0 && dc.ArtworkFilters.Any(f => f.ID == query.ArtWorkFilterID))
+                {
+                    ArtworkFilter filter = dc.ArtworkFilters.Where(f => f.ID == query.ArtWorkFilterID).First();
+                    predicate = predicate.And(p => p.ArtworkMetadatas.Any(q => q.KeyID == filter.ArtworkKeyID && q.Value == filter.Value));
+                }
+            }
+            
             List<ArtWorkModel> artworks = new List<ArtWorkModel>();
-            foreach(Artwork work in dc.Artworks){
+            foreach (Artwork work in dc.Artworks.Where(predicate))
+            {
                 ArtWorkModel model = new ArtWorkModel();
                 model.ArtistID = work.ArtistID;
                 model.ArtWorkID = work.ID;
                 model.Name = work.name;
                 artworks.Add(model);
             }
-
-            IEnumerable<ArtWorkModel> filteredArtworks = artworks;
-
-            if (!String.IsNullOrEmpty(query.Name))
-                filteredArtworks = filteredArtworks.Where(p => p.Name == query.Name);
-
-            if (query.ArtistID != 0)
-                filteredArtworks = filteredArtworks.Where(p => p.ArtistID == query.ArtistID);
+            
             ArtworkResults result = new ArtworkResults()
             {
-                ArtWorks = filteredArtworks
+                ArtWorks = artworks
             };
          
             return result;
