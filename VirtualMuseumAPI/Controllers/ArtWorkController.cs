@@ -19,7 +19,12 @@ namespace VirtualMuseumAPI.Controllers
     [Authorize]
     public class ArtWorkController : ApiController
     {
+        VirtualMuseumDataContext dc;
 
+        public ArtWorkController()
+        {
+            dc = new VirtualMuseumDataContext();
+        }
         public class ArtworkResults
         {
             public IEnumerable<ArtWorkModel> ArtWorks { get; set; }
@@ -35,7 +40,6 @@ namespace VirtualMuseumAPI.Controllers
         public ArtworkResults Get([FromUri] ArtWorkSearchModel query)
         {
             List<ArtWorkModel> artworks = new List<ArtWorkModel>();
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
             foreach(Artwork work in dc.Artworks){
                 ArtWorkModel model = new ArtWorkModel();
                 model.ArtistID = work.ArtistID;
@@ -59,19 +63,17 @@ namespace VirtualMuseumAPI.Controllers
             return result;
 
         }
-
-
-
-        // GET api/ArtWork/5
+        
         /// <summary>
         /// Get an JPG image file that is assigned to the artwork with the specified id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">The Museum's unique ID</param>
         /// <returns></returns>
         [AllowAnonymous]
-        public IHttpActionResult Get(int id)
+        [Route("api/Artwork/{id}/data")]
+        [HttpGet]
+        public IHttpActionResult GetArtworkData(int id)
         {
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
             if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
             {
                 return NotFound();
@@ -84,6 +86,31 @@ namespace VirtualMuseumAPI.Controllers
                 return new VirtualMuseumDataResult(stream, ("image/jpg"));
             }
             
+        }
+
+        // GET api/Artwork/id
+        /// <summary>
+        /// Get the properties of the artwork with the specified id
+        /// </summary>
+        /// <param name="id">The Artworks's unique ID</param>
+        /// <returns>The artwork object with the specified id</returns>
+        [AllowAnonymous]
+        public IHttpActionResult Get(int id)
+        {
+
+            if (!dc.Artworks.Any(a => a.ID == id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                Artwork artwork = dc.Artworks.First(p => p.ID == id);
+                ArtWorkModel model = new ArtWorkModel();
+                model.ArtistID = artwork.ArtistID;
+                model.Name = artwork.name;
+                model.ArtWorkID = artwork.ID;
+                return Ok(model);
+            }
         }
 
         // POST api/ArtWork
@@ -145,7 +172,6 @@ namespace VirtualMuseumAPI.Controllers
         {
             if (ModelState.IsValid)
             {
-                VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
                 if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
                 {
                     return NotFound();
@@ -175,8 +201,6 @@ namespace VirtualMuseumAPI.Controllers
          //DELETE api/ArtWork/5
         public IHttpActionResult Delete(int id)
         {
-
-            VirtualMuseumDataContext dc = new VirtualMuseumDataContext();
             if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
             {
                 return NotFound();
