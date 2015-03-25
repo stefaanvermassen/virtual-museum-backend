@@ -234,6 +234,7 @@
     <Compile Include="Models\ArtWorkModel.cs" />
     <Compile Include="Models\ArtWorkSearchModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\KeyValuePair.cs" />
     <Compile Include="Models\MuseumModel.cs" />
     <Compile Include="Models\VirtualMuseum.designer.cs">
       <AutoGen>True</AutoGen>

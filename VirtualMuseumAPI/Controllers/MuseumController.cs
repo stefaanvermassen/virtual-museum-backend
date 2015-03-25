@@ -118,7 +118,7 @@ namespace VirtualMuseumAPI.Controllers
             {
     
                 VirtualMuseumFactory factory = new VirtualMuseumFactory(dc);
-                Museum museum = factory.createMuseum(model.Description, model.Privacy, User.Identity, User.Identity);
+                Museum museum = factory.CreateMuseum(model.Description, model.Privacy, User.Identity, User.Identity);
                 model.MuseumID = museum.ID;
                 model.LastModified = museum.ModiDate;
                 model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);

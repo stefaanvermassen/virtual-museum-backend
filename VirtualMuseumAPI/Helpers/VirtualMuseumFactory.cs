@@ -24,10 +24,8 @@ namespace VirtualMuseumAPI.Helpers
             dc = new VirtualMuseumDataContext();
         }
 
-       
 
-
-        public Artwork createArtWork(byte[] buffer, IIdentity modiByUser)
+        public Artwork CreateArtWork(byte[] buffer, IIdentity modiByUser)
         {            
             Artwork artwork = new Artwork
             {
@@ -50,7 +48,7 @@ namespace VirtualMuseumAPI.Helpers
             return artwork;
         }
 
-        public Artist createPublicArtist(String name, IIdentity modiByUser, IIdentity artistUser = null)
+        public Artist CreatePublicArtist(String name, IIdentity modiByUser, IIdentity artistUser = null)
         {
             Artist artist = new Artist
             {
@@ -74,7 +72,7 @@ namespace VirtualMuseumAPI.Helpers
             return artist;
         }
 
-        public Artist createPrivateArtist(String name, String justRegisteredUserID)
+        public Artist CreatePrivateArtist(String name, String justRegisteredUserID)
         {
             if (dc.AspNetUsers.Any(a => a.Id == justRegisteredUserID))
             {
@@ -100,7 +98,7 @@ namespace VirtualMuseumAPI.Helpers
             return null;
         }
 
-        public Museum createMuseum(String description, Privacy.Levels level, IIdentity ownerID, IIdentity modiByUser)
+        public Museum CreateMuseum(String description, Privacy.Levels level, IIdentity ownerID, IIdentity modiByUser)
         {
             PrivacyLevel privacyLevel = dc.PrivacyLevels.Where(a=>a.Name == "PRIVATE").First();
             if (dc.PrivacyLevels.Any(a => a.Name == Enum.GetName(typeof(Privacy.Levels), (int) level))){
@@ -120,30 +118,33 @@ namespace VirtualMuseumAPI.Helpers
             return museum;
         }
 
-        public PrivacyLevel createPrivacyLevel(String name, String description, String modiByUserID)
+        public PrivacyLevel CreatePrivacyLevel(String name, String description)
         {
-            if (dc.AspNetUsers.Any(a => a.Id == modiByUserID))
+            PrivacyLevel level = new PrivacyLevel()
             {
-                PrivacyLevel level = new PrivacyLevel()
-                {
-                    Description = description,
-                    Name = name,
-                    ModiBy = modiByUserID,
-                    ModiDate = DateTime.Now
-                };
-                dc.PrivacyLevels.InsertOnSubmit(level);
-                dc.SubmitChanges();
-                return level;
-            }
-            else
-            {
-                return null;
-            }
-            
+                Description = description,
+                Name = name
+            };
+            dc.PrivacyLevels.InsertOnSubmit(level);
+            dc.SubmitChanges();
+            return level;
         }
 
-        
-    }
+        public ConfigValue CreateConfigValue(String setting, String value)
+        {
+            ConfigValue val = new ConfigValue() { Setting = setting, Value = value };
+            dc.ConfigValues.InsertOnSubmit(val);
+            dc.SubmitChanges();
+            return val;
+        }
 
-   
+        public ArtworkKey CreateArtworkKey(String name)
+        {
+            ArtworkKey key = new ArtworkKey() { name = name };
+            dc.ArtworkKeys.InsertOnSubmit(key);
+            dc.SubmitChanges();
+            return key;
+        }
+    }
+ 
 }

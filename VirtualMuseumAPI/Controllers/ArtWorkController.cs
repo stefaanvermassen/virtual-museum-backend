@@ -134,7 +134,7 @@ namespace VirtualMuseumAPI.Controllers
                         var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                         var buffer = await file.ReadAsByteArrayAsync();
                         VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
-                        Artwork artwork = VMFactory.createArtWork(buffer, User.Identity);
+                        Artwork artwork = VMFactory.CreateArtWork(buffer, User.Identity);
                         ArtWorkModel artworkModel = new ArtWorkModel()
                         {
                             ArtistID = artwork.ArtistID,
