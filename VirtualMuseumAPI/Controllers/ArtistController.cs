@@ -82,14 +82,17 @@ namespace VirtualMuseumAPI.Controllers
         /// <param name="value"></param>
         public HttpResponseMessage Put(int id, [FromBody]ArtistModel value)
         {
+            if (!ModelState.IsValid)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
             using (VirtualMuseumDataContext dc = new VirtualMuseumDataContext())
             {
-                var artist = dc.Artists.First(a => a.ID == id);
-                if (artist == null)
+                if (!dc.Artists.Any(a => a.ID == id))
                 {
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, "The artist doesn't exist.");
                 }
-                artist.ID = id;
+                var artist = dc.Artists.FirstOrDefault(a => a.ID == id);
                 artist.Name = value.Name;
                 artist.ModiBy = User.Identity.GetUserId();
                 artist.ModiDate = DateTime.Now;
