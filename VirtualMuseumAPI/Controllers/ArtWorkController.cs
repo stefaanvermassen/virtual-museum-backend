@@ -42,9 +42,10 @@ namespace VirtualMuseumAPI.Controllers
         {
             string userID = User.Identity.GetUserId();
             var predicate = PredicateBuilder.True<Artwork>();
-            if (String.IsNullOrEmpty(query.Name) && query.Filter == null && query.ArtistID != 0)
+            if (String.IsNullOrEmpty(query.Name) && query.Filter == null && query.ArtistID == 0 && query.ArtWorkFilterID == 0)
             {
                 //No filters provided, return the union from all your filters
+                predicate = PredicateBuilder.False<Artwork>();
                 foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFiltersXUsers.Any(b => b.UID == userID)))
                 {
                     predicate = predicate.Or(p => p.ArtworkMetadatas.Any(
@@ -67,6 +68,12 @@ namespace VirtualMuseumAPI.Controllers
                         predicate = predicate.And(p => p.ArtworkMetadatas.Any(
                             q => q.ArtworkKey.ID == dc.ArtworkKeys.Where(r => r.name == kv.Name).First().ID && q.Value == kv.Value));
                     }
+                }
+
+                if (query.ArtWorkFilterID != 0 && dc.ArtworkFilters.Any(f => f.ID == query.ArtWorkFilterID))
+                {
+                    ArtworkFilter filter = dc.ArtworkFilters.Where(f => f.ID == query.ArtWorkFilterID).First();
+                    predicate = predicate.And(p => p.ArtworkMetadatas.Any(q => q.KeyID == filter.ArtworkKeyID && q.Value == filter.Value));
                 }
             }
             
