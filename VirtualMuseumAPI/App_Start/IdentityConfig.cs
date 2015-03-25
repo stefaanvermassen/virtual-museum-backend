@@ -83,12 +83,15 @@ namespace VirtualMuseumAPI
     {
         protected override void Seed(ApplicationDbContext context)
         {
-            InitializeIdentityForEF(context);
-            InitializePrivacyRoles(context);
+            VirtualMuseumFactory factory = new VirtualMuseumFactory();
+            InitializeIdentityForEF(context, factory);
+            InitializePrivacyRoles(factory);
+            InitializeConfigValues(factory);
+            InitializeArtworkKeys(factory);
             base.Seed(context);
         }
  
-        public static void InitializeIdentityForEF(ApplicationDbContext db)
+        public static void InitializeIdentityForEF(ApplicationDbContext db, VirtualMuseumFactory factory)
         {
             var userManager = HttpContext.Current
                 .GetOwinContext().GetUserManager<ApplicationUserManager>();
@@ -115,15 +118,11 @@ namespace VirtualMuseumAPI
                 user = new ApplicationUser { UserName = userName, Email = email };
                 var result = userManager.Create(user, password);
                 result = userManager.SetLockoutEnabled(user.Id, false);
-                VirtualMuseumFactory factory = new VirtualMuseumFactory();
                 string script = File.ReadAllText(HostingEnvironment.MapPath("~/database_script.sql"));
                 SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["VirtualMuseumConnectionString"].ToString());
                 Server server = new Server(new ServerConnection(connection));
                 server.ConnectionContext.ExecuteNonQuery(script);
-
-               //db.Database.ExecuteSqlCommand(TransactionalBehavior.DoNotEnsureTransaction, script);
-                //db.SaveChanges();
-                factory.createPrivateArtist(user.UserName, user.Id);
+                factory.CreatePrivateArtist(user.UserName, user.Id);
             }
 
             // Add user admin to Role Admin if not already added
@@ -134,16 +133,27 @@ namespace VirtualMuseumAPI
             }
         }
 
-        public static void InitializePrivacyRoles(ApplicationDbContext db)
+        public static void InitializePrivacyRoles(VirtualMuseumFactory factory)
         {
-            VirtualMuseumFactory factory = new VirtualMuseumFactory();
-            var userManager = HttpContext.Current
-                .GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var user = userManager.FindByName("VirtualMuseum");
-            factory.createPrivacyLevel("PUBLIC", "public", user.Id);
-            factory.createPrivacyLevel("PRIVATE", "private", user.Id);
+            factory.CreatePrivacyLevel("PUBLIC", "public");
+            factory.CreatePrivacyLevel("PRIVATE", "private");
         }
 
+        public static void InitializeConfigValues(VirtualMuseumFactory factory)
+        {
+            //Limits for artworkfilters that are bounded to a user
+            factory.CreateConfigValue("limit.artworkfiltertags", "5");
+            factory.CreateConfigValue("limit.artworkfiltergenres", "5");
+            //Limits for artworkkeys per artwork
+            factory.CreateConfigValue("limit.artworktags", "5");
+            factory.CreateConfigValue("limit.artworkgenres", "5");
+        }
+
+        public static void InitializeArtworkKeys(VirtualMuseumFactory factory)
+        {
+            factory.CreateArtworkKey("Tag");
+            factory.CreateArtworkKey("Genre");
+        }
 
     }
 }

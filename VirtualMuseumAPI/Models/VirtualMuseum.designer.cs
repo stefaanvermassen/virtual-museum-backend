@@ -30,15 +30,21 @@ namespace VirtualMuseumAPI.Models
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
+    partial void InsertPrivacyLevel(PrivacyLevel instance);
+    partial void UpdatePrivacyLevel(PrivacyLevel instance);
+    partial void DeletePrivacyLevel(PrivacyLevel instance);
     partial void InsertArtist(Artist instance);
     partial void UpdateArtist(Artist instance);
     partial void DeleteArtist(Artist instance);
-    partial void InsertArtwork(Artwork instance);
-    partial void UpdateArtwork(Artwork instance);
-    partial void DeleteArtwork(Artwork instance);
     partial void InsertArtistsXUser(ArtistsXUser instance);
     partial void UpdateArtistsXUser(ArtistsXUser instance);
     partial void DeleteArtistsXUser(ArtistsXUser instance);
+    partial void InsertArtworkFilter(ArtworkFilter instance);
+    partial void UpdateArtworkFilter(ArtworkFilter instance);
+    partial void DeleteArtworkFilter(ArtworkFilter instance);
+    partial void InsertArtworkFiltersXUser(ArtworkFiltersXUser instance);
+    partial void UpdateArtworkFiltersXUser(ArtworkFiltersXUser instance);
+    partial void DeleteArtworkFiltersXUser(ArtworkFiltersXUser instance);
     partial void InsertArtworkKey(ArtworkKey instance);
     partial void UpdateArtworkKey(ArtworkKey instance);
     partial void DeleteArtworkKey(ArtworkKey instance);
@@ -48,9 +54,18 @@ namespace VirtualMuseumAPI.Models
     partial void InsertArtworkRepresentation(ArtworkRepresentation instance);
     partial void UpdateArtworkRepresentation(ArtworkRepresentation instance);
     partial void DeleteArtworkRepresentation(ArtworkRepresentation instance);
+    partial void InsertArtwork(Artwork instance);
+    partial void UpdateArtwork(Artwork instance);
+    partial void DeleteArtwork(Artwork instance);
+    partial void InsertArtworksXUser(ArtworksXUser instance);
+    partial void UpdateArtworksXUser(ArtworksXUser instance);
+    partial void DeleteArtworksXUser(ArtworksXUser instance);
     partial void InsertAspNetUser(AspNetUser instance);
     partial void UpdateAspNetUser(AspNetUser instance);
     partial void DeleteAspNetUser(AspNetUser instance);
+    partial void InsertConfigValue(ConfigValue instance);
+    partial void UpdateConfigValue(ConfigValue instance);
+    partial void DeleteConfigValue(ConfigValue instance);
     partial void InsertMuseumKey(MuseumKey instance);
     partial void UpdateMuseumKey(MuseumKey instance);
     partial void DeleteMuseumKey(MuseumKey instance);
@@ -63,9 +78,6 @@ namespace VirtualMuseumAPI.Models
     partial void InsertMuseumsXArtwork(MuseumsXArtwork instance);
     partial void UpdateMuseumsXArtwork(MuseumsXArtwork instance);
     partial void DeleteMuseumsXArtwork(MuseumsXArtwork instance);
-    partial void InsertPrivacyLevel(PrivacyLevel instance);
-    partial void UpdatePrivacyLevel(PrivacyLevel instance);
-    partial void DeletePrivacyLevel(PrivacyLevel instance);
     #endregion
 		
 		public VirtualMuseumDataContext() : 
@@ -98,6 +110,14 @@ namespace VirtualMuseumAPI.Models
 			OnCreated();
 		}
 		
+		public System.Data.Linq.Table<PrivacyLevel> PrivacyLevels
+		{
+			get
+			{
+				return this.GetTable<PrivacyLevel>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Artist> Artists
 		{
 			get
@@ -106,19 +126,27 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
-		public System.Data.Linq.Table<Artwork> Artworks
-		{
-			get
-			{
-				return this.GetTable<Artwork>();
-			}
-		}
-		
 		public System.Data.Linq.Table<ArtistsXUser> ArtistsXUsers
 		{
 			get
 			{
 				return this.GetTable<ArtistsXUser>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ArtworkFilter> ArtworkFilters
+		{
+			get
+			{
+				return this.GetTable<ArtworkFilter>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ArtworkFiltersXUser> ArtworkFiltersXUsers
+		{
+			get
+			{
+				return this.GetTable<ArtworkFiltersXUser>();
 			}
 		}
 		
@@ -146,11 +174,35 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<Artwork> Artworks
+		{
+			get
+			{
+				return this.GetTable<Artwork>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ArtworksXUser> ArtworksXUsers
+		{
+			get
+			{
+				return this.GetTable<ArtworksXUser>();
+			}
+		}
+		
 		public System.Data.Linq.Table<AspNetUser> AspNetUsers
 		{
 			get
 			{
 				return this.GetTable<AspNetUser>();
+			}
+		}
+		
+		public System.Data.Linq.Table<ConfigValue> ConfigValues
+		{
+			get
+			{
+				return this.GetTable<ConfigValue>();
 			}
 		}
 		
@@ -185,13 +237,143 @@ namespace VirtualMuseumAPI.Models
 				return this.GetTable<MuseumsXArtwork>();
 			}
 		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PrivacyLevels")]
+	public partial class PrivacyLevel : INotifyPropertyChanging, INotifyPropertyChanged
+	{
 		
-		public System.Data.Linq.Table<PrivacyLevel> PrivacyLevels
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private string _Description;
+		
+		private EntitySet<Museum> _Museums;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    #endregion
+		
+		public PrivacyLevel()
+		{
+			this._Museums = new EntitySet<Museum>(new Action<Museum>(this.attach_Museums), new Action<Museum>(this.detach_Museums));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
 		{
 			get
 			{
-				return this.GetTable<PrivacyLevel>();
+				return this._ID;
 			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PrivacyLevel_Museum", Storage="_Museums", ThisKey="ID", OtherKey="PrivacyLevelID")]
+		public EntitySet<Museum> Museums
+		{
+			get
+			{
+				return this._Museums;
+			}
+			set
+			{
+				this._Museums.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_Museums(Museum entity)
+		{
+			this.SendPropertyChanging();
+			entity.PrivacyLevel = this;
+		}
+		
+		private void detach_Museums(Museum entity)
+		{
+			this.SendPropertyChanging();
+			entity.PrivacyLevel = null;
 		}
 	}
 	
@@ -398,302 +580,6 @@ namespace VirtualMuseumAPI.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Artworks")]
-	public partial class Artwork : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _name;
-		
-		private int _ArtistID;
-		
-		private string _ModiBy;
-		
-		private System.DateTime _ModiDate;
-		
-		private EntitySet<ArtworkRepresentation> _ArtworkRepresentations;
-		
-		private EntitySet<MuseumsXArtwork> _MuseumsXArtworks;
-		
-		private EntityRef<Artist> _Artist;
-		
-		private EntityRef<AspNetUser> _AspNetUser;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnnameChanging(string value);
-    partial void OnnameChanged();
-    partial void OnArtistIDChanging(int value);
-    partial void OnArtistIDChanged();
-    partial void OnModiByChanging(string value);
-    partial void OnModiByChanged();
-    partial void OnModiDateChanging(System.DateTime value);
-    partial void OnModiDateChanged();
-    #endregion
-		
-		public Artwork()
-		{
-			this._ArtworkRepresentations = new EntitySet<ArtworkRepresentation>(new Action<ArtworkRepresentation>(this.attach_ArtworkRepresentations), new Action<ArtworkRepresentation>(this.detach_ArtworkRepresentations));
-			this._MuseumsXArtworks = new EntitySet<MuseumsXArtwork>(new Action<MuseumsXArtwork>(this.attach_MuseumsXArtworks), new Action<MuseumsXArtwork>(this.detach_MuseumsXArtworks));
-			this._Artist = default(EntityRef<Artist>);
-			this._AspNetUser = default(EntityRef<AspNetUser>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string name
-		{
-			get
-			{
-				return this._name;
-			}
-			set
-			{
-				if ((this._name != value))
-				{
-					this.OnnameChanging(value);
-					this.SendPropertyChanging();
-					this._name = value;
-					this.SendPropertyChanged("name");
-					this.OnnameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArtistID", DbType="Int NOT NULL")]
-		public int ArtistID
-		{
-			get
-			{
-				return this._ArtistID;
-			}
-			set
-			{
-				if ((this._ArtistID != value))
-				{
-					if (this._Artist.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnArtistIDChanging(value);
-					this.SendPropertyChanging();
-					this._ArtistID = value;
-					this.SendPropertyChanged("ArtistID");
-					this.OnArtistIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModiBy", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string ModiBy
-		{
-			get
-			{
-				return this._ModiBy;
-			}
-			set
-			{
-				if ((this._ModiBy != value))
-				{
-					if (this._AspNetUser.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnModiByChanging(value);
-					this.SendPropertyChanging();
-					this._ModiBy = value;
-					this.SendPropertyChanged("ModiBy");
-					this.OnModiByChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModiDate", DbType="DateTime NOT NULL")]
-		public System.DateTime ModiDate
-		{
-			get
-			{
-				return this._ModiDate;
-			}
-			set
-			{
-				if ((this._ModiDate != value))
-				{
-					this.OnModiDateChanging(value);
-					this.SendPropertyChanging();
-					this._ModiDate = value;
-					this.SendPropertyChanged("ModiDate");
-					this.OnModiDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artwork_ArtworkRepresentation", Storage="_ArtworkRepresentations", ThisKey="ID", OtherKey="ArtworkID")]
-		public EntitySet<ArtworkRepresentation> ArtworkRepresentations
-		{
-			get
-			{
-				return this._ArtworkRepresentations;
-			}
-			set
-			{
-				this._ArtworkRepresentations.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artwork_MuseumsXArtwork", Storage="_MuseumsXArtworks", ThisKey="ID", OtherKey="ArtworkID")]
-		public EntitySet<MuseumsXArtwork> MuseumsXArtworks
-		{
-			get
-			{
-				return this._MuseumsXArtworks;
-			}
-			set
-			{
-				this._MuseumsXArtworks.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artist_Artwork", Storage="_Artist", ThisKey="ArtistID", OtherKey="ID", IsForeignKey=true)]
-		public Artist Artist
-		{
-			get
-			{
-				return this._Artist.Entity;
-			}
-			set
-			{
-				Artist previousValue = this._Artist.Entity;
-				if (((previousValue != value) 
-							|| (this._Artist.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._Artist.Entity = null;
-						previousValue.Artworks.Remove(this);
-					}
-					this._Artist.Entity = value;
-					if ((value != null))
-					{
-						value.Artworks.Add(this);
-						this._ArtistID = value.ID;
-					}
-					else
-					{
-						this._ArtistID = default(int);
-					}
-					this.SendPropertyChanged("Artist");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Artwork", Storage="_AspNetUser", ThisKey="ModiBy", OtherKey="Id", IsForeignKey=true)]
-		public AspNetUser AspNetUser
-		{
-			get
-			{
-				return this._AspNetUser.Entity;
-			}
-			set
-			{
-				AspNetUser previousValue = this._AspNetUser.Entity;
-				if (((previousValue != value) 
-							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._AspNetUser.Entity = null;
-						previousValue.Artworks.Remove(this);
-					}
-					this._AspNetUser.Entity = value;
-					if ((value != null))
-					{
-						value.Artworks.Add(this);
-						this._ModiBy = value.Id;
-					}
-					else
-					{
-						this._ModiBy = default(string);
-					}
-					this.SendPropertyChanged("AspNetUser");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_ArtworkRepresentations(ArtworkRepresentation entity)
-		{
-			this.SendPropertyChanging();
-			entity.Artwork = this;
-		}
-		
-		private void detach_ArtworkRepresentations(ArtworkRepresentation entity)
-		{
-			this.SendPropertyChanging();
-			entity.Artwork = null;
-		}
-		
-		private void attach_MuseumsXArtworks(MuseumsXArtwork entity)
-		{
-			this.SendPropertyChanging();
-			entity.Artwork = this;
-		}
-		
-		private void detach_MuseumsXArtworks(MuseumsXArtwork entity)
-		{
-			this.SendPropertyChanging();
-			entity.Artwork = null;
-		}
-	}
-	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ArtistsXUsers")]
 	public partial class ArtistsXUser : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -821,21 +707,25 @@ namespace VirtualMuseumAPI.Models
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ArtworkKeys")]
-	public partial class ArtworkKey : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ArtworkFilters")]
+	public partial class ArtworkFilter : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _ID;
 		
-		private string _name;
+		private int _ArtworkKeyID;
+		
+		private string _Value;
 		
 		private string _ModiBy;
 		
 		private System.DateTime _ModiDate;
 		
-		private EntitySet<ArtworkMetadata> _ArtworkMetadatas;
+		private EntitySet<ArtworkFiltersXUser> _ArtworkFiltersXUsers;
+		
+		private EntityRef<ArtworkKey> _ArtworkKey;
 		
 		private EntityRef<AspNetUser> _AspNetUser;
 		
@@ -845,17 +735,20 @@ namespace VirtualMuseumAPI.Models
     partial void OnCreated();
     partial void OnIDChanging(int value);
     partial void OnIDChanged();
-    partial void OnnameChanging(string value);
-    partial void OnnameChanged();
+    partial void OnArtworkKeyIDChanging(int value);
+    partial void OnArtworkKeyIDChanged();
+    partial void OnValueChanging(string value);
+    partial void OnValueChanged();
     partial void OnModiByChanging(string value);
     partial void OnModiByChanged();
     partial void OnModiDateChanging(System.DateTime value);
     partial void OnModiDateChanged();
     #endregion
 		
-		public ArtworkKey()
+		public ArtworkFilter()
 		{
-			this._ArtworkMetadatas = new EntitySet<ArtworkMetadata>(new Action<ArtworkMetadata>(this.attach_ArtworkMetadatas), new Action<ArtworkMetadata>(this.detach_ArtworkMetadatas));
+			this._ArtworkFiltersXUsers = new EntitySet<ArtworkFiltersXUser>(new Action<ArtworkFiltersXUser>(this.attach_ArtworkFiltersXUsers), new Action<ArtworkFiltersXUser>(this.detach_ArtworkFiltersXUsers));
+			this._ArtworkKey = default(EntityRef<ArtworkKey>);
 			this._AspNetUser = default(EntityRef<AspNetUser>);
 			OnCreated();
 		}
@@ -880,22 +773,46 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string name
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArtworkKeyID", DbType="Int NOT NULL")]
+		public int ArtworkKeyID
 		{
 			get
 			{
-				return this._name;
+				return this._ArtworkKeyID;
 			}
 			set
 			{
-				if ((this._name != value))
+				if ((this._ArtworkKeyID != value))
 				{
-					this.OnnameChanging(value);
+					if (this._ArtworkKey.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnArtworkKeyIDChanging(value);
 					this.SendPropertyChanging();
-					this._name = value;
-					this.SendPropertyChanged("name");
-					this.OnnameChanged();
+					this._ArtworkKeyID = value;
+					this.SendPropertyChanged("ArtworkKeyID");
+					this.OnArtworkKeyIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Value
+		{
+			get
+			{
+				return this._Value;
+			}
+			set
+			{
+				if ((this._Value != value))
+				{
+					this.OnValueChanging(value);
+					this.SendPropertyChanging();
+					this._Value = value;
+					this.SendPropertyChanged("Value");
+					this.OnValueChanged();
 				}
 			}
 		}
@@ -944,20 +861,54 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ArtworkKey_ArtworkMetadata", Storage="_ArtworkMetadatas", ThisKey="ID", OtherKey="KeyID")]
-		public EntitySet<ArtworkMetadata> ArtworkMetadatas
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ArtworkFilter_ArtworkFiltersXUser", Storage="_ArtworkFiltersXUsers", ThisKey="ID", OtherKey="ArtworkFilterID")]
+		public EntitySet<ArtworkFiltersXUser> ArtworkFiltersXUsers
 		{
 			get
 			{
-				return this._ArtworkMetadatas;
+				return this._ArtworkFiltersXUsers;
 			}
 			set
 			{
-				this._ArtworkMetadatas.Assign(value);
+				this._ArtworkFiltersXUsers.Assign(value);
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworkKey", Storage="_AspNetUser", ThisKey="ModiBy", OtherKey="Id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ArtworkKey_ArtworkFilter", Storage="_ArtworkKey", ThisKey="ArtworkKeyID", OtherKey="ID", IsForeignKey=true)]
+		public ArtworkKey ArtworkKey
+		{
+			get
+			{
+				return this._ArtworkKey.Entity;
+			}
+			set
+			{
+				ArtworkKey previousValue = this._ArtworkKey.Entity;
+				if (((previousValue != value) 
+							|| (this._ArtworkKey.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ArtworkKey.Entity = null;
+						previousValue.ArtworkFilters.Remove(this);
+					}
+					this._ArtworkKey.Entity = value;
+					if ((value != null))
+					{
+						value.ArtworkFilters.Add(this);
+						this._ArtworkKeyID = value.ID;
+					}
+					else
+					{
+						this._ArtworkKeyID = default(int);
+					}
+					this.SendPropertyChanged("ArtworkKey");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworkFilter", Storage="_AspNetUser", ThisKey="ModiBy", OtherKey="Id", IsForeignKey=true)]
 		public AspNetUser AspNetUser
 		{
 			get
@@ -974,12 +925,12 @@ namespace VirtualMuseumAPI.Models
 					if ((previousValue != null))
 					{
 						this._AspNetUser.Entity = null;
-						previousValue.ArtworkKeys.Remove(this);
+						previousValue.ArtworkFilters.Remove(this);
 					}
 					this._AspNetUser.Entity = value;
 					if ((value != null))
 					{
-						value.ArtworkKeys.Add(this);
+						value.ArtworkFilters.Add(this);
 						this._ModiBy = value.Id;
 					}
 					else
@@ -1009,6 +960,316 @@ namespace VirtualMuseumAPI.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+		
+		private void attach_ArtworkFiltersXUsers(ArtworkFiltersXUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.ArtworkFilter = this;
+		}
+		
+		private void detach_ArtworkFiltersXUsers(ArtworkFiltersXUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.ArtworkFilter = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ArtworkFiltersXUsers")]
+	public partial class ArtworkFiltersXUser : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _UID;
+		
+		private int _ArtworkFilterID;
+		
+		private EntityRef<ArtworkFilter> _ArtworkFilter;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUIDChanging(string value);
+    partial void OnUIDChanged();
+    partial void OnArtworkFilterIDChanging(int value);
+    partial void OnArtworkFilterIDChanged();
+    #endregion
+		
+		public ArtworkFiltersXUser()
+		{
+			this._ArtworkFilter = default(EntityRef<ArtworkFilter>);
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArtworkFilterID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ArtworkFilterID
+		{
+			get
+			{
+				return this._ArtworkFilterID;
+			}
+			set
+			{
+				if ((this._ArtworkFilterID != value))
+				{
+					if (this._ArtworkFilter.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnArtworkFilterIDChanging(value);
+					this.SendPropertyChanging();
+					this._ArtworkFilterID = value;
+					this.SendPropertyChanged("ArtworkFilterID");
+					this.OnArtworkFilterIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ArtworkFilter_ArtworkFiltersXUser", Storage="_ArtworkFilter", ThisKey="ArtworkFilterID", OtherKey="ID", IsForeignKey=true)]
+		public ArtworkFilter ArtworkFilter
+		{
+			get
+			{
+				return this._ArtworkFilter.Entity;
+			}
+			set
+			{
+				ArtworkFilter previousValue = this._ArtworkFilter.Entity;
+				if (((previousValue != value) 
+							|| (this._ArtworkFilter.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._ArtworkFilter.Entity = null;
+						previousValue.ArtworkFiltersXUsers.Remove(this);
+					}
+					this._ArtworkFilter.Entity = value;
+					if ((value != null))
+					{
+						value.ArtworkFiltersXUsers.Add(this);
+						this._ArtworkFilterID = value.ID;
+					}
+					else
+					{
+						this._ArtworkFilterID = default(int);
+					}
+					this.SendPropertyChanged("ArtworkFilter");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworkFiltersXUser", Storage="_AspNetUser", ThisKey="UID", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.ArtworkFiltersXUsers.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.ArtworkFiltersXUsers.Add(this);
+						this._UID = value.Id;
+					}
+					else
+					{
+						this._UID = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ArtworkKeys")]
+	public partial class ArtworkKey : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _name;
+		
+		private EntitySet<ArtworkFilter> _ArtworkFilters;
+		
+		private EntitySet<ArtworkMetadata> _ArtworkMetadatas;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    #endregion
+		
+		public ArtworkKey()
+		{
+			this._ArtworkFilters = new EntitySet<ArtworkFilter>(new Action<ArtworkFilter>(this.attach_ArtworkFilters), new Action<ArtworkFilter>(this.detach_ArtworkFilters));
+			this._ArtworkMetadatas = new EntitySet<ArtworkMetadata>(new Action<ArtworkMetadata>(this.attach_ArtworkMetadatas), new Action<ArtworkMetadata>(this.detach_ArtworkMetadatas));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ArtworkKey_ArtworkFilter", Storage="_ArtworkFilters", ThisKey="ID", OtherKey="ArtworkKeyID")]
+		public EntitySet<ArtworkFilter> ArtworkFilters
+		{
+			get
+			{
+				return this._ArtworkFilters;
+			}
+			set
+			{
+				this._ArtworkFilters.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="ArtworkKey_ArtworkMetadata", Storage="_ArtworkMetadatas", ThisKey="ID", OtherKey="KeyID")]
+		public EntitySet<ArtworkMetadata> ArtworkMetadatas
+		{
+			get
+			{
+				return this._ArtworkMetadatas;
+			}
+			set
+			{
+				this._ArtworkMetadatas.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ArtworkFilters(ArtworkFilter entity)
+		{
+			this.SendPropertyChanging();
+			entity.ArtworkKey = this;
+		}
+		
+		private void detach_ArtworkFilters(ArtworkFilter entity)
+		{
+			this.SendPropertyChanging();
+			entity.ArtworkKey = null;
 		}
 		
 		private void attach_ArtworkMetadatas(ArtworkMetadata entity)
@@ -1560,6 +1821,498 @@ namespace VirtualMuseumAPI.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Artworks")]
+	public partial class Artwork : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _name;
+		
+		private int _ArtistID;
+		
+		private string _ModiBy;
+		
+		private System.DateTime _ModiDate;
+		
+		private EntitySet<ArtworkRepresentation> _ArtworkRepresentations;
+		
+		private EntitySet<ArtworksXUser> _ArtworksXUsers;
+		
+		private EntitySet<MuseumsXArtwork> _MuseumsXArtworks;
+		
+		private EntityRef<Artist> _Artist;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnnameChanging(string value);
+    partial void OnnameChanged();
+    partial void OnArtistIDChanging(int value);
+    partial void OnArtistIDChanged();
+    partial void OnModiByChanging(string value);
+    partial void OnModiByChanged();
+    partial void OnModiDateChanging(System.DateTime value);
+    partial void OnModiDateChanged();
+    #endregion
+		
+		public Artwork()
+		{
+			this._ArtworkRepresentations = new EntitySet<ArtworkRepresentation>(new Action<ArtworkRepresentation>(this.attach_ArtworkRepresentations), new Action<ArtworkRepresentation>(this.detach_ArtworkRepresentations));
+			this._ArtworksXUsers = new EntitySet<ArtworksXUser>(new Action<ArtworksXUser>(this.attach_ArtworksXUsers), new Action<ArtworksXUser>(this.detach_ArtworksXUsers));
+			this._MuseumsXArtworks = new EntitySet<MuseumsXArtwork>(new Action<MuseumsXArtwork>(this.attach_MuseumsXArtworks), new Action<MuseumsXArtwork>(this.detach_MuseumsXArtworks));
+			this._Artist = default(EntityRef<Artist>);
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string name
+		{
+			get
+			{
+				return this._name;
+			}
+			set
+			{
+				if ((this._name != value))
+				{
+					this.OnnameChanging(value);
+					this.SendPropertyChanging();
+					this._name = value;
+					this.SendPropertyChanged("name");
+					this.OnnameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArtistID", DbType="Int NOT NULL")]
+		public int ArtistID
+		{
+			get
+			{
+				return this._ArtistID;
+			}
+			set
+			{
+				if ((this._ArtistID != value))
+				{
+					if (this._Artist.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnArtistIDChanging(value);
+					this.SendPropertyChanging();
+					this._ArtistID = value;
+					this.SendPropertyChanged("ArtistID");
+					this.OnArtistIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModiBy", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
+		public string ModiBy
+		{
+			get
+			{
+				return this._ModiBy;
+			}
+			set
+			{
+				if ((this._ModiBy != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnModiByChanging(value);
+					this.SendPropertyChanging();
+					this._ModiBy = value;
+					this.SendPropertyChanged("ModiBy");
+					this.OnModiByChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModiDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ModiDate
+		{
+			get
+			{
+				return this._ModiDate;
+			}
+			set
+			{
+				if ((this._ModiDate != value))
+				{
+					this.OnModiDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModiDate = value;
+					this.SendPropertyChanged("ModiDate");
+					this.OnModiDateChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artwork_ArtworkRepresentation", Storage="_ArtworkRepresentations", ThisKey="ID", OtherKey="ArtworkID")]
+		public EntitySet<ArtworkRepresentation> ArtworkRepresentations
+		{
+			get
+			{
+				return this._ArtworkRepresentations;
+			}
+			set
+			{
+				this._ArtworkRepresentations.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artwork_ArtworksXUser", Storage="_ArtworksXUsers", ThisKey="ID", OtherKey="ArtworkID")]
+		public EntitySet<ArtworksXUser> ArtworksXUsers
+		{
+			get
+			{
+				return this._ArtworksXUsers;
+			}
+			set
+			{
+				this._ArtworksXUsers.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artwork_MuseumsXArtwork", Storage="_MuseumsXArtworks", ThisKey="ID", OtherKey="ArtworkID")]
+		public EntitySet<MuseumsXArtwork> MuseumsXArtworks
+		{
+			get
+			{
+				return this._MuseumsXArtworks;
+			}
+			set
+			{
+				this._MuseumsXArtworks.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artist_Artwork", Storage="_Artist", ThisKey="ArtistID", OtherKey="ID", IsForeignKey=true)]
+		public Artist Artist
+		{
+			get
+			{
+				return this._Artist.Entity;
+			}
+			set
+			{
+				Artist previousValue = this._Artist.Entity;
+				if (((previousValue != value) 
+							|| (this._Artist.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Artist.Entity = null;
+						previousValue.Artworks.Remove(this);
+					}
+					this._Artist.Entity = value;
+					if ((value != null))
+					{
+						value.Artworks.Add(this);
+						this._ArtistID = value.ID;
+					}
+					else
+					{
+						this._ArtistID = default(int);
+					}
+					this.SendPropertyChanged("Artist");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Artwork", Storage="_AspNetUser", ThisKey="ModiBy", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.Artworks.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.Artworks.Add(this);
+						this._ModiBy = value.Id;
+					}
+					else
+					{
+						this._ModiBy = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_ArtworkRepresentations(ArtworkRepresentation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Artwork = this;
+		}
+		
+		private void detach_ArtworkRepresentations(ArtworkRepresentation entity)
+		{
+			this.SendPropertyChanging();
+			entity.Artwork = null;
+		}
+		
+		private void attach_ArtworksXUsers(ArtworksXUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.Artwork = this;
+		}
+		
+		private void detach_ArtworksXUsers(ArtworksXUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.Artwork = null;
+		}
+		
+		private void attach_MuseumsXArtworks(MuseumsXArtwork entity)
+		{
+			this.SendPropertyChanging();
+			entity.Artwork = this;
+		}
+		
+		private void detach_MuseumsXArtworks(MuseumsXArtwork entity)
+		{
+			this.SendPropertyChanging();
+			entity.Artwork = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ArtworksXUsers")]
+	public partial class ArtworksXUser : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _UID;
+		
+		private int _ArtworkID;
+		
+		private EntityRef<Artwork> _Artwork;
+		
+		private EntityRef<AspNetUser> _AspNetUser;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUIDChanging(string value);
+    partial void OnUIDChanged();
+    partial void OnArtworkIDChanging(int value);
+    partial void OnArtworkIDChanged();
+    #endregion
+		
+		public ArtworksXUser()
+		{
+			this._Artwork = default(EntityRef<Artwork>);
+			this._AspNetUser = default(EntityRef<AspNetUser>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					if (this._AspNetUser.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArtworkID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int ArtworkID
+		{
+			get
+			{
+				return this._ArtworkID;
+			}
+			set
+			{
+				if ((this._ArtworkID != value))
+				{
+					if (this._Artwork.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnArtworkIDChanging(value);
+					this.SendPropertyChanging();
+					this._ArtworkID = value;
+					this.SendPropertyChanged("ArtworkID");
+					this.OnArtworkIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Artwork_ArtworksXUser", Storage="_Artwork", ThisKey="ArtworkID", OtherKey="ID", IsForeignKey=true)]
+		public Artwork Artwork
+		{
+			get
+			{
+				return this._Artwork.Entity;
+			}
+			set
+			{
+				Artwork previousValue = this._Artwork.Entity;
+				if (((previousValue != value) 
+							|| (this._Artwork.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._Artwork.Entity = null;
+						previousValue.ArtworksXUsers.Remove(this);
+					}
+					this._Artwork.Entity = value;
+					if ((value != null))
+					{
+						value.ArtworksXUsers.Add(this);
+						this._ArtworkID = value.ID;
+					}
+					else
+					{
+						this._ArtworkID = default(int);
+					}
+					this.SendPropertyChanged("Artwork");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworksXUser", Storage="_AspNetUser", ThisKey="UID", OtherKey="Id", IsForeignKey=true)]
+		public AspNetUser AspNetUser
+		{
+			get
+			{
+				return this._AspNetUser.Entity;
+			}
+			set
+			{
+				AspNetUser previousValue = this._AspNetUser.Entity;
+				if (((previousValue != value) 
+							|| (this._AspNetUser.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._AspNetUser.Entity = null;
+						previousValue.ArtworksXUsers.Remove(this);
+					}
+					this._AspNetUser.Entity = value;
+					if ((value != null))
+					{
+						value.ArtworksXUsers.Add(this);
+						this._UID = value.Id;
+					}
+					else
+					{
+						this._UID = default(string);
+					}
+					this.SendPropertyChanged("AspNetUser");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.AspNetUsers")]
 	public partial class AspNetUser : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -1592,13 +2345,17 @@ namespace VirtualMuseumAPI.Models
 		
 		private EntitySet<Artist> _Artists;
 		
-		private EntitySet<Artwork> _Artworks;
-		
 		private EntitySet<ArtistsXUser> _ArtistsXUsers;
 		
-		private EntitySet<ArtworkKey> _ArtworkKeys;
+		private EntitySet<ArtworkFilter> _ArtworkFilters;
+		
+		private EntitySet<ArtworkFiltersXUser> _ArtworkFiltersXUsers;
 		
 		private EntitySet<ArtworkMetadata> _ArtworkMetadatas;
+		
+		private EntitySet<Artwork> _Artworks;
+		
+		private EntitySet<ArtworksXUser> _ArtworksXUsers;
 		
 		private EntitySet<MuseumKey> _MuseumKeys;
 		
@@ -1641,10 +2398,12 @@ namespace VirtualMuseumAPI.Models
 		public AspNetUser()
 		{
 			this._Artists = new EntitySet<Artist>(new Action<Artist>(this.attach_Artists), new Action<Artist>(this.detach_Artists));
-			this._Artworks = new EntitySet<Artwork>(new Action<Artwork>(this.attach_Artworks), new Action<Artwork>(this.detach_Artworks));
 			this._ArtistsXUsers = new EntitySet<ArtistsXUser>(new Action<ArtistsXUser>(this.attach_ArtistsXUsers), new Action<ArtistsXUser>(this.detach_ArtistsXUsers));
-			this._ArtworkKeys = new EntitySet<ArtworkKey>(new Action<ArtworkKey>(this.attach_ArtworkKeys), new Action<ArtworkKey>(this.detach_ArtworkKeys));
+			this._ArtworkFilters = new EntitySet<ArtworkFilter>(new Action<ArtworkFilter>(this.attach_ArtworkFilters), new Action<ArtworkFilter>(this.detach_ArtworkFilters));
+			this._ArtworkFiltersXUsers = new EntitySet<ArtworkFiltersXUser>(new Action<ArtworkFiltersXUser>(this.attach_ArtworkFiltersXUsers), new Action<ArtworkFiltersXUser>(this.detach_ArtworkFiltersXUsers));
 			this._ArtworkMetadatas = new EntitySet<ArtworkMetadata>(new Action<ArtworkMetadata>(this.attach_ArtworkMetadatas), new Action<ArtworkMetadata>(this.detach_ArtworkMetadatas));
+			this._Artworks = new EntitySet<Artwork>(new Action<Artwork>(this.attach_Artworks), new Action<Artwork>(this.detach_Artworks));
+			this._ArtworksXUsers = new EntitySet<ArtworksXUser>(new Action<ArtworksXUser>(this.attach_ArtworksXUsers), new Action<ArtworksXUser>(this.detach_ArtworksXUsers));
 			this._MuseumKeys = new EntitySet<MuseumKey>(new Action<MuseumKey>(this.attach_MuseumKeys), new Action<MuseumKey>(this.detach_MuseumKeys));
 			this._MuseumMetadatas = new EntitySet<MuseumMetadata>(new Action<MuseumMetadata>(this.attach_MuseumMetadatas), new Action<MuseumMetadata>(this.detach_MuseumMetadatas));
 			this._Museums = new EntitySet<Museum>(new Action<Museum>(this.attach_Museums), new Action<Museum>(this.detach_Museums));
@@ -1905,19 +2664,6 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Artwork", Storage="_Artworks", ThisKey="Id", OtherKey="ModiBy")]
-		public EntitySet<Artwork> Artworks
-		{
-			get
-			{
-				return this._Artworks;
-			}
-			set
-			{
-				this._Artworks.Assign(value);
-			}
-		}
-		
 		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtistsXUser", Storage="_ArtistsXUsers", ThisKey="Id", OtherKey="UID")]
 		public EntitySet<ArtistsXUser> ArtistsXUsers
 		{
@@ -1931,16 +2677,29 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworkKey", Storage="_ArtworkKeys", ThisKey="Id", OtherKey="ModiBy")]
-		public EntitySet<ArtworkKey> ArtworkKeys
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworkFilter", Storage="_ArtworkFilters", ThisKey="Id", OtherKey="ModiBy")]
+		public EntitySet<ArtworkFilter> ArtworkFilters
 		{
 			get
 			{
-				return this._ArtworkKeys;
+				return this._ArtworkFilters;
 			}
 			set
 			{
-				this._ArtworkKeys.Assign(value);
+				this._ArtworkFilters.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworkFiltersXUser", Storage="_ArtworkFiltersXUsers", ThisKey="Id", OtherKey="UID")]
+		public EntitySet<ArtworkFiltersXUser> ArtworkFiltersXUsers
+		{
+			get
+			{
+				return this._ArtworkFiltersXUsers;
+			}
+			set
+			{
+				this._ArtworkFiltersXUsers.Assign(value);
 			}
 		}
 		
@@ -1954,6 +2713,32 @@ namespace VirtualMuseumAPI.Models
 			set
 			{
 				this._ArtworkMetadatas.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_Artwork", Storage="_Artworks", ThisKey="Id", OtherKey="ModiBy")]
+		public EntitySet<Artwork> Artworks
+		{
+			get
+			{
+				return this._Artworks;
+			}
+			set
+			{
+				this._Artworks.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="AspNetUser_ArtworksXUser", Storage="_ArtworksXUsers", ThisKey="Id", OtherKey="UID")]
+		public EntitySet<ArtworksXUser> ArtworksXUsers
+		{
+			get
+			{
+				return this._ArtworksXUsers;
+			}
+			set
+			{
+				this._ArtworksXUsers.Assign(value);
 			}
 		}
 		
@@ -2041,18 +2826,6 @@ namespace VirtualMuseumAPI.Models
 			entity.AspNetUser = null;
 		}
 		
-		private void attach_Artworks(Artwork entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = this;
-		}
-		
-		private void detach_Artworks(Artwork entity)
-		{
-			this.SendPropertyChanging();
-			entity.AspNetUser = null;
-		}
-		
 		private void attach_ArtistsXUsers(ArtistsXUser entity)
 		{
 			this.SendPropertyChanging();
@@ -2065,13 +2838,25 @@ namespace VirtualMuseumAPI.Models
 			entity.AspNetUser = null;
 		}
 		
-		private void attach_ArtworkKeys(ArtworkKey entity)
+		private void attach_ArtworkFilters(ArtworkFilter entity)
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser = this;
 		}
 		
-		private void detach_ArtworkKeys(ArtworkKey entity)
+		private void detach_ArtworkFilters(ArtworkFilter entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
+		}
+		
+		private void attach_ArtworkFiltersXUsers(ArtworkFiltersXUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
+		}
+		
+		private void detach_ArtworkFiltersXUsers(ArtworkFiltersXUser entity)
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser = null;
@@ -2084,6 +2869,30 @@ namespace VirtualMuseumAPI.Models
 		}
 		
 		private void detach_ArtworkMetadatas(ArtworkMetadata entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
+		}
+		
+		private void attach_Artworks(Artwork entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
+		}
+		
+		private void detach_Artworks(Artwork entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = null;
+		}
+		
+		private void attach_ArtworksXUsers(ArtworksXUser entity)
+		{
+			this.SendPropertyChanging();
+			entity.AspNetUser = this;
+		}
+		
+		private void detach_ArtworksXUsers(ArtworksXUser entity)
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser = null;
@@ -2135,6 +2944,116 @@ namespace VirtualMuseumAPI.Models
 		{
 			this.SendPropertyChanging();
 			entity.AspNetUser1 = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.ConfigValues")]
+	public partial class ConfigValue : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Setting;
+		
+		private string _Value;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnSettingChanging(string value);
+    partial void OnSettingChanged();
+    partial void OnValueChanging(string value);
+    partial void OnValueChanged();
+    #endregion
+		
+		public ConfigValue()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Setting", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
+		public string Setting
+		{
+			get
+			{
+				return this._Setting;
+			}
+			set
+			{
+				if ((this._Setting != value))
+				{
+					this.OnSettingChanging(value);
+					this.SendPropertyChanging();
+					this._Setting = value;
+					this.SendPropertyChanged("Setting");
+					this.OnSettingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Value
+		{
+			get
+			{
+				return this._Value;
+			}
+			set
+			{
+				if ((this._Value != value))
+				{
+					this.OnValueChanging(value);
+					this.SendPropertyChanging();
+					this._Value = value;
+					this.SendPropertyChanged("Value");
+					this.OnValueChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
 		}
 	}
 	
@@ -3220,192 +4139,6 @@ namespace VirtualMuseumAPI.Models
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.PrivacyLevels")]
-	public partial class PrivacyLevel : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private string _Description;
-		
-		private string _ModiBy;
-		
-		private System.DateTime _ModiDate;
-		
-		private EntitySet<Museum> _Museums;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnModiByChanging(string value);
-    partial void OnModiByChanged();
-    partial void OnModiDateChanging(System.DateTime value);
-    partial void OnModiDateChanged();
-    #endregion
-		
-		public PrivacyLevel()
-		{
-			this._Museums = new EntitySet<Museum>(new Action<Museum>(this.attach_Museums), new Action<Museum>(this.detach_Museums));
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="VarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModiBy", DbType="NVarChar(128) NOT NULL", CanBeNull=false)]
-		public string ModiBy
-		{
-			get
-			{
-				return this._ModiBy;
-			}
-			set
-			{
-				if ((this._ModiBy != value))
-				{
-					this.OnModiByChanging(value);
-					this.SendPropertyChanging();
-					this._ModiBy = value;
-					this.SendPropertyChanged("ModiBy");
-					this.OnModiByChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModiDate", DbType="DateTime NOT NULL")]
-		public System.DateTime ModiDate
-		{
-			get
-			{
-				return this._ModiDate;
-			}
-			set
-			{
-				if ((this._ModiDate != value))
-				{
-					this.OnModiDateChanging(value);
-					this.SendPropertyChanging();
-					this._ModiDate = value;
-					this.SendPropertyChanged("ModiDate");
-					this.OnModiDateChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="PrivacyLevel_Museum", Storage="_Museums", ThisKey="ID", OtherKey="PrivacyLevelID")]
-		public EntitySet<Museum> Museums
-		{
-			get
-			{
-				return this._Museums;
-			}
-			set
-			{
-				this._Museums.Assign(value);
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_Museums(Museum entity)
-		{
-			this.SendPropertyChanging();
-			entity.PrivacyLevel = this;
-		}
-		
-		private void detach_Museums(Museum entity)
-		{
-			this.SendPropertyChanging();
-			entity.PrivacyLevel = null;
 		}
 	}
 }

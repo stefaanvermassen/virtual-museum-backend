@@ -5,10 +5,9 @@ using System.Web;
 
 namespace VirtualMuseumAPI.Models
 {
-    public class ArtWorkSearchModel
+    public class KeyValuePair
     {
         public string Name { get; set; }
-        public int ArtistID { get; set; }
-        public List<KeyValuePair> keys { get; set; }
+        public string Value { get; set; }
     }
 }

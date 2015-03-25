@@ -62,7 +62,7 @@ namespace VirtualMuseumAPI.Controllers
             if (ModelState.IsValid)
             {
                 VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
-                Artist artist = VMFactory.createPublicArtist(value.Name, User.Identity, User.Identity);
+                Artist artist = VMFactory.CreatePublicArtist(value.Name, User.Identity, User.Identity);
                 return Request.CreateResponse(HttpStatusCode.OK, artist.ID);
             }
             else

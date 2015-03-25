@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="VirtualMuseum_DEV" Class="VirtualMuseumDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=WIN2012TEMPLATE;Initial Catalog=VirtualMuseum_DEV;Integrated Security=False;User ID=VirtualMuseum" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="VirtualMuseumConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.PrivacyLevels" Member="PrivacyLevels">
+    <Type Name="PrivacyLevel">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Association Name="PrivacyLevel_Museum" Member="Museums" ThisKey="ID" OtherKey="PrivacyLevelID" Type="Museum" />
+    </Type>
+  </Table>
   <Table Name="dbo.Artists" Member="Artists">
     <Type Name="Artist">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -10,19 +18,6 @@
       <Association Name="AspNetUser_Artist" Member="AspNetUser" ThisKey="ModiBy" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
     </Type>
   </Table>
-  <Table Name="dbo.Artworks" Member="Artworks">
-    <Type Name="Artwork">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="ArtistID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="Artwork_ArtworkRepresentation" Member="ArtworkRepresentations" ThisKey="ID" OtherKey="ArtworkID" Type="ArtworkRepresentation" />
-      <Association Name="Artwork_MuseumsXArtwork" Member="MuseumsXArtworks" ThisKey="ID" OtherKey="ArtworkID" Type="MuseumsXArtwork" />
-      <Association Name="Artist_Artwork" Member="Artist" ThisKey="ArtistID" OtherKey="ID" Type="Artist" IsForeignKey="true" />
-      <Association Name="AspNetUser_Artwork" Member="AspNetUser" ThisKey="ModiBy" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="dbo.ArtistsXUsers" Member="ArtistsXUsers">
     <Type Name="ArtistsXUser">
       <Column Name="UID" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -30,14 +25,32 @@
       <Association Name="AspNetUser_ArtistsXUser" Member="AspNetUser" ThisKey="UID" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.ArtworkFilters" Member="ArtworkFilters">
+    <Type Name="ArtworkFilter">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ArtworkKeyID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ArtworkFilter_ArtworkFiltersXUser" Member="ArtworkFiltersXUsers" ThisKey="ID" OtherKey="ArtworkFilterID" Type="ArtworkFiltersXUser" />
+      <Association Name="ArtworkKey_ArtworkFilter" Member="ArtworkKey" ThisKey="ArtworkKeyID" OtherKey="ID" Type="ArtworkKey" IsForeignKey="true" />
+      <Association Name="AspNetUser_ArtworkFilter" Member="AspNetUser" ThisKey="ModiBy" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArtworkFiltersXUsers" Member="ArtworkFiltersXUsers">
+    <Type Name="ArtworkFiltersXUser">
+      <Column Name="UID" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ArtworkFilterID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="ArtworkFilter_ArtworkFiltersXUser" Member="ArtworkFilter" ThisKey="ArtworkFilterID" OtherKey="ID" Type="ArtworkFilter" IsForeignKey="true" />
+      <Association Name="AspNetUser_ArtworkFiltersXUser" Member="AspNetUser" ThisKey="UID" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.ArtworkKeys" Member="ArtworkKeys">
     <Type Name="ArtworkKey">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
-      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="ArtworkKey_ArtworkFilter" Member="ArtworkFilters" ThisKey="ID" OtherKey="ArtworkKeyID" Type="ArtworkFilter" />
       <Association Name="ArtworkKey_ArtworkMetadata" Member="ArtworkMetadatas" ThisKey="ID" OtherKey="KeyID" Type="ArtworkMetadata" />
-      <Association Name="AspNetUser_ArtworkKey" Member="AspNetUser" ThisKey="ModiBy" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.ArtworkMetadata" Member="ArtworkMetadatas">
@@ -64,6 +77,28 @@
       <Association Name="Artwork_ArtworkRepresentation" Member="Artwork" ThisKey="ArtworkID" OtherKey="ID" Type="Artwork" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.Artworks" Member="Artworks">
+    <Type Name="Artwork">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ArtistID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
+      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Artwork_ArtworkRepresentation" Member="ArtworkRepresentations" ThisKey="ID" OtherKey="ArtworkID" Type="ArtworkRepresentation" />
+      <Association Name="Artwork_ArtworksXUser" Member="ArtworksXUsers" ThisKey="ID" OtherKey="ArtworkID" Type="ArtworksXUser" />
+      <Association Name="Artwork_MuseumsXArtwork" Member="MuseumsXArtworks" ThisKey="ID" OtherKey="ArtworkID" Type="MuseumsXArtwork" />
+      <Association Name="Artist_Artwork" Member="Artist" ThisKey="ArtistID" OtherKey="ID" Type="Artist" IsForeignKey="true" />
+      <Association Name="AspNetUser_Artwork" Member="AspNetUser" ThisKey="ModiBy" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ArtworksXUsers" Member="ArtworksXUsers">
+    <Type Name="ArtworksXUser">
+      <Column Name="UID" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ArtworkID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Artwork_ArtworksXUser" Member="Artwork" ThisKey="ArtworkID" OtherKey="ID" Type="Artwork" IsForeignKey="true" />
+      <Association Name="AspNetUser_ArtworksXUser" Member="AspNetUser" ThisKey="UID" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+    </Type>
+  </Table>
   <Table Name="dbo.AspNetUsers" Member="AspNetUsers">
     <Type Name="AspNetUser">
       <Column Name="Id" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -79,14 +114,23 @@
       <Column Name="AccessFailedCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="UserName" Type="System.String" DbType="NVarChar(256) NOT NULL" CanBeNull="false" />
       <Association Name="AspNetUser_Artist" Member="Artists" ThisKey="Id" OtherKey="ModiBy" Type="Artist" />
-      <Association Name="AspNetUser_Artwork" Member="Artworks" ThisKey="Id" OtherKey="ModiBy" Type="Artwork" />
       <Association Name="AspNetUser_ArtistsXUser" Member="ArtistsXUsers" ThisKey="Id" OtherKey="UID" Type="ArtistsXUser" />
-      <Association Name="AspNetUser_ArtworkKey" Member="ArtworkKeys" ThisKey="Id" OtherKey="ModiBy" Type="ArtworkKey" />
+      <Association Name="AspNetUser_ArtworkFilter" Member="ArtworkFilters" ThisKey="Id" OtherKey="ModiBy" Type="ArtworkFilter" />
+      <Association Name="AspNetUser_ArtworkFiltersXUser" Member="ArtworkFiltersXUsers" ThisKey="Id" OtherKey="UID" Type="ArtworkFiltersXUser" />
       <Association Name="AspNetUser_ArtworkMetadata" Member="ArtworkMetadatas" ThisKey="Id" OtherKey="ModiBy" Type="ArtworkMetadata" />
+      <Association Name="AspNetUser_Artwork" Member="Artworks" ThisKey="Id" OtherKey="ModiBy" Type="Artwork" />
+      <Association Name="AspNetUser_ArtworksXUser" Member="ArtworksXUsers" ThisKey="Id" OtherKey="UID" Type="ArtworksXUser" />
       <Association Name="AspNetUser_MuseumKey" Member="MuseumKeys" ThisKey="Id" OtherKey="ModiBy" Type="MuseumKey" />
       <Association Name="AspNetUser_MuseumMetadata" Member="MuseumMetadatas" ThisKey="Id" OtherKey="ModiBy" Type="MuseumMetadata" />
       <Association Name="AspNetUser_Museum" Member="Museums" ThisKey="Id" OtherKey="ModiBy" Type="Museum" />
       <Association Name="AspNetUser_Museum1" Member="Museums1" ThisKey="Id" OtherKey="OwnerID" Type="Museum" />
+    </Type>
+  </Table>
+  <Table Name="dbo.ConfigValues" Member="ConfigValues">
+    <Type Name="ConfigValue">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Setting" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.MuseumKeys" Member="MuseumKeys">
@@ -135,16 +179,6 @@
       <Column Name="ArtworkID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="Artwork_MuseumsXArtwork" Member="Artwork" ThisKey="ArtworkID" OtherKey="ID" Type="Artwork" IsForeignKey="true" />
       <Association Name="Museum_MuseumsXArtwork" Member="Museum" ThisKey="MuseumID" OtherKey="ID" Type="Museum" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.PrivacyLevels" Member="PrivacyLevels">
-    <Type Name="PrivacyLevel">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
-      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Association Name="PrivacyLevel_Museum" Member="Museums" ThisKey="ID" OtherKey="PrivacyLevelID" Type="Museum" />
     </Type>
   </Table>
 </Database>
