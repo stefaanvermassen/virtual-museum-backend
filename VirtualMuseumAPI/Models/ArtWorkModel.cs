@@ -8,6 +8,7 @@ namespace VirtualMuseumAPI.Models
 {
     public class ArtWorkModel
     {
+        
         /// <summary>
         /// The Artworks's unique ID
         /// </summary>
@@ -22,5 +23,13 @@ namespace VirtualMuseumAPI.Models
         /// </summary>
         [Required]
         public string Name { get; set; }
+        /// <summary>
+        /// The Artworks's metadata
+        /// </summary>
+        [Required]
+        public IEnumerable<KeyValuePair> Metadata { get; set; }
+
+       
+
     }
 }

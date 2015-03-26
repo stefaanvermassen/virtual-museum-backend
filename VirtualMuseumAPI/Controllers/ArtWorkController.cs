@@ -32,7 +32,6 @@ namespace VirtualMuseumAPI.Controllers
             public IEnumerable<ArtWorkModel> ArtWorks { get; set; }
         }
 
-
         /// <summary>
         /// Get all the artworks that match the specified fields via the query arguments. Please use as: <![CDATA[api/artwork?name=UGent&ArtistID=1&filter[0].Name=tag&filter[0].Value=cool]]>
         /// </summary>
@@ -148,6 +147,11 @@ namespace VirtualMuseumAPI.Controllers
                 model.ArtistID = artwork.ArtistID;
                 model.Name = artwork.name;
                 model.ArtWorkID = artwork.ID;
+                List<KeyValuePair> metadatas = new List<KeyValuePair>();
+                foreach(ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == id)){
+                    metadatas.Add(new KeyValuePair() { Name = dc.ArtworkKeys.Where( k=> k.ID ==  metadataItem.KeyID).First().name, Value = metadataItem.Value });
+                }
+                model.Metadata = metadatas;
                 return Ok(model);
             }
         }
@@ -221,13 +225,22 @@ namespace VirtualMuseumAPI.Controllers
                     {
                         return NotFound();
                     }
+                    VirtualMuseumFactory factory = new VirtualMuseumFactory(dc);
                     Artwork artWork = dc.Artworks.FirstOrDefault(a => a.ID == id);
                     work.ArtWorkID = id;
                     artWork.name = work.Name;
                     artWork.ModiBy = User.Identity.GetUserId();
                     artWork.ModiDate = DateTime.Now;
+                    dc.ArtworkMetadatas.DeleteAllOnSubmit(dc.ArtworkMetadatas.Where(a => a.ArtworkID == id));
                     dc.SubmitChanges();
-                    return Ok(work);
+                    IEnumerable<KeyValuePair> providedMetadata = work.Metadata.Where(a => a.Name != null && dc.ArtworkKeys.Any(k => k.name.ToLower() == a.Name.Trim().ToLower()) && a.Value != null);
+
+                    foreach (KeyValuePair kv in providedMetadata)
+                    {
+                        factory.CreateArtworkMetadata(id, kv.Name, kv.Value, User.Identity);
+                    }
+                    
+                    return Get(id);
                 } 
             }
             else
