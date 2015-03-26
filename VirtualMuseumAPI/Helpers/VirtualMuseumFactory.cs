@@ -145,6 +145,21 @@ namespace VirtualMuseumAPI.Helpers
             dc.SubmitChanges();
             return key;
         }
+
+        public ArtworkMetadata CreateArtworkMetadata(int artWorkID, String key, String value, IIdentity modiByUser)
+        {
+            ArtworkMetadata metadata = new ArtworkMetadata()
+            {
+                ArtworkID = artWorkID,
+                KeyID = dc.ArtworkKeys.Where(k => k.name.ToLower() == key.Trim().ToLower()).First().ID,
+                Value = value,
+                ModiBy = IdentityExtensions.GetUserId(modiByUser),
+                ModiDate = DateTime.Now
+            };
+            dc.ArtworkMetadatas.InsertOnSubmit(metadata);
+            dc.SubmitChanges();
+            return metadata;
+        }
     }
  
 }
