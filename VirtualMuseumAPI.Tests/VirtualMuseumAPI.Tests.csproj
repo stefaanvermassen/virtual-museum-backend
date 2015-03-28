@@ -75,6 +75,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestArtistController.cs" />
     <Compile Include="TestArtWorkController.cs" />
     <Compile Include="TestMuseumController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
