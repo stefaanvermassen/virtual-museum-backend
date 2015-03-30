@@ -46,9 +46,10 @@ namespace VirtualMuseumAPI.Tests
             using (TransactionScope transaction = new TransactionScope())
             {
                 var artistController = getArtistController();
+                artistController.ModelState.AddModelError("Key", "ErrorMessage"); // Values of these two strings don't matter.  
                 var artist = new ArtistModel() {};
-                var postArtist = artistController.Post(artist) as BadRequestErrorMessageResult;
-                Assert.IsNotNull(postArtist);
+                var postArtist = artistController.Post(artist);
+                Assert.IsInstanceOfType(postArtist, typeof(InvalidModelStateResult));
   
                 // Not commiting transaction to leave DB in clean state
             }
@@ -85,11 +86,14 @@ namespace VirtualMuseumAPI.Tests
                 var postArtist = artistController.Post(testArtists[0]) as OkNegotiatedContentResult<ArtistModel>;
                 Assert.IsNotNull(postArtist);
 
+                artistController = getArtistController();
                 var originalArtist = artistController.Get(postArtist.Content.ArtistID);
                 var artist = new ArtistModel() { ArtistID = postArtist.Content.ArtistID, Name = null };
-                var putArtist = artistController.Put(artist.ArtistID, artist) as BadRequestErrorMessageResult;
-                Assert.IsNotNull(putArtist);
-
+                
+                artistController = getArtistController();
+                artistController.ModelState.AddModelError("Key", "ErrorMessage"); // Values of these two strings don't matter.  
+                var putArtist = artistController.Put(artist.ArtistID, artist);
+                Assert.IsInstanceOfType(putArtist, typeof(InvalidModelStateResult));
                 // Not commiting transaction to leave DB in clean state
             }
         }
