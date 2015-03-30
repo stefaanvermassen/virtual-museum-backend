@@ -29,6 +29,38 @@ namespace VirtualMuseumAPI.Tests
     public class TestMuseumController
     {
 
+        [TestMethod]
+        public void GetMuseum_ShouldNotFindMuseum()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                //Test with an ID that doesn't exist
+                var museumController = getMuseumController();
+                var getMuseum = museumController.Get(0);
+                Assert.IsInstanceOfType(getMuseum, typeof(NotFoundResult));
+                // Not commiting transaction to leave DB in clean state
+            }
+        }
+
+
+        [TestMethod]
+        public void GetMuseumData_ShouldNotFindMuseum()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                //Test with an ID that doesn't exist
+                var museumController = getMuseumController();
+                var getMuseum = museumController.GetMuseumData(0);
+                Assert.IsInstanceOfType(getMuseum, typeof(NotFoundResult));
+                var testMuseums = GetTestMuseums();
+
+                //No data assigned to the museum entry
+                var postMuseum = museumController.Post(testMuseums[0]) as OkNegotiatedContentResult<MuseumModel>;
+                getMuseum = museumController.GetMuseumData(postMuseum.Content.MuseumID);
+                Assert.IsInstanceOfType(getMuseum, typeof(NotFoundResult));
+                // Not commiting transaction to leave DB in clean state
+            }
+        }
 
         [TestMethod]
         public void PostMuseum_ShouldReturnCorrectMuseum()
@@ -43,6 +75,21 @@ namespace VirtualMuseumAPI.Tests
                 Assert.IsNotNull(getMuseum);
                 Assert.AreEqual(getMuseum.Content.Description, postMuseum.Content.Description);
                 Assert.AreEqual(getMuseum.Content.Privacy, postMuseum.Content.Privacy);
+
+                // Not commiting transaction to leave DB in clean state
+            }
+        }
+
+        [TestMethod]
+        public void PostMuseum_ShouldFailWhenNotFilledInCorrectly()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                var museumcontroller = getMuseumController();
+                museumcontroller.ModelState.AddModelError("Key", "ErrorMessage"); // Values of these two strings don't matter.  
+                var museum = new MuseumModel() { };
+                var postMuseum = museumcontroller.Post(museum);
+                Assert.IsInstanceOfType(postMuseum, typeof(InvalidModelStateResult));
 
                 // Not commiting transaction to leave DB in clean state
             }
@@ -123,6 +170,63 @@ namespace VirtualMuseumAPI.Tests
                 
             }
             
+        }
+
+        [TestMethod]
+        public void PutMuseum_WorksCorrectly()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                var testMuseums = GetTestMuseums();
+                var MuseumController = getMuseumController();
+                var postMuseum = MuseumController.Post(testMuseums[0]) as OkNegotiatedContentResult<MuseumModel>;
+                Assert.IsNotNull(postMuseum);
+
+                var originalMuseum = MuseumController.Get(postMuseum.Content.MuseumID);
+                var Museum = new MuseumModel() { MuseumID = postMuseum.Content.MuseumID, Description = "Leonardo Da Vinci's museum", Privacy= Privacy.Levels.PUBLIC };
+                var putMuseum = MuseumController.Put(Museum.MuseumID, Museum) as OkNegotiatedContentResult<MuseumModel>;
+                Assert.IsNotNull(putMuseum);
+                Assert.AreNotEqual(putMuseum.Content.Description, postMuseum.Content.Description);
+                Assert.AreEqual(putMuseum.Content.Privacy, Museum.Privacy);
+
+                // Not commiting transaction to leave DB in clean state
+            }
+        }
+
+        [TestMethod]
+        public void PutMuseum_WorksInCorrectly()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                var testMuseums = GetTestMuseums();
+                var MuseumController = getMuseumController();
+                var postMuseum = MuseumController.Post(testMuseums[0]) as OkNegotiatedContentResult<MuseumModel>;
+                Assert.IsNotNull(postMuseum);
+
+                MuseumController = getMuseumController();
+                var originalMuseum = MuseumController.Get(postMuseum.Content.MuseumID);
+                var Museum = new MuseumModel() { MuseumID = postMuseum.Content.MuseumID, Description = null };
+
+                MuseumController = getMuseumController();
+                MuseumController.ModelState.AddModelError("Key", "ErrorMessage"); // Values of these two strings don't matter.  
+                var putMuseum = MuseumController.Put(Museum.MuseumID, Museum);
+                Assert.IsInstanceOfType(putMuseum, typeof(InvalidModelStateResult));
+                // Not commiting transaction to leave DB in clean state
+            }
+        }
+
+        [TestMethod]
+        public void PutMuseum_ShouldNotFindMuseum()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                //Test with an ID that doesn't exist
+                var museumController = getMuseumController();
+                var museum = new MuseumModel() { MuseumID = 0, Description = "Leonardo Da Vinci's museum", Privacy = Privacy.Levels.PUBLIC };
+                var putMuseum = museumController.Put(0, museum);
+                Assert.IsInstanceOfType(putMuseum, typeof(NotFoundResult));
+                // Not commiting transaction to leave DB in clean state
+            }
         }
 
         private List<MuseumModel> GetTestMuseums()
