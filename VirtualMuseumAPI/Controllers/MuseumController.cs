@@ -42,7 +42,6 @@ namespace VirtualMuseumAPI.Controllers
             }
             else
             {
-                HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
                 Binary bin = dc.Museums.First(p => p.ID == id).Data;
                 MemoryStream stream = new MemoryStream(bin.ToArray());
                 return new VirtualMuseumDataResult(stream, "application/octet-stream");
@@ -63,7 +62,6 @@ namespace VirtualMuseumAPI.Controllers
             if (dc.Museums.Any(a=> a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First() && a.Data != null) )
             {
                 Random rand = new Random();
-                int toSkip = rand.Next(0, dc.Museums.Count());
                 return Get(
                     VirtualMuseumUtils.RandomIEnumerableElement(
                     dc.Museums.Where(a => a.PrivacyLevel == dc.PrivacyLevels.Where(b => b.Name == "PUBLIC").First()), rand).ID
@@ -150,7 +148,6 @@ namespace VirtualMuseumAPI.Controllers
                     var provider = new MultipartMemoryStreamProvider();
                     await Request.Content.ReadAsMultipartAsync(provider);
                     var file = provider.Contents.First();
-                    var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                     var buffer = await file.ReadAsByteArrayAsync();
                     Museum museum = dc.Museums.Where(a=> a.ID == id).First();
                     museum.Data = buffer;

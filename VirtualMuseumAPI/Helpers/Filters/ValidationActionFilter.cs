@@ -17,7 +17,7 @@ namespace VirtualMuseumAPI.Helpers.Filters
                 actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Arguments cannot be null");
             }
 
-            if (actionContext.ModelState.IsValid == false)
+            if (!actionContext.ModelState.IsValid)
             {
                 actionContext.Response = actionContext.Request.CreateErrorResponse(
                     HttpStatusCode.BadRequest, actionContext.ModelState);
