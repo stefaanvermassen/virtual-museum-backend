@@ -18,8 +18,14 @@ namespace VirtualMuseumAPI.Helpers
 
         public VirtualMuseumDataResult(MemoryStream stream, string mediaType)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
-            if (mediaType == null) throw new ArgumentNullException("mediaType");
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
+            if (mediaType == null)
+            {
+                throw new ArgumentNullException("mediaType");
+            } 
             _stream = stream;
             _mediaType = mediaType;
 
