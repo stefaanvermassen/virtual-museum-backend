@@ -57,12 +57,18 @@ namespace VirtualMuseumAPI.Controllers
                 //Search in public art
                 //TODO predicate to public art
 
-                if (!String.IsNullOrEmpty(query.Name)) predicate = predicate.And(p => p.name == query.Name);
+                if (!String.IsNullOrEmpty(query.Name)) 
+                { 
+                    predicate = predicate.And(p => p.name == query.Name); 
+                }
 
                 
                 if (query.ArtistID != 0)
                 {
-                    if (!dc.Artists.Any(a => a.ID == query.ArtistID)) return new ArtworkResults() { ArtWorks = artworks };
+                    if (!dc.Artists.Any(a => a.ID == query.ArtistID))
+                    {
+                        return new ArtworkResults() { ArtWorks = artworks };
+                    }
                     predicate = predicate.And(p => p.ArtistID == query.ArtistID);
                 } 
 
@@ -77,7 +83,10 @@ namespace VirtualMuseumAPI.Controllers
                 }
                 if (query.ArtWorkFilterID != 0)
                 {
-                    if (!dc.ArtworkFilters.Any(f => f.ID == query.ArtWorkFilterID)) return new ArtworkResults() { ArtWorks = artworks };
+                    if (!dc.ArtworkFilters.Any(f => f.ID == query.ArtWorkFilterID))
+                    {
+                        return new ArtworkResults() { ArtWorks = artworks };
+                    }
                     ArtworkFilter filter = dc.ArtworkFilters.Where(f => f.ID == query.ArtWorkFilterID).First();
                     predicate = predicate.And(p => p.ArtworkMetadatas.Any(q => q.KeyID == filter.ArtworkKeyID && q.Value == filter.Value));
                 }
