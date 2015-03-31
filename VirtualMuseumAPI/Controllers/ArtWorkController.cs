@@ -90,6 +90,12 @@ namespace VirtualMuseumAPI.Controllers
                 model.ArtistID = work.ArtistID;
                 model.ArtWorkID = work.ID;
                 model.Name = work.name;
+                List<KeyValuePair> metadatas = new List<KeyValuePair>();
+                foreach (ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == work.ID))
+                {
+                    metadatas.Add(new KeyValuePair() { Name = dc.ArtworkKeys.Where(k => k.ID == metadataItem.KeyID).First().name, Value = metadataItem.Value });
+                }
+                model.Metadata = metadatas;
                 artworks.Add(model);
             }
             
