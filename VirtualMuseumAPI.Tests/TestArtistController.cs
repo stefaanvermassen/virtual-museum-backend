@@ -198,7 +198,7 @@ namespace VirtualMuseumAPI.Tests
                 .OmitAutoProperties()
                 .With(x => x.Request, fixture.Create<HttpRequestMessage>()));
             //Simulate this user to execute controller methods
-            var claim = new Claim("VirtualMuseum", "0fdf6184-964e-40e3-a828-076853cbd5d0");
+            var claim = new Claim("VirtualMuseum", "d32895c4-8d71-4340-884c-89293cc50784");
             var mockIdentity =
                 Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
             fixture.Customize<ArtistController>(c => c
