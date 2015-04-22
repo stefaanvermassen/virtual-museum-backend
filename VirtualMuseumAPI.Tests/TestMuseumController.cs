@@ -229,6 +229,38 @@ namespace VirtualMuseumAPI.Tests
             }
         }
 
+        [TestMethod]
+        public void ConnectedMuseum_ShouldNotReturnMuseums()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                //Test with an ID that doesn't exist
+                var museumController = getMuseumController();
+                var connectResult = museumController.GetConnectedMuseums();
+                Assert.IsInstanceOfType(connectResult, typeof(NotFoundResult));
+                // Not commiting transaction to leave DB in clean state
+            }
+        }
+
+        [TestMethod]
+        public void ConnectedMuseum_ShouldMuseums()
+        {
+            using (TransactionScope transaction = new TransactionScope())
+            {
+                //Test with an ID that doesn't exist
+                var museumController = getMuseumController();
+                var testMuseums = GetTestMuseums();
+                museumController.Post(testMuseums[0]);
+                museumController.Post(testMuseums[1]);
+
+                var connectResult = museumController.GetConnectedMuseums() as OkNegotiatedContentResult<MuseumController.MuseumResults>;
+                Assert.IsNotNull(connectResult);
+                Assert.IsTrue(connectResult.Content.Museums.Any());
+                Assert.IsTrue(connectResult.Content.Museums.Any(m => m.Description == testMuseums[0].Description));
+                // Not commiting transaction to leave DB in clean state
+            }
+        }
+
         private List<MuseumModel> GetTestMuseums()
         {
             var testMuseums = new List<MuseumModel>();

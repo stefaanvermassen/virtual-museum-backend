@@ -19,6 +19,11 @@ namespace VirtualMuseumAPI.Controllers
     [Authorize]
     public class MuseumController : ApiController
     {
+        public class MuseumResults
+        {
+            public IEnumerable<MuseumModel> Museums { get; set; }
+        }
+
         VirtualMuseumDataContext dc;
 
         public MuseumController()
@@ -75,7 +80,32 @@ namespace VirtualMuseumAPI.Controllers
                        
         }
 
-        
+        // GET api/Museums/connected
+        /// <summary>
+        /// Get the museums connected to the user.
+        /// </summary>
+        /// <returns>A list of museums which belong to user</returns>
+        [Route("api/Museum/connected")]
+        [HttpGet]
+        public IHttpActionResult GetConnectedMuseums()
+        {
+            string userid = User.Identity.GetUserId();
+
+            if (!dc.Museums.Any(m => m.OwnerID == userid))
+            {
+                return NotFound();
+            }
+            var museums = dc.Museums.Where(m => m.OwnerID == userid).
+                Select(m => new MuseumModel
+                {
+                    Description = m.Description,
+                    LastModified = m.ModiDate,
+                    MuseumID = m.ID,
+                    Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.First(a => a.ID == m.PrivacyLevelID).Name)
+                }).ToList();
+
+            return Ok(new MuseumResults() { Museums = museums });
+        }
 
         // GET api/museum/id
         /// <summary>
