@@ -25,7 +25,7 @@ namespace VirtualMuseumAPI.Helpers
         }
 
 
-        public Artwork CreateArtWork(byte[] buffer, IIdentity modiByUser)
+        public Artwork CreateArtWork(byte[] buffer, int size, IIdentity modiByUser)
         {            
             Artwork artwork = new Artwork
             {
@@ -41,11 +41,25 @@ namespace VirtualMuseumAPI.Helpers
                 ArtworkID = artwork.ID,
                 DataGUID = Guid.NewGuid(),
                 Data = new System.Data.Linq.Binary(buffer),
-                Size = 1
+                Size = size
             };
             dc.ArtworkRepresentations.InsertOnSubmit(representation);
             dc.SubmitChanges();
             return artwork;
+        }
+
+        public ArtworkRepresentation CreateArtWorkRepresentation(int ArtWorkID, byte[] buffer, int size, IIdentity modiByUser)
+        {
+            ArtworkRepresentation representation = new ArtworkRepresentation
+            {
+                ArtworkID = ArtWorkID,
+                DataGUID = Guid.NewGuid(),
+                Data = new System.Data.Linq.Binary(buffer),
+                Size = size
+            };
+            dc.ArtworkRepresentations.InsertOnSubmit(representation);
+            dc.SubmitChanges();
+            return representation;
         }
 
         public Artist CreatePublicArtist(String name, IIdentity modiByUser, IIdentity artistUser = null)

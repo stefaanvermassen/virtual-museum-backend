@@ -125,16 +125,16 @@ namespace VirtualMuseumAPI.Controllers
         [AllowAnonymous]
         [Route("api/Artwork/{id}/data")]
         [HttpGet]
-        public IHttpActionResult GetArtworkData(int id)
+        public IHttpActionResult GetArtworkData(int id, int size = 1)
         {
-            if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
+            if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id && a.Size == size))
             {
                 return NotFound();
             }
             else
             {
                 HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
-                Binary bin = dc.ArtworkRepresentations.FirstOrDefault(p => p.ArtworkID == id).Data;
+                Binary bin = dc.ArtworkRepresentations.FirstOrDefault(p => p.ArtworkID == id && p.Size == size).Data;
                 MemoryStream stream = new MemoryStream(bin.ToArray());
                 return new VirtualMuseumDataResult(stream, ("image/jpg"));
             }
@@ -191,15 +191,23 @@ namespace VirtualMuseumAPI.Controllers
                     {
                         var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                         var buffer = await file.ReadAsByteArrayAsync();
-                        VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
-                        Artwork artwork = VMFactory.CreateArtWork(buffer, User.Identity);
-                        ArtWorkModel artworkModel = new ArtWorkModel()
+                        if (VirtualMuseumUtils.IsValidImage(buffer))
                         {
-                            ArtistID = artwork.ArtistID,
-                            ArtWorkID = artwork.ID,
-                            Name = artwork.name
-                        };
-                        messages.Add(artworkModel);
+                            VirtualMuseumFactory VMFactory = new VirtualMuseumFactory();
+                            Artwork artwork = VMFactory.CreateArtWork(buffer, 5, User.Identity);
+                            //Additional sizes
+                            VMFactory.CreateArtWorkRepresentation(artwork.ID, VirtualMuseumUtils.CreateThumbnail(buffer, 128, 128), 1, User.Identity);
+                            VMFactory.CreateArtWorkRepresentation(artwork.ID, VirtualMuseumUtils.CreateThumbnail(buffer, 256, 256), 2, User.Identity);
+                            VMFactory.CreateArtWorkRepresentation(artwork.ID, VirtualMuseumUtils.CreateThumbnail(buffer, 1024, 1024), 3, User.Identity);
+                            VMFactory.CreateArtWorkRepresentation(artwork.ID, VirtualMuseumUtils.CreateThumbnail(buffer, 2048, 2048), 4, User.Identity);
+                            ArtWorkModel artworkModel = new ArtWorkModel()
+                            {
+                                ArtistID = artwork.ArtistID,
+                                ArtWorkID = artwork.ID,
+                                Name = artwork.name
+                            };
+                            messages.Add(artworkModel);
+                        } 
                     }
                     ArtworkResults result = new ArtworkResults()
                     {
