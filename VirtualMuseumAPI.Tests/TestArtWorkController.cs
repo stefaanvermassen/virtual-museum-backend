@@ -48,12 +48,12 @@ namespace VirtualMuseumAPI.Tests
             using (TransactionScope transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 //Data to send
-                var ArtWorkData = new Byte[100];
+                var ArtWorkData = Convert.FromBase64String(VirtualMuseumTestUtils.img);
                 //Get controller with MultipartFormDataContent
                 var ArtWorkController = getArtWorkController(ArtWorkData);
                 var postArtWorkData = await ArtWorkController.PostAsync() as OkNegotiatedContentResult<VirtualMuseumAPI.Controllers.ArtWorkController.ArtworkResults>;
                 //Get the new ArtWork
-                var getArtWork = ArtWorkController.GetArtworkData(postArtWorkData.Content.ArtWorks.First().ArtWorkID) as VirtualMuseumDataResult;
+                var getArtWork = ArtWorkController.GetArtworkData(postArtWorkData.Content.ArtWorks.First().ArtWorkID, 5) as VirtualMuseumDataResult;
 
                 Assert.IsNotNull(postArtWorkData);
                 Assert.IsNotNull(getArtWork);
@@ -74,7 +74,7 @@ namespace VirtualMuseumAPI.Tests
             {
                 var testArtWorks = GetTestArtWorks();
                 //Data to send
-                var ArtWorkData = new Byte[100];
+                var ArtWorkData = Convert.FromBase64String(VirtualMuseumTestUtils.img);
                 //Get controller with MultipartFormDataContent
                 var ArtWorkController = getArtWorkController(ArtWorkData);
                 var postArtWorkData = await ArtWorkController.PostAsync() as OkNegotiatedContentResult<VirtualMuseumAPI.Controllers.ArtWorkController.ArtworkResults>;
@@ -97,7 +97,7 @@ namespace VirtualMuseumAPI.Tests
             {
                 var testArtWorks = GetTestArtWorks();
                 //Data to send
-                var ArtWorkData = new Byte[100];
+                var ArtWorkData = Convert.FromBase64String(VirtualMuseumTestUtils.img);
                 //Get controller with MultipartFormDataContent
                 var ArtWorkController = getArtWorkController(ArtWorkData);
                 var postArtWorkData = await ArtWorkController.PostAsync() as OkNegotiatedContentResult<VirtualMuseumAPI.Controllers.ArtWorkController.ArtworkResults>;

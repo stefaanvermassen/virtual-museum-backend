@@ -79,6 +79,7 @@
     <Compile Include="TestArtWorkController.cs" />
     <Compile Include="TestMuseumController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VirtualMuseumTestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
