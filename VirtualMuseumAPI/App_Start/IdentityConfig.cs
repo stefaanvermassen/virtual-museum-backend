@@ -123,6 +123,7 @@ namespace VirtualMuseumAPI
                 Server server = new Server(new ServerConnection(connection));
                 server.ConnectionContext.ExecuteNonQuery(script);
                 factory.CreatePrivateArtist(user.UserName, user.Id);
+                factory.CreateUserCredit(user.Id);
             }
 
             // Add user admin to Role Admin if not already added
@@ -137,6 +138,11 @@ namespace VirtualMuseumAPI
         {
             factory.CreatePrivacyLevel("PUBLIC", "public");
             factory.CreatePrivacyLevel("PRIVATE", "private");
+        }
+
+        public static void InitializeCreditActions(VirtualMuseumFactory factory)
+        {
+            factory.CreateCreditAction("ENTERMUSEUM", "You can gain credits by entering a new museum", 500);
         }
 
         public static void InitializeConfigValues(VirtualMuseumFactory factory)

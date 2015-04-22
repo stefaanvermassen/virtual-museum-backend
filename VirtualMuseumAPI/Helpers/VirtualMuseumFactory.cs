@@ -174,6 +174,37 @@ namespace VirtualMuseumAPI.Helpers
             dc.SubmitChanges();
             return metadata;
         }
+
+        public CreditsXUser CreateUserCredit(String justRegisteredUserID)
+        {
+            if (dc.AspNetUsers.Any(a => a.Id == justRegisteredUserID))
+            {
+                CreditsXUser creditUserEntry = new CreditsXUser
+                {
+                    Credits = 0,
+                    UID = justRegisteredUserID,
+                    ModiDate = DateTime.Now
+                };
+                dc.CreditsXUsers.InsertOnSubmit(creditUserEntry);
+                dc.SubmitChanges();
+
+                return creditUserEntry;
+            }
+            return null;
+        }
+
+        public CreditAction CreateCreditAction(String name, String description, int credits)
+        {
+            CreditAction action = new CreditAction
+            {
+                Name = name,
+                Description = description,
+                Credits = credits
+            };
+            dc.CreditActions.InsertOnSubmit(action);
+            dc.SubmitChanges();
+            return action;
+        }
     }
  
 }

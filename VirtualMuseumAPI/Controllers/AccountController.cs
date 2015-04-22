@@ -365,6 +365,7 @@ namespace VirtualMuseumAPI.Controllers
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
             VirtualMuseumFactory factory = new VirtualMuseumFactory();
             factory.CreatePrivateArtist(model.UserName, user.Id);
+            factory.CreateUserCredit(user.Id);
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
