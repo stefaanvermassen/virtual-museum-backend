@@ -29,7 +29,10 @@ namespace VirtualMuseumAPI.Models
         [Required]
         public IEnumerable<KeyValuePair> Metadata { get; set; }
 
-       
+        /// <summary>
+        /// How many times the artwork is collected
+        /// </summary
+        public int Collected { get; set; }      
 
     }
 }

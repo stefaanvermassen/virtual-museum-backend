@@ -99,6 +99,7 @@ namespace VirtualMuseumAPI.Controllers
                 model.ArtistID = work.ArtistID;
                 model.ArtWorkID = work.ID;
                 model.Name = work.name;
+                model.Collected = work.Collected;
                 List<KeyValuePair> metadatas = new List<KeyValuePair>();
                 foreach (ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == work.ID))
                 {
@@ -162,6 +163,7 @@ namespace VirtualMuseumAPI.Controllers
                 model.ArtistID = artwork.ArtistID;
                 model.Name = artwork.name;
                 model.ArtWorkID = artwork.ID;
+                model.Collected = artwork.Collected;
                 List<KeyValuePair> metadatas = new List<KeyValuePair>();
                 foreach(ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == id)){
                     metadatas.Add(new KeyValuePair() { Name = dc.ArtworkKeys.Where( k=> k.ID ==  metadataItem.KeyID).First().name, Value = metadataItem.Value });
@@ -304,8 +306,6 @@ namespace VirtualMuseumAPI.Controllers
                 dc.SubmitChanges();
                 return Ok();
             } 
-        }
-
-       
+        }       
     }
 }

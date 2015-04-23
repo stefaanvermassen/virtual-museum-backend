@@ -72,7 +72,7 @@ namespace VirtualMuseumAPI.Controllers
                         {
                             if (!dc.MuseumUserVisits.Any(a => a.MuseumID == model.ID && a.UID == userid))
                             {
-                                int creditsToAdd = dc.CreditActions.First(c => c.Name == "ENTERMUSEUM").Credits;
+                                int creditsToAdd = dc.CreditActions.First(c => c.Name == Enum.GetName(typeof(CreditActionType),model.Actions)).Credits;
                                 dc.CreditsXUsers.First(u => u.UID == userid).Credits += creditsToAdd;
                                 dc.SubmitChanges();
                                 var user = UserManager.FindById(userid);

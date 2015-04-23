@@ -73,6 +73,7 @@ namespace VirtualMuseumAPI.Tests
                 var getMuseum = museumController.Get(postMuseum.Content.MuseumID) as OkNegotiatedContentResult<MuseumModel>;
                 Assert.IsNotNull(postMuseum);
                 Assert.IsNotNull(getMuseum);
+                Assert.AreEqual(getMuseum.Content.Name, postMuseum.Content.Name);
                 Assert.AreEqual(getMuseum.Content.Description, postMuseum.Content.Description);
                 Assert.AreEqual(getMuseum.Content.Privacy, postMuseum.Content.Privacy);
 
@@ -183,9 +184,10 @@ namespace VirtualMuseumAPI.Tests
                 Assert.IsNotNull(postMuseum);
 
                 var originalMuseum = MuseumController.Get(postMuseum.Content.MuseumID);
-                var Museum = new MuseumModel() { MuseumID = postMuseum.Content.MuseumID, Description = "Leonardo Da Vinci's museum", Privacy= Privacy.Levels.PUBLIC };
+                var Museum = new MuseumModel() { MuseumID = postMuseum.Content.MuseumID, Name="Test", Description = "Leonardo Da Vinci's museum", Privacy= Privacy.Levels.PUBLIC };
                 var putMuseum = MuseumController.Put(Museum.MuseumID, Museum) as OkNegotiatedContentResult<MuseumModel>;
                 Assert.IsNotNull(putMuseum);
+                Assert.AreNotEqual(putMuseum.Content.Name, postMuseum.Content.Name);
                 Assert.AreNotEqual(putMuseum.Content.Description, postMuseum.Content.Description);
                 Assert.AreEqual(putMuseum.Content.Privacy, Museum.Privacy);
 
@@ -205,7 +207,7 @@ namespace VirtualMuseumAPI.Tests
 
                 MuseumController = getMuseumController();
                 var originalMuseum = MuseumController.Get(postMuseum.Content.MuseumID);
-                var Museum = new MuseumModel() { MuseumID = postMuseum.Content.MuseumID, Description = null };
+                var Museum = new MuseumModel() { MuseumID = postMuseum.Content.MuseumID, Name="Test",  Description = null };
 
                 MuseumController = getMuseumController();
                 MuseumController.ModelState.AddModelError("Key", "ErrorMessage"); // Values of these two strings don't matter.  
@@ -222,7 +224,7 @@ namespace VirtualMuseumAPI.Tests
             {
                 //Test with an ID that doesn't exist
                 var museumController = getMuseumController();
-                var museum = new MuseumModel() { MuseumID = 0, Description = "Leonardo Da Vinci's museum", Privacy = Privacy.Levels.PUBLIC };
+                var museum = new MuseumModel() { MuseumID = 0, Name="Test", Description = "Leonardo Da Vinci's museum", Privacy = Privacy.Levels.PUBLIC };
                 var putMuseum = museumController.Put(0, museum);
                 Assert.IsInstanceOfType(putMuseum, typeof(NotFoundResult));
                 // Not commiting transaction to leave DB in clean state
@@ -264,8 +266,8 @@ namespace VirtualMuseumAPI.Tests
         private List<MuseumModel> GetTestMuseums()
         {
             var testMuseums = new List<MuseumModel>();
-            testMuseums.Add(new MuseumModel { Description = "DemoMuseumPrivate", Privacy = Privacy.Levels.PRIVATE });
-            testMuseums.Add(new MuseumModel { Description = "DemoMuseumPublic", Privacy = Privacy.Levels.PUBLIC });
+            testMuseums.Add(new MuseumModel {Name="DemoMuseumPrivate", Description = "DemoMuseumPrivate", Privacy = Privacy.Levels.PRIVATE });
+            testMuseums.Add(new MuseumModel {Name="DemoMuseumPublic", Description = "DemoMuseumPublic", Privacy = Privacy.Levels.PUBLIC });
             return testMuseums;
         }
 

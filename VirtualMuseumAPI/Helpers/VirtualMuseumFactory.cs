@@ -31,6 +31,7 @@ namespace VirtualMuseumAPI.Helpers
             {
                 ArtistID = dc.ArtistsXUsers.Where(a => a.UID == IdentityExtensions.GetUserId(modiByUser)).First().ArtistID,
                 name = "",
+                Collected = 0,
                 ModiBy = IdentityExtensions.GetUserId(modiByUser),
                 ModiDate = DateTime.Now
             };
@@ -112,7 +113,7 @@ namespace VirtualMuseumAPI.Helpers
             return null;
         }
 
-        public Museum CreateMuseum(String description, Privacy.Levels level, IIdentity ownerID, IIdentity modiByUser)
+        public Museum CreateMuseum(String name, String description, Privacy.Levels level, IIdentity ownerID, IIdentity modiByUser)
         {
             PrivacyLevel privacyLevel = dc.PrivacyLevels.Where(a=>a.Name == "PRIVATE").First();
             if (dc.PrivacyLevels.Any(a => a.Name == Enum.GetName(typeof(Privacy.Levels), (int) level))){
@@ -121,10 +122,12 @@ namespace VirtualMuseumAPI.Helpers
            
             Museum museum = new Museum()
             {
+                Name = name,
                 Description = description,
                 PrivacyLevelID = privacyLevel.ID,
                 OwnerID = IdentityExtensions.GetUserId(modiByUser),
                 ModiBy = IdentityExtensions.GetUserId(modiByUser),
+                Visited = 0,
                 ModiDate = DateTime.Now
             };
             dc.Museums.InsertOnSubmit(museum);
