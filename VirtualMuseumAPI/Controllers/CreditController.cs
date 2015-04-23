@@ -55,7 +55,7 @@ namespace VirtualMuseumAPI.Controllers
             {
                 UserName = user.UserName,
                 Email = user.Email,
-                Credits = dc.CreditsXUsers.Where(u => u.UID == userid).First().Credits
+                Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
             });
         }
 
@@ -72,14 +72,15 @@ namespace VirtualMuseumAPI.Controllers
                         {
                             if (!dc.MuseumUserVisits.Any(a => a.MuseumID == model.ID && a.UID == userid))
                             {
-                                int creditsToAdd = dc.CreditActions.Where(c => c.Name == "ENTERMUSEUM").First().Credits;
-                                dc.CreditsXUsers.Where(u => u.UID == userid).First().Credits += creditsToAdd;
+                                int creditsToAdd = dc.CreditActions.First(c => c.Name == "ENTERMUSEUM").Credits;
+                                dc.CreditsXUsers.First(u => u.UID == userid).Credits += creditsToAdd;
+                                dc.SubmitChanges();
                                 var user = UserManager.FindById(userid);
                                 return Ok(new UserInfoViewModel
                                 {
                                     UserName = user.UserName,
                                     Email = user.Email,
-                                    Credits = dc.CreditsXUsers.Where(u => u.UID == userid).First().Credits
+                                    Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
                                 });
                             }
                             else
