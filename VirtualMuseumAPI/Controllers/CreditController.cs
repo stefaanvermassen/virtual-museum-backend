@@ -28,29 +28,18 @@ namespace VirtualMuseumAPI.Controllers
     public class CreditController : ApiController
     {
         VirtualMuseumDataContext dc;
-        private ApplicationUserManager _userManager;
 
         public CreditController()
         {
             dc = new VirtualMuseumDataContext();
         }
 
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
+
 
         public IHttpActionResult Get()
         {
             string userid = User.Identity.GetUserId();
-            var user = UserManager.FindById(userid);
+            var user = dc.AspNetUsers.First(u => u.Id == userid);
             return Ok(new UserInfoViewModel
             {
                 UserName = user.UserName,
@@ -66,38 +55,55 @@ namespace VirtualMuseumAPI.Controllers
                 switch (model.Actions)
                 {
                     case CreditActionType.Actions.ENTERMUSEUM:
-                        var museum = dc.Museums.First(m => m.ID == model.ID);
+                        if (!dc.Museums.Any(m => m.ID == model.ID))
+                        {
+                            return NotFound();
+                        }
                         string userid = User.Identity.GetUserId();
-                        if (userid != museum.OwnerID)
+                        var user = dc.AspNetUsers.First(u => u.Id == userid);
+                        return Ok(new UserInfoViewModel
                         {
-                            if (!dc.MuseumUserVisits.Any(a => a.MuseumID == model.ID && a.UID == userid))
-                            {
-                                int creditsToAdd = dc.CreditActions.First(c => c.Name == Enum.GetName(typeof(CreditActionType),model.Actions)).Credits;
-                                dc.CreditsXUsers.First(u => u.UID == userid).Credits += creditsToAdd;
-                                dc.SubmitChanges();
-                                var user = UserManager.FindById(userid);
-                                return Ok(new UserInfoViewModel
-                                {
-                                    UserName = user.UserName,
-                                    Email = user.Email,
-                                    Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
-                                });
-                            }
-                            else
-                            {
-                                return BadRequest();
-                            }
-                        }
-                        else
-                        {
-                            return BadRequest();
-                        }
+                            UserName = user.UserName,
+                            Email = user.Email,
+                            CreditsAdded = ProcessEnterMuseumAction(user, model.ID),
+                            Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
+                        });
+
                     default:
-                        break;
+                        return BadRequest();
                 }
             }
             return BadRequest();
         }
 
+        private bool ProcessEnterMuseumAction(AspNetUser user, int museumID)
+        {
+            var museum = dc.Museums.First(m => m.ID == museumID);
+
+
+            if (user.Id != museum.OwnerID)
+            {
+                //Increment museum visited count
+                museum.Visited += 1;
+                dc.SubmitChanges();
+
+                if (!dc.MuseumUserVisits.Any(a => a.MuseumID == museumID && a.UID == user.Id))
+                {
+                    int creditsToAdd = dc.CreditActions.First(c => c.Name == Enum.GetName(typeof(CreditActionType.Actions), CreditActionType.Actions.ENTERMUSEUM)).Credits;
+                    dc.CreditsXUsers.First(u => u.UID == user.Id).Credits += creditsToAdd;
+                    dc.MuseumUserVisits.InsertOnSubmit(new MuseumUserVisit() { UID = user.Id, MuseumID = museumID });
+                    dc.SubmitChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

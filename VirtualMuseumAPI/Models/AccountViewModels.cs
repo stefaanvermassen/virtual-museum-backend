@@ -36,6 +36,8 @@ namespace VirtualMuseumAPI.Models
         public string LoginProvider { get; set; }
 
         public int Credits { get; set; }
+
+        public bool CreditsAdded { get; set; }
     }
 
     public class UserLoginInfoViewModel
