@@ -66,6 +66,9 @@ namespace VirtualMuseumAPI.Models
     partial void InsertConfigValue(ConfigValue instance);
     partial void UpdateConfigValue(ConfigValue instance);
     partial void DeleteConfigValue(ConfigValue instance);
+    partial void InsertCreditAction(CreditAction instance);
+    partial void UpdateCreditAction(CreditAction instance);
+    partial void DeleteCreditAction(CreditAction instance);
     partial void InsertCreditsXUser(CreditsXUser instance);
     partial void UpdateCreditsXUser(CreditsXUser instance);
     partial void DeleteCreditsXUser(CreditsXUser instance);
@@ -75,6 +78,9 @@ namespace VirtualMuseumAPI.Models
     partial void InsertMuseumMetadata(MuseumMetadata instance);
     partial void UpdateMuseumMetadata(MuseumMetadata instance);
     partial void DeleteMuseumMetadata(MuseumMetadata instance);
+    partial void InsertMuseumRating(MuseumRating instance);
+    partial void UpdateMuseumRating(MuseumRating instance);
+    partial void DeleteMuseumRating(MuseumRating instance);
     partial void InsertMuseum(Museum instance);
     partial void UpdateMuseum(Museum instance);
     partial void DeleteMuseum(Museum instance);
@@ -84,9 +90,6 @@ namespace VirtualMuseumAPI.Models
     partial void InsertMuseumUserVisit(MuseumUserVisit instance);
     partial void UpdateMuseumUserVisit(MuseumUserVisit instance);
     partial void DeleteMuseumUserVisit(MuseumUserVisit instance);
-    partial void InsertCreditAction(CreditAction instance);
-    partial void UpdateCreditAction(CreditAction instance);
-    partial void DeleteCreditAction(CreditAction instance);
     #endregion
 		
 		public VirtualMuseumDataContext() : 
@@ -215,6 +218,14 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<CreditAction> CreditActions
+		{
+			get
+			{
+				return this.GetTable<CreditAction>();
+			}
+		}
+		
 		public System.Data.Linq.Table<CreditsXUser> CreditsXUsers
 		{
 			get
@@ -239,6 +250,14 @@ namespace VirtualMuseumAPI.Models
 			}
 		}
 		
+		public System.Data.Linq.Table<MuseumRating> MuseumRatings
+		{
+			get
+			{
+				return this.GetTable<MuseumRating>();
+			}
+		}
+		
 		public System.Data.Linq.Table<Museum> Museums
 		{
 			get
@@ -260,14 +279,6 @@ namespace VirtualMuseumAPI.Models
 			get
 			{
 				return this.GetTable<MuseumUserVisit>();
-			}
-		}
-		
-		public System.Data.Linq.Table<CreditAction> CreditActions
-		{
-			get
-			{
-				return this.GetTable<CreditAction>();
 			}
 		}
 	}
@@ -1907,6 +1918,8 @@ namespace VirtualMuseumAPI.Models
 		
 		private int _ArtistID;
 		
+		private int _Collected;
+		
 		private string _ModiBy;
 		
 		private System.DateTime _ModiDate;
@@ -1933,6 +1946,8 @@ namespace VirtualMuseumAPI.Models
     partial void OnnameChanged();
     partial void OnArtistIDChanging(int value);
     partial void OnArtistIDChanged();
+    partial void OnCollectedChanging(int value);
+    partial void OnCollectedChanged();
     partial void OnModiByChanging(string value);
     partial void OnModiByChanged();
     partial void OnModiDateChanging(System.DateTime value);
@@ -2010,6 +2025,26 @@ namespace VirtualMuseumAPI.Models
 					this._ArtistID = value;
 					this.SendPropertyChanged("ArtistID");
 					this.OnArtistIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Collected", DbType="Int NOT NULL")]
+		public int Collected
+		{
+			get
+			{
+				return this._Collected;
+			}
+			set
+			{
+				if ((this._Collected != value))
+				{
+					this.OnCollectedChanging(value);
+					this.SendPropertyChanging();
+					this._Collected = value;
+					this.SendPropertyChanged("Collected");
+					this.OnCollectedChanged();
 				}
 			}
 		}
@@ -3219,6 +3254,140 @@ namespace VirtualMuseumAPI.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CreditActions")]
+	public partial class CreditAction : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _ID;
+		
+		private string _Name;
+		
+		private string _Description;
+		
+		private int _Credits;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIDChanging(int value);
+    partial void OnIDChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnDescriptionChanging(string value);
+    partial void OnDescriptionChanged();
+    partial void OnCreditsChanging(int value);
+    partial void OnCreditsChanged();
+    #endregion
+		
+		public CreditAction()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int ID
+		{
+			get
+			{
+				return this._ID;
+			}
+			set
+			{
+				if ((this._ID != value))
+				{
+					this.OnIDChanging(value);
+					this.SendPropertyChanging();
+					this._ID = value;
+					this.SendPropertyChanged("ID");
+					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
+		public string Description
+		{
+			get
+			{
+				return this._Description;
+			}
+			set
+			{
+				if ((this._Description != value))
+				{
+					this.OnDescriptionChanging(value);
+					this.SendPropertyChanging();
+					this._Description = value;
+					this.SendPropertyChanged("Description");
+					this.OnDescriptionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Credits", DbType="Int NOT NULL")]
+		public int Credits
+		{
+			get
+			{
+				return this._Credits;
+			}
+			set
+			{
+				if ((this._Credits != value))
+				{
+					this.OnCreditsChanging(value);
+					this.SendPropertyChanging();
+					this._Credits = value;
+					this.SendPropertyChanged("Credits");
+					this.OnCreditsChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CreditsXUsers")]
 	public partial class CreditsXUser : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -3878,6 +4047,140 @@ namespace VirtualMuseumAPI.Models
 		}
 	}
 	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.MuseumRatings")]
+	public partial class MuseumRating : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private string _UID;
+		
+		private int _MuseumID;
+		
+		private int _Rating;
+		
+		private System.DateTime _ModiDate;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnUIDChanging(string value);
+    partial void OnUIDChanged();
+    partial void OnMuseumIDChanging(int value);
+    partial void OnMuseumIDChanged();
+    partial void OnRatingChanging(int value);
+    partial void OnRatingChanged();
+    partial void OnModiDateChanging(System.DateTime value);
+    partial void OnModiDateChanged();
+    #endregion
+		
+		public MuseumRating()
+		{
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UID", DbType="NVarChar(128) NOT NULL", CanBeNull=false, IsPrimaryKey=true)]
+		public string UID
+		{
+			get
+			{
+				return this._UID;
+			}
+			set
+			{
+				if ((this._UID != value))
+				{
+					this.OnUIDChanging(value);
+					this.SendPropertyChanging();
+					this._UID = value;
+					this.SendPropertyChanged("UID");
+					this.OnUIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MuseumID", DbType="Int NOT NULL", IsPrimaryKey=true)]
+		public int MuseumID
+		{
+			get
+			{
+				return this._MuseumID;
+			}
+			set
+			{
+				if ((this._MuseumID != value))
+				{
+					this.OnMuseumIDChanging(value);
+					this.SendPropertyChanging();
+					this._MuseumID = value;
+					this.SendPropertyChanged("MuseumID");
+					this.OnMuseumIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Rating", DbType="Int NOT NULL")]
+		public int Rating
+		{
+			get
+			{
+				return this._Rating;
+			}
+			set
+			{
+				if ((this._Rating != value))
+				{
+					this.OnRatingChanging(value);
+					this.SendPropertyChanging();
+					this._Rating = value;
+					this.SendPropertyChanged("Rating");
+					this.OnRatingChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ModiDate", DbType="DateTime NOT NULL")]
+		public System.DateTime ModiDate
+		{
+			get
+			{
+				return this._ModiDate;
+			}
+			set
+			{
+				if ((this._ModiDate != value))
+				{
+					this.OnModiDateChanging(value);
+					this.SendPropertyChanging();
+					this._ModiDate = value;
+					this.SendPropertyChanged("ModiDate");
+					this.OnModiDateChanged();
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Museums")]
 	public partial class Museum : INotifyPropertyChanging, INotifyPropertyChanged
 	{
@@ -3895,6 +4198,8 @@ namespace VirtualMuseumAPI.Models
 		private int _Status;
 		
 		private int _PrivacyLevelID;
+		
+		private int _Visited;
 		
 		private string _ModiBy;
 		
@@ -3928,6 +4233,8 @@ namespace VirtualMuseumAPI.Models
     partial void OnStatusChanged();
     partial void OnPrivacyLevelIDChanging(int value);
     partial void OnPrivacyLevelIDChanged();
+    partial void OnVisitedChanging(int value);
+    partial void OnVisitedChanged();
     partial void OnModiByChanging(string value);
     partial void OnModiByChanged();
     partial void OnModiDateChanging(System.DateTime value);
@@ -4069,6 +4376,26 @@ namespace VirtualMuseumAPI.Models
 					this._PrivacyLevelID = value;
 					this.SendPropertyChanged("PrivacyLevelID");
 					this.OnPrivacyLevelIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Visited", DbType="Int NOT NULL")]
+		public int Visited
+		{
+			get
+			{
+				return this._Visited;
+			}
+			set
+			{
+				if ((this._Visited != value))
+				{
+					this.OnVisitedChanging(value);
+					this.SendPropertyChanging();
+					this._Visited = value;
+					this.SendPropertyChanged("Visited");
+					this.OnVisitedChanged();
 				}
 			}
 		}
@@ -4626,140 +4953,6 @@ namespace VirtualMuseumAPI.Models
 						this._UID = default(string);
 					}
 					this.SendPropertyChanged("AspNetUser");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.CreditActions")]
-	public partial class CreditAction : INotifyPropertyChanging, INotifyPropertyChanged
-	{
-		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _ID;
-		
-		private string _Name;
-		
-		private string _Description;
-		
-		private int _Credits;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIDChanging(int value);
-    partial void OnIDChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    partial void OnDescriptionChanging(string value);
-    partial void OnDescriptionChanged();
-    partial void OnCreditsChanging(int value);
-    partial void OnCreditsChanged();
-    #endregion
-		
-		public CreditAction()
-		{
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
-		public int ID
-		{
-			get
-			{
-				return this._ID;
-			}
-			set
-			{
-				if ((this._ID != value))
-				{
-					this.OnIDChanging(value);
-					this.SendPropertyChanging();
-					this._ID = value;
-					this.SendPropertyChanged("ID");
-					this.OnIDChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Description", DbType="NVarChar(MAX) NOT NULL", CanBeNull=false)]
-		public string Description
-		{
-			get
-			{
-				return this._Description;
-			}
-			set
-			{
-				if ((this._Description != value))
-				{
-					this.OnDescriptionChanging(value);
-					this.SendPropertyChanging();
-					this._Description = value;
-					this.SendPropertyChanged("Description");
-					this.OnDescriptionChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Credits", DbType="Int NOT NULL")]
-		public int Credits
-		{
-			get
-			{
-				return this._Credits;
-			}
-			set
-			{
-				if ((this._Credits != value))
-				{
-					this.OnCreditsChanging(value);
-					this.SendPropertyChanging();
-					this._Credits = value;
-					this.SendPropertyChanged("Credits");
-					this.OnCreditsChanged();
 				}
 			}
 		}
