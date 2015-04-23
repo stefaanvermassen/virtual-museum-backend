@@ -99,9 +99,11 @@ namespace VirtualMuseumAPI.Controllers
                 Select(m => new MuseumModel
                 {
                     Description = m.Description,
+                    Name = m.Name,
                     LastModified = m.ModiDate,
                     MuseumID = m.ID,
-                    Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.First(a => a.ID == m.PrivacyLevelID).Name)
+                    Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.First(a => a.ID == m.PrivacyLevelID).Name),
+                    Visited = m.Visited
                 }).ToList();
 
             return Ok(new MuseumResults() { Museums = museums });
@@ -126,9 +128,11 @@ namespace VirtualMuseumAPI.Controllers
                 Museum museum = dc.Museums.First(p => p.ID == id);
                 MuseumModel model = new MuseumModel();
                 model.Description = museum.Description;
+                model.Name = museum.Name;
                 model.LastModified = museum.ModiDate;
                 model.MuseumID = museum.ID;
-                model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);
+                model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.First(a => a.ID == museum.PrivacyLevelID).Name);
+                model.Visited = museum.Visited;
                 return Ok(model);
             }
         }
@@ -146,7 +150,7 @@ namespace VirtualMuseumAPI.Controllers
             {
     
                 VirtualMuseumFactory factory = new VirtualMuseumFactory(dc);
-                Museum museum = factory.CreateMuseum(model.Description, model.Privacy, User.Identity, User.Identity);
+                Museum museum = factory.CreateMuseum(model.Name, model.Description, model.Privacy, User.Identity, User.Identity);
                 model.MuseumID = museum.ID;
                 model.LastModified = museum.ModiDate;
                 model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);
@@ -185,6 +189,7 @@ namespace VirtualMuseumAPI.Controllers
                     dc.Museums.Where(a=> a.ID == id).First().Data = buffer;
                     dc.SubmitChanges();
                     MuseumModel MuseumModel = new MuseumModel(){
+                        Name = museum.Name,
                         Description = museum.Description,
                         LastModified = museum.ModiDate,
                         MuseumID = museum.ID
@@ -230,6 +235,7 @@ namespace VirtualMuseumAPI.Controllers
                     Museum museum = dc.Museums.First(a => a.ID == id);
                     museum.PrivacyLevelID = privacyLevel.ID;
                     museum.Description = model.Description;
+                    museum.Name = model.Name;
                     museum.ModiBy = User.Identity.GetUserId();
                     museum.ModiDate =  DateTime.Now;
                     dc.SubmitChanges();
@@ -242,14 +248,6 @@ namespace VirtualMuseumAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-        }
-
-
-        
-    }
-
- 
-
-   
+        }        
+    }   
 }

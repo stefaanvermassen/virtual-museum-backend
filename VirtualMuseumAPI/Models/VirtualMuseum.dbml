@@ -1,13 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="VirtualMuseum_DEV" Class="VirtualMuseumDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="WebSettings" ConnectionString="Data Source=WIN2012TEMPLATE;Initial Catalog=VirtualMuseum_DEV;Integrated Security=False;User ID=VirtualMuseum" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="VirtualMuseumConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.PrivacyLevels" Member="PrivacyLevels">
-    <Type Name="PrivacyLevel">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Association Name="PrivacyLevel_Museum" Member="Museums" ThisKey="ID" OtherKey="PrivacyLevelID" Type="Museum" />
-    </Type>
-  </Table>
   <Table Name="dbo.Artists" Member="Artists">
     <Type Name="Artist">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -16,6 +8,14 @@
       <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="Artist_Artwork" Member="Artworks" ThisKey="ID" OtherKey="ArtistID" Type="Artwork" />
       <Association Name="AspNetUser_Artist" Member="AspNetUser" ThisKey="ModiBy" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.PrivacyLevels" Member="PrivacyLevels">
+    <Type Name="PrivacyLevel">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Association Name="PrivacyLevel_Museum" Member="Museums" ThisKey="ID" OtherKey="PrivacyLevelID" Type="Museum" />
     </Type>
   </Table>
   <Table Name="dbo.ArtistsXUsers" Member="ArtistsXUsers">
@@ -83,6 +83,7 @@
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="ArtistID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Collected" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
       <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="Artwork_ArtworkMetadata" Member="ArtworkMetadatas" ThisKey="ID" OtherKey="ArtworkID" Type="ArtworkMetadata" />
@@ -137,6 +138,14 @@
       <Column Name="Value" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
+  <Table Name="dbo.CreditActions" Member="CreditActions">
+    <Type Name="CreditAction">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Credits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
   <Table Name="dbo.CreditsXUsers" Member="CreditsXUsers">
     <Type Name="CreditsXUser">
       <Column Name="UID" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
@@ -168,14 +177,24 @@
       <Association Name="Museum_MuseumMetadata" Member="Museum" ThisKey="MuseumID" OtherKey="ID" Type="Museum" IsForeignKey="true" />
     </Type>
   </Table>
+  <Table Name="dbo.MuseumRatings" Member="MuseumRatings">
+    <Type Name="MuseumRating">
+      <Column Name="UID" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MuseumID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Rating" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
   <Table Name="dbo.Museums" Member="Museums">
     <Type Name="Museum">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Data" Type="System.Data.Linq.Binary" DbType="VarBinary(MAX)" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
       <Column Name="OwnerID" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
       <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="PrivacyLevelID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Visited" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
       <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="Museum_MuseumMetadata" Member="MuseumMetadatas" ThisKey="ID" OtherKey="MuseumID" Type="MuseumMetadata" />
@@ -200,14 +219,6 @@
       <Column Name="UID" Type="System.String" DbType="NVarChar(128) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
       <Association Name="Museum_MuseumUserVisit" Member="Museum" ThisKey="MuseumID" OtherKey="ID" Type="Museum" IsForeignKey="true" />
       <Association Name="AspNetUser_MuseumUserVisit" Member="AspNetUser" ThisKey="UID" OtherKey="Id" Type="AspNetUser" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="dbo.CreditActions" Member="CreditActions">
-    <Type Name="CreditAction">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
-      <Column Name="Description" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
-      <Column Name="Credits" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

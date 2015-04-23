@@ -220,12 +220,14 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArtistController.cs" />
+    <Compile Include="Controllers\CreditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ArtWorkController.cs" />
     <Compile Include="Controllers\MuseumController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CreditActionType.cs" />
     <Compile Include="Helpers\Filters\ValidationActionFilter.cs" />
     <Compile Include="Helpers\MuseumDataResult.cs" />
     <Compile Include="Helpers\Privacy.cs" />
@@ -236,6 +238,7 @@
     <Compile Include="Models\ArtistModel.cs" />
     <Compile Include="Models\ArtWorkModel.cs" />
     <Compile Include="Models\ArtWorkSearchModel.cs" />
+    <Compile Include="Models\CreditModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\KeyValuePair.cs" />
     <Compile Include="Models\MuseumModel.cs" />

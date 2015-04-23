@@ -16,6 +16,13 @@ namespace VirtualMuseumAPI.Models
         /// The Museum's unique ID.
         /// </summary>
         public int MuseumID { get; set; }
+
+        /// <summary>
+        /// The museum's name.
+        /// </summary>
+        [Required]
+        public string Name { get; set; }
+
         /// <summary>
         /// The museum's description.
         /// </summary>
@@ -31,5 +38,10 @@ namespace VirtualMuseumAPI.Models
         /// </summary>
         [Required]
         public Privacy.Levels Privacy { get; set; }
+
+        /// <summary>
+        /// How many times the museum is visited
+        /// </summary>
+        public int Visited { get; set; }
     }
 }
