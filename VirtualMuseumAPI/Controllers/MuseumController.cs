@@ -13,6 +13,9 @@ using System.IO;
 using System.Net.Http.Headers;
 using Ploeh.AutoFixture;
 using System.Web.Http.Hosting;
+using System.Web.WebPages;
+using LinqKit;
+using Microsoft.Ajax.Utilities;
 
 namespace VirtualMuseumAPI.Controllers
 {
@@ -97,6 +100,48 @@ namespace VirtualMuseumAPI.Controllers
             }
             var museums = dc.Museums.Where(m => m.OwnerID == userid).
                 Select(m => new MuseumModel
+                {
+                    OwnerName = dc.AspNetUsers.First(a => a.Id == m.OwnerID).UserName,
+                    Description = m.Description,
+                    Name = m.Name,
+                    LastModified = m.ModiDate,
+                    MuseumID = m.ID,
+                    Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.First(a => a.ID == m.PrivacyLevelID).Name),
+                    Visited = m.Visited
+                }).ToList();
+
+            return Ok(new MuseumResults() { Museums = museums });
+        }
+
+        public IHttpActionResult Get([FromUri] MuseumSearchModel msm)
+        {
+            string userID = User.Identity.GetUserId();
+            var predicate = PredicateBuilder.True<Museum>();
+            
+            // Only show public museums, or show the users museums
+            predicate.And(m => (m.PrivacyLevelID == 1 || m.OwnerID == userID));
+
+            if (!msm.Description.IsNullOrWhiteSpace())
+            {
+                predicate = predicate.And(m => m.Description.ToLower().Contains(msm.Description.ToLower()));
+            }
+
+            if (!msm.OwnerName.IsNullOrWhiteSpace())
+            {
+                //TODO: fix case insensitivity
+                var users = from user in dc.AspNetUsers where user.UserName.Contains(msm.OwnerName) select user.Id;
+                predicate = predicate.And(m => users.Contains(m.OwnerID));
+            }
+
+            if (!msm.Name.IsNullOrWhiteSpace())
+            {
+                predicate = predicate.And(m => m.Name.ToLower().Contains(msm.Name.ToLower()));
+            }
+
+            //TODO: rating
+
+            // Execute all substrings
+            var museums = dc.Museums.Where(predicate).Select(m => new MuseumModel
                 {
                     OwnerName = dc.AspNetUsers.First(a => a.Id == m.OwnerID).UserName,
                     Description = m.Description,
