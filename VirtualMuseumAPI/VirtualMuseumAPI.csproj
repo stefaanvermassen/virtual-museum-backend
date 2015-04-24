@@ -238,6 +238,7 @@
     <Compile Include="Models\ArtistModel.cs" />
     <Compile Include="Models\ArtWorkModel.cs" />
     <Compile Include="Models\ArtWorkSearchModel.cs" />
+    <Compile Include="Models\MuseumSearchModel.cs" />
     <Compile Include="Models\CreditModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\KeyValuePair.cs" />
