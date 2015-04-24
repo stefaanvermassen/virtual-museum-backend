@@ -30,9 +30,9 @@ namespace VirtualMuseumAPI.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// The museum's owner.
+        /// The username of the museum's owner.
         /// </summary>
-        public string OwnerID { get; set; }
+        public string OwnerName { get; set; }
 
         /// <summary>
         /// When is the museum modified.

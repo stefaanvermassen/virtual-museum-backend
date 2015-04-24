@@ -98,7 +98,7 @@ namespace VirtualMuseumAPI.Controllers
             var museums = dc.Museums.Where(m => m.OwnerID == userid).
                 Select(m => new MuseumModel
                 {
-                    OwnerID = m.OwnerID,
+                    OwnerName = dc.AspNetUsers.First(a => a.Id == m.OwnerID).UserName,
                     Description = m.Description,
                     Name = m.Name,
                     LastModified = m.ModiDate,
@@ -128,7 +128,7 @@ namespace VirtualMuseumAPI.Controllers
             {
                 Museum museum = dc.Museums.First(p => p.ID == id);
                 MuseumModel model = new MuseumModel();
-                model.OwnerID = museum.OwnerID;
+                model.OwnerName = dc.AspNetUsers.First(a => a.Id == museum.OwnerID).UserName;
                 model.Description = museum.Description;
                 model.Name = museum.Name;
                 model.LastModified = museum.ModiDate;
@@ -153,7 +153,7 @@ namespace VirtualMuseumAPI.Controllers
     
                 VirtualMuseumFactory factory = new VirtualMuseumFactory(dc);
                 Museum museum = factory.CreateMuseum(model.Name, model.Description, model.Privacy, User.Identity, User.Identity);
-                model.OwnerID = User.Identity.GetUserId();
+                model.OwnerName = User.Identity.GetUserName();
                 model.MuseumID = museum.ID;
                 model.LastModified = museum.ModiDate;
                 model.Privacy = (Privacy.Levels)Enum.Parse(typeof(Privacy.Levels), dc.PrivacyLevels.Where(a => a.ID == museum.PrivacyLevelID).First().Name);
@@ -193,7 +193,7 @@ namespace VirtualMuseumAPI.Controllers
                     dc.SubmitChanges();
                     MuseumModel MuseumModel = new MuseumModel(){
                         Name = museum.Name,
-                        OwnerID = museum.OwnerID,
+                        OwnerName = dc.AspNetUsers.First(a => a.Id == museum.OwnerID).UserName,
                         Description = museum.Description,
                         LastModified = museum.ModiDate,
                         MuseumID = museum.ID
@@ -243,7 +243,7 @@ namespace VirtualMuseumAPI.Controllers
                     museum.ModiBy = User.Identity.GetUserId();
                     museum.ModiDate =  DateTime.Now;
                     dc.SubmitChanges();
-                    model.OwnerID = User.Identity.GetUserId();
+                    model.OwnerName = User.Identity.GetUserName();
                     model.LastModified = museum.ModiDate;
                     model.MuseumID = museum.ID;
                     return Ok(model);
