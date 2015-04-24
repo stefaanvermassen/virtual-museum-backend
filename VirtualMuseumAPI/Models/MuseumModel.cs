@@ -28,6 +28,12 @@ namespace VirtualMuseumAPI.Models
         /// </summary>
         [Required]
         public string Description { get; set; }
+
+        /// <summary>
+        /// The museum's owner.
+        /// </summary>
+        public string OwnerID { get; set; }
+
         /// <summary>
         /// When is the museum modified.
         /// </summary>
