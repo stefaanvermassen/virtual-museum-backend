@@ -113,6 +113,11 @@ namespace VirtualMuseumAPI.Controllers
             return Ok(new MuseumResults() { Museums = museums });
         }
 
+        /// <summary>
+        /// Get a list of museums, or filter on a list of museums
+        /// </summary>
+        /// <param name="Museum search">museums fields</param>
+        /// <returns></returns>
         public IHttpActionResult Get([FromUri] MuseumSearchModel msm)
         {
             string userID = User.Identity.GetUserId();
