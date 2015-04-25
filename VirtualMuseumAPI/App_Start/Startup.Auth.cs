@@ -55,9 +55,9 @@ namespace VirtualMuseumAPI
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //    appId: "",
-            //    appSecret: "");
+            app.UseFacebookAuthentication(
+                appId: "827318770667908",
+                appSecret: "c30a0f64daa6a264a1b23774fd97fd19");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
