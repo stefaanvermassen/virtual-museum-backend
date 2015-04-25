@@ -7,6 +7,6 @@ namespace VirtualMuseumAPI.Helpers
 {
     public class CreditActionType
     {
-        public enum Actions { ENTERMUSEUM };
+        public enum Actions { ENTERMUSEUM, BUILDEDMUSEUM };
     }
 }

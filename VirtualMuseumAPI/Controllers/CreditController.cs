@@ -55,25 +55,44 @@ namespace VirtualMuseumAPI.Controllers
                 switch (model.Actions)
                 {
                     case CreditActionType.Actions.ENTERMUSEUM:
-                        if (!dc.Museums.Any(m => m.ID == model.ID))
-                        {
-                            return NotFound();
-                        }
-                        string userid = User.Identity.GetUserId();
-                        var user = dc.AspNetUsers.First(u => u.Id == userid);
-                        return Ok(new UserInfoViewModel
-                        {
-                            UserName = user.UserName,
-                            Email = user.Email,
-                            CreditsAdded = ProcessEnterMuseumAction(user, model.ID),
-                            Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
-                        });
-
+                        return EnterMuseumAction(model);
                     default:
+                        if (model.Actions != null)
+                        {
+                            string userid = User.Identity.GetUserId();
+                            var user = dc.AspNetUsers.First(u => u.Id == userid);
+                            int creditsToAdd = dc.CreditActions.First(c => c.Name == Enum.GetName(typeof(CreditActionType.Actions), model.Actions)).Credits;
+                            dc.CreditsXUsers.First(u => u.UID == user.Id).Credits += creditsToAdd;
+                            dc.SubmitChanges();
+                            return Ok(new UserInfoViewModel
+                            {
+                                UserName = user.UserName,
+                                Email = user.Email,
+                                CreditsAdded = true,
+                                Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
+                            });
+                        }
                         return BadRequest();
                 }
             }
             return BadRequest();
+        }
+
+        private IHttpActionResult EnterMuseumAction(CreditModel model)
+        {
+            if (!dc.Museums.Any(m => m.ID == model.ID))
+            {
+                return NotFound();
+            }
+            string userid = User.Identity.GetUserId();
+            var user = dc.AspNetUsers.First(u => u.Id == userid);
+            return Ok(new UserInfoViewModel
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                CreditsAdded = ProcessEnterMuseumAction(user, model.ID),
+                Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
+            });
         }
 
         private bool ProcessEnterMuseumAction(AspNetUser user, int museumID)
@@ -89,21 +108,14 @@ namespace VirtualMuseumAPI.Controllers
 
                 if (!dc.MuseumUserVisits.Any(a => a.MuseumID == museumID && a.UID == user.Id))
                 {
-                    int creditsToAdd = dc.CreditActions.First(c => c.Name == Enum.GetName(typeof(CreditActionType.Actions), CreditActionType.Actions.ENTERMUSEUM)).Credits;
+                    int creditsToAdd = dc.CreditActions.First( c => c.Name == Enum.GetName(typeof (CreditActionType.Actions), CreditActionType.Actions.ENTERMUSEUM)).Credits;
                     dc.CreditsXUsers.First(u => u.UID == user.Id).Credits += creditsToAdd;
-                    dc.MuseumUserVisits.InsertOnSubmit(new MuseumUserVisit() { UID = user.Id, MuseumID = museumID });
+                    dc.MuseumUserVisits.InsertOnSubmit(new MuseumUserVisit() {UID = user.Id, MuseumID = museumID});
                     dc.SubmitChanges();
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
     }
 }
