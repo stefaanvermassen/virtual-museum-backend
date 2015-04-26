@@ -35,19 +35,21 @@ namespace VirtualMuseumAPI.Controllers
         }
 
 
-
+        /// <summary>
+        /// Get the current state of user credits
+        /// </summary>
+        /// <returns></returns>
         public IHttpActionResult Get()
         {
-            string userid = User.Identity.GetUserId();
-            var user = dc.AspNetUsers.First(u => u.Id == userid);
-            return Ok(new UserInfoViewModel
-            {
-                UserName = user.UserName,
-                Email = user.Email,
-                Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
-            });
+            return CreateUserInfoResponse(false);
         }
 
+
+        /// <summary>
+        /// Add credits to the user account
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public IHttpActionResult Post(CreditModel model)
         {
             if (ModelState.IsValid)
@@ -57,22 +59,12 @@ namespace VirtualMuseumAPI.Controllers
                     case CreditActionType.Actions.ENTERMUSEUM:
                         return EnterMuseumAction(model);
                     default:
-                        if (model.Actions != null)
-                        {
-                            string userid = User.Identity.GetUserId();
-                            var user = dc.AspNetUsers.First(u => u.Id == userid);
-                            int creditsToAdd = dc.CreditActions.First(c => c.Name == Enum.GetName(typeof(CreditActionType.Actions), model.Actions)).Credits;
-                            dc.CreditsXUsers.First(u => u.UID == user.Id).Credits += creditsToAdd;
-                            dc.SubmitChanges();
-                            return Ok(new UserInfoViewModel
-                            {
-                                UserName = user.UserName,
-                                Email = user.Email,
-                                CreditsAdded = true,
-                                Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
-                            });
-                        }
-                        return BadRequest();
+                        string userid = User.Identity.GetUserId();
+                        var user = dc.AspNetUsers.First(u => u.Id == userid);
+                        int creditsToAdd = dc.CreditActions.First(c => c.Name == Enum.GetName(typeof(CreditActionType.Actions), model.Actions)).Credits;
+                        dc.CreditsXUsers.First(u => u.UID == user.Id).Credits += creditsToAdd;
+                        dc.SubmitChanges();
+                        return CreateUserInfoResponse(true);
                 }
             }
             return BadRequest();
@@ -86,11 +78,19 @@ namespace VirtualMuseumAPI.Controllers
             }
             string userid = User.Identity.GetUserId();
             var user = dc.AspNetUsers.First(u => u.Id == userid);
+            return CreateUserInfoResponse(ProcessEnterMuseumAction(user, model.ID));
+        }
+
+        private IHttpActionResult CreateUserInfoResponse(bool addedCredits)
+        {
+            string userid = User.Identity.GetUserId();
+            var user = dc.AspNetUsers.First(u => u.Id == userid);
+
             return Ok(new UserInfoViewModel
             {
                 UserName = user.UserName,
                 Email = user.Email,
-                CreditsAdded = ProcessEnterMuseumAction(user, model.ID),
+                CreditsAdded = addedCredits,
                 Credits = dc.CreditsXUsers.First(u => u.UID == userid).Credits
             });
         }
@@ -98,7 +98,6 @@ namespace VirtualMuseumAPI.Controllers
         private bool ProcessEnterMuseumAction(AspNetUser user, int museumID)
         {
             var museum = dc.Museums.First(m => m.ID == museumID);
-
 
             if (user.Id != museum.OwnerID)
             {
