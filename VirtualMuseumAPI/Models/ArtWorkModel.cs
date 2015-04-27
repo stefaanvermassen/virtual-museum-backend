@@ -19,6 +19,10 @@ namespace VirtualMuseumAPI.Models
         [Required]
         public int ArtistID { get; set; }
         /// <summary>
+        /// The artistmodel, so the name of the artist can be displayed
+        /// </summary>
+        public ArtistModel Artist { get; set; }
+        /// <summary>
         /// The Artworks's name
         /// </summary>
         [Required]

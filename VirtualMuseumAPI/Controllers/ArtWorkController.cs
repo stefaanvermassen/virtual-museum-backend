@@ -95,18 +95,7 @@ namespace VirtualMuseumAPI.Controllers
             
             foreach (Artwork work in dc.Artworks.Where(predicate))
             {
-                ArtWorkModel model = new ArtWorkModel();
-                model.ArtistID = work.ArtistID;
-                model.ArtWorkID = work.ID;
-                model.Name = work.name;
-                model.Collected = work.Collected;
-                List<KeyValuePair> metadatas = new List<KeyValuePair>();
-                foreach (ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == work.ID))
-                {
-                    metadatas.Add(new KeyValuePair() { Name = dc.ArtworkKeys.Where(k => k.ID == metadataItem.KeyID).First().name, Value = metadataItem.Value });
-                }
-                model.Metadata = metadatas;
-                artworks.Add(model);
+                artworks.Add(createFromArtWork(work));
             }
             
             ArtworkResults result = new ArtworkResults()
@@ -159,17 +148,7 @@ namespace VirtualMuseumAPI.Controllers
             else
             {
                 Artwork artwork = dc.Artworks.First(p => p.ID == id);
-                ArtWorkModel model = new ArtWorkModel();
-                model.ArtistID = artwork.ArtistID;
-                model.Name = artwork.name;
-                model.ArtWorkID = artwork.ID;
-                model.Collected = artwork.Collected;
-                List<KeyValuePair> metadatas = new List<KeyValuePair>();
-                foreach(ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == id)){
-                    metadatas.Add(new KeyValuePair() { Name = dc.ArtworkKeys.Where( k=> k.ID ==  metadataItem.KeyID).First().name, Value = metadataItem.Value });
-                }
-                model.Metadata = metadatas;
-                return Ok(model);
+                return Ok(createFromArtWork(artwork));
             }
         }
 
@@ -202,13 +181,8 @@ namespace VirtualMuseumAPI.Controllers
                             VMFactory.CreateArtWorkRepresentation(artwork.ID, VirtualMuseumUtils.CreateThumbnail(buffer, 256, 256), 2, User.Identity);
                             VMFactory.CreateArtWorkRepresentation(artwork.ID, VirtualMuseumUtils.CreateThumbnail(buffer, 1024, 1024), 3, User.Identity);
                             VMFactory.CreateArtWorkRepresentation(artwork.ID, VirtualMuseumUtils.CreateThumbnail(buffer, 2048, 2048), 4, User.Identity);
-                            ArtWorkModel artworkModel = new ArtWorkModel()
-                            {
-                                ArtistID = artwork.ArtistID,
-                                ArtWorkID = artwork.ID,
-                                Name = artwork.name
-                            };
-                            messages.Add(artworkModel);
+
+                            messages.Add(createFromArtWork(artwork));
                         } 
                     }
                     ArtworkResults result = new ArtworkResults()
@@ -306,6 +280,29 @@ namespace VirtualMuseumAPI.Controllers
                 dc.SubmitChanges();
                 return Ok();
             } 
-        }       
+        }
+
+        private ArtWorkModel createFromArtWork(Artwork work)
+        {
+            ArtistModel artist = new ArtistModel()
+            {
+                ArtistID = work.ArtistID,
+                Name = work.Artist.Name
+            };
+
+            ArtWorkModel model = new ArtWorkModel();
+            model.ArtistID = work.ArtistID;
+            model.ArtWorkID = work.ID;
+            model.Artist = artist;
+            model.Name = work.name;
+            model.Collected = work.Collected;
+            List<KeyValuePair> metadatas = new List<KeyValuePair>();
+            foreach (ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == work.ID))
+            {
+                metadatas.Add(new KeyValuePair() { Name = dc.ArtworkKeys.First(k => k.ID == metadataItem.KeyID).name, Value = metadataItem.Value });
+            }
+            model.Metadata = metadatas;
+            return model;
+        }
     }
 }
