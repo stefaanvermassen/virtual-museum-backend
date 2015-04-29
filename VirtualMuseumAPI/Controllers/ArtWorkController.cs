@@ -232,7 +232,7 @@ namespace VirtualMuseumAPI.Controllers
                     artWork.ModiDate = DateTime.Now;
                     dc.ArtworkMetadatas.DeleteAllOnSubmit(dc.ArtworkMetadatas.Where(a => a.ArtworkID == id));
                     dc.SubmitChanges();
-                    IEnumerable<KeyValuePair> providedMetadata = work.Metadata.Where(a => a.Name != null && dc.ArtworkKeys.Any(k => k.name.ToLower() == a.Name.Trim().ToLower()) && a.Value != null);
+                    IEnumerable<KeyValuePair> providedMetadata = work.Metadata.Where(a => !(String.IsNullOrEmpty(a.Name) || String.IsNullOrEmpty(a.Value)));
 
                     foreach (KeyValuePair kv in providedMetadata)
                     {
@@ -299,7 +299,7 @@ namespace VirtualMuseumAPI.Controllers
             List<KeyValuePair> metadatas = new List<KeyValuePair>();
             foreach (ArtworkMetadata metadataItem in dc.ArtworkMetadatas.Where(m => m.ArtworkID == work.ID))
             {
-                metadatas.Add(new KeyValuePair() { Name = dc.ArtworkKeys.First(k => k.ID == metadataItem.KeyID).name, Value = metadataItem.Value });
+                metadatas.Add(new KeyValuePair() {Id = metadataItem.ID, Name = dc.ArtworkKeys.First(k => k.ID == metadataItem.KeyID).name, Value = metadataItem.Value });
             }
             model.Metadata = metadatas;
             return model;
