@@ -63,14 +63,14 @@ namespace VirtualMuseumAPI.Controllers
             }
             else if ((!String.IsNullOrEmpty(pair.Value)) && String.IsNullOrEmpty(pair.Name))
             {
-                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.Value.ToLower() == pair.Name.Trim().ToLower()))
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.Value.ToLower() == pair.Value.Trim().ToLower()))
                 {
                     filters.Add(new KeyValuePair() { Id = filter.ID, Name = filter.ArtworkKey.name, Value = filter.Value });
                 }
             }
             else if ((!String.IsNullOrEmpty(pair.Value)) && (!String.IsNullOrEmpty(pair.Name)))
             {
-                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.Value.ToLower() == pair.Name.Trim().ToLower() && a.ArtworkKey.name.ToLower() == pair.Name.Trim().ToLower()))
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.Value.ToLower() == pair.Value.Trim().ToLower() && a.ArtworkKey.name.ToLower() == pair.Name.Trim().ToLower()))
                 {
                     filters.Add(new KeyValuePair() { Id = filter.ID, Name = filter.ArtworkKey.name, Value = filter.Value });
                 } 
