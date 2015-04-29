@@ -46,10 +46,19 @@ namespace VirtualMuseumAPI.Controllers
             {
                 //No filters provided, return the union from all your filters
                 predicate = PredicateBuilder.False<Artwork>();
+                var filterpredicate = PredicateBuilder.True<Artwork>();
                 foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFiltersXUsers.Any(b => b.UID == userID)))
                 {
-                    predicate = predicate.Or(p => p.ArtworkMetadatas.Any(
-                        q => q.ArtworkKey.ID == filter.ArtworkKeyID && q.Value == filter.Value));
+                   
+                    
+                    foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
+                    {
+
+                        filterpredicate = filterpredicate.And(p => p.ArtworkMetadatas.Any(
+                            q => q.ArtworkKey.ID == filtervalue.ArtworkKeyID && q.Value == filtervalue.Value));
+                        
+                    }
+                    predicate = predicate.Or(filterpredicate);
                 }
             }
             else
@@ -88,7 +97,10 @@ namespace VirtualMuseumAPI.Controllers
                         return new ArtworkResults() { ArtWorks = artworks };
                     }
                     ArtworkFilter filter = dc.ArtworkFilters.Where(f => f.ID == query.ArtWorkFilterID).First();
-                    predicate = predicate.And(p => p.ArtworkMetadatas.Any(q => q.KeyID == filter.ArtworkKeyID && q.Value == filter.Value));
+                    foreach (ArtworkFilterValue artworkFilterValue in filter.ArtworkFilterValues)
+                    {
+                        predicate = predicate.And(p => p.ArtworkMetadatas.Any(q => q.KeyID == artworkFilterValue.ArtworkKeyID && q.Value == artworkFilterValue.Value));
+                    }  
                 }
             }
             

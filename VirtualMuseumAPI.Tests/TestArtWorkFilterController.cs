@@ -27,23 +27,7 @@ namespace VirtualMuseumAPI.Tests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                var testFilters = GetTestFilters();
-                var filterController = getArtWorkFilterController();
-                //New filter in DB
-                filterController.Post(testFilters[0]);
-                //Should now be connected to this user
-                var connectedFilters = filterController.Get();
-                Assert.IsTrue(connectedFilters.ArtWorkFilters.Any(f => f.Name == testFilters[0].Name && f.Value == testFilters[0].Value));
-
-                //make a new where the key does already exist
-                var postFilter = filterController.Post(testFilters[1]) as OkNegotiatedContentResult<KeyValuePair>;
-                Assert.AreEqual(testFilters[1].Name, postFilter.Content.Name);
-                Assert.AreEqual(testFilters[1].Value, postFilter.Content.Value);
-
-                //make a new where key and value already exist
-                postFilter = filterController.Post(testFilters[1]) as OkNegotiatedContentResult<KeyValuePair>; 
-                Assert.AreEqual(testFilters[1].Name, postFilter.Content.Name);
-                Assert.AreEqual(testFilters[1].Value, postFilter.Content.Value);
+               
             }
         }
 
@@ -52,21 +36,7 @@ namespace VirtualMuseumAPI.Tests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                var testFilters = GetTestFilters();
-                var filterController = getArtWorkFilterController();
-                //New filter in DB
-                filterController.Post(testFilters[0]);
-                //Should find this filter
-                var searchedFilters = filterController.Get(testFilters[0]);
-                Assert.IsTrue(searchedFilters.ArtWorkFilters.Any(f => f.Name == testFilters[0].Name && f.Value == testFilters[0].Value));
-
-                //Search with name only
-                searchedFilters = filterController.Get(new KeyValuePair() { Name="testkey1"});
-                Assert.IsTrue(searchedFilters.ArtWorkFilters.Any(f => f.Name == testFilters[0].Name && f.Value == testFilters[0].Value));
-
-                //Search with value only
-                searchedFilters = filterController.Get(new KeyValuePair() { Value = "testvalue1" });
-                Assert.IsTrue(searchedFilters.ArtWorkFilters.Any(f => f.Name == testFilters[0].Name && f.Value == testFilters[0].Value));
+               
             }
         }
 
@@ -75,22 +45,19 @@ namespace VirtualMuseumAPI.Tests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-                var testFilters = GetTestFilters();
-                var filterController = getArtWorkFilterController();
-                //New filter in DB
-                var postFilter = filterController.Post(testFilters[0]) as OkNegotiatedContentResult<KeyValuePair>;
-                filterController.Delete(postFilter.Content.Id);
-                //Should now be connected to this user
-                var connectedFilters = filterController.Get();
-                Assert.IsFalse(connectedFilters.ArtWorkFilters.Any(f => f.Name == testFilters[0].Name && f.Value == testFilters[0].Value));
+                
             }
         }
 
-        private List<KeyValuePair> GetTestFilters()
+        private List<ArtWorkFilterModel> GetTestFilters()
         {
-            var testfilters = new List<KeyValuePair>();
-            testfilters.Add(new KeyValuePair() { Name = "testkey1", Value = "testvalue1" });
-            testfilters.Add(new KeyValuePair() { Name = "testkey1", Value = "testvalue2" });
+            var testfilters = new List<ArtWorkFilterModel>();
+            var pairs = new List<KeyValuePair>();
+            pairs.Add((new KeyValuePair() { Name = "testkey1", Value = "testvalue1" }));
+            testfilters.Add(new ArtWorkFilterModel() { ArtistID = 1, Pairs = pairs }); 
+            var pairs2 = new List<KeyValuePair>();
+            pairs2.Add((new KeyValuePair() { Name = "testkey1", Value = "testvalue2" }));
+            testfilters.Add(new ArtWorkFilterModel() { ArtistID = 1, Pairs = pairs2 }); 
             return testfilters;
         }
 

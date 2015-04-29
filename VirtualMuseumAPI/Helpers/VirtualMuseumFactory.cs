@@ -220,18 +220,30 @@ namespace VirtualMuseumAPI.Helpers
         }
 
        
-        public ArtworkFilter CreateArtWorkFilter(int artworkKeyID, String value, IIdentity modiByUser)
+        public ArtworkFilter CreateArtWorkFilter(int artistID, IIdentity modiByUser)
         {
             ArtworkFilter filter = new ArtworkFilter()
             {
-                ArtworkKeyID = artworkKeyID,
-                Value = value,
+                ArtistID = artistID,
                 ModiBy = modiByUser.GetUserId(),
                 ModiDate = DateTime.Now
             };
             dc.ArtworkFilters.InsertOnSubmit(filter);
             dc.SubmitChanges();
             return filter;
+        }
+
+        public ArtworkFilterValue CreateArtWorkFilterValue(int artworkFilterID, int artworkKeyID, string value)
+        {
+            ArtworkFilterValue artworkFiltervalue = new ArtworkFilterValue()
+            {
+                ArtworkFilterID = artworkFilterID,
+                ArtworkKeyID = artworkKeyID,
+                Value = value
+            };
+            dc.ArtworkFilterValues.InsertOnSubmit(artworkFiltervalue);
+            dc.SubmitChanges();
+            return artworkFiltervalue;
         }
 
         public ArtworkFiltersXUser AssignArtWorkFilterToUser(int artWorkFilterID, IIdentity user)
