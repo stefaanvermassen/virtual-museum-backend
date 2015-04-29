@@ -38,6 +38,7 @@ namespace VirtualMuseumAPI.Controllers
             {
                 ArtWorkFilterModel artworkFilterModel = new ArtWorkFilterModel();
                 artworkFilterModel.ArtistID = filter.ArtistID;
+                artworkFilterModel.Pairs = new List<KeyValuePair>();
                 foreach(ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID)){
                     artworkFilterModel.Pairs.Add(new KeyValuePair() { Name = filtervalue.ArtworkKey.name, Value = filtervalue.Value });
                 }
@@ -60,6 +61,7 @@ namespace VirtualMuseumAPI.Controllers
             ArtworkFilter filter = dc.ArtworkFilters.First(a => a.ID == id);
             ArtWorkFilterModel artworkFilterModel = new ArtWorkFilterModel();
             artworkFilterModel.ArtistID = filter.ArtistID;
+            artworkFilterModel.Pairs = new List<KeyValuePair>();
             foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
             {
                 artworkFilterModel.Pairs.Add(new KeyValuePair() { Name = filtervalue.ArtworkKey.name, Value = filtervalue.Value });
@@ -152,6 +154,7 @@ namespace VirtualMuseumAPI.Controllers
 
             if (exists)
             {
+                factory.AssignArtWorkFilterToUser(foundFilterID, User.Identity);
                 return Get(foundFilterID);
             }
             else
@@ -171,6 +174,7 @@ namespace VirtualMuseumAPI.Controllers
                     }
                     factory.CreateArtWorkFilterValue(newFilter.ID, key.ID, keyPair.Value);
                 }
+                factory.AssignArtWorkFilterToUser(newFilter.ID, User.Identity);
                 return Get(newFilter.ID);
             } 
         }

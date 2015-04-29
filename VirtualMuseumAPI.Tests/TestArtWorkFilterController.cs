@@ -27,7 +27,35 @@ namespace VirtualMuseumAPI.Tests
         {
             using (TransactionScope transaction = new TransactionScope())
             {
-               
+                var testFilters = GetTestFilters();
+                var filterController = getArtWorkFilterController();
+                filterController.Post(testFilters[0]);
+                //Should now be connected to this user
+                var connectedFilters = filterController.Get();
+                bool isAssigned = false;
+                foreach (ArtWorkFilterModel model in connectedFilters.ArtWorkFilters)
+                {
+                    if (model.Pairs.Any(a => a.Name == testFilters[0].Pairs.ElementAt(0).Name && a.Value == testFilters[0].Pairs.ElementAt(0).Value))
+                    {
+                        isAssigned = true;
+                    }
+                }
+                Assert.IsTrue(isAssigned);
+
+                //Make a new where the key does already exist
+                filterController.Post(testFilters[1]);
+                //Should now be connected to this user
+                connectedFilters = filterController.Get();
+                isAssigned = false;
+                foreach (ArtWorkFilterModel model in connectedFilters.ArtWorkFilters)
+                {
+                    if (model.Pairs.Any(a => a.Name == testFilters[1].Pairs.ElementAt(0).Name && a.Value == testFilters[1].Pairs.ElementAt(0).Value))
+                    {
+                        isAssigned = true;
+                    }
+                }
+                Assert.IsTrue(isAssigned);
+
             }
         }
 
