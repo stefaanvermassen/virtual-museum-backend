@@ -242,6 +242,7 @@ namespace VirtualMuseumAPI.Helpers
                 UID = user.GetUserId()
             };
             dc.ArtworkFiltersXUsers.InsertOnSubmit(assignToUser);
+            dc.SubmitChanges();
             return assignToUser;
         }
     }
