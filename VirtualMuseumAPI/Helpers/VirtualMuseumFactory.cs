@@ -165,10 +165,20 @@ namespace VirtualMuseumAPI.Helpers
 
         public ArtworkMetadata CreateArtworkMetadata(int artWorkID, String key, String value, IIdentity modiByUser)
         {
+            int keyID = -1;
+            if (dc.ArtworkKeys.Any((k => k.name.ToLower() == key.Trim().ToLower())))
+            {
+                keyID = dc.ArtworkKeys.First((k => k.name.ToLower() == key.Trim().ToLower())).ID;
+            }
+            else
+            {
+                keyID = CreateArtworkKey(key.ToLower().Trim()).ID;
+            }
+
             ArtworkMetadata metadata = new ArtworkMetadata()
             {
                 ArtworkID = artWorkID,
-                KeyID = dc.ArtworkKeys.Where(k => k.name.ToLower() == key.Trim().ToLower()).First().ID,
+                KeyID = keyID,
                 Value = value,
                 ModiBy = IdentityExtensions.GetUserId(modiByUser),
                 ModiDate = DateTime.Now
@@ -207,6 +217,32 @@ namespace VirtualMuseumAPI.Helpers
             dc.CreditActions.InsertOnSubmit(action);
             dc.SubmitChanges();
             return action;
+        }
+
+       
+        public ArtworkFilter CreateArtWorkFilter(int artworkKeyID, String value, IIdentity modiByUser)
+        {
+            ArtworkFilter filter = new ArtworkFilter()
+            {
+                ArtworkKeyID = artworkKeyID,
+                Value = value,
+                ModiBy = modiByUser.GetUserId(),
+                ModiDate = DateTime.Now
+            };
+            dc.ArtworkFilters.InsertOnSubmit(filter);
+            dc.SubmitChanges();
+            return filter;
+        }
+
+        public ArtworkFiltersXUser AssignArtWorkFilterToUser(int artWorkFilterID, IIdentity user)
+        {
+            ArtworkFiltersXUser assignToUser = new ArtworkFiltersXUser()
+            {
+                ArtworkFilterID = artWorkFilterID,
+                UID = user.GetUserId()
+            };
+            dc.ArtworkFiltersXUsers.InsertOnSubmit(assignToUser);
+            return assignToUser;
         }
     }
  
