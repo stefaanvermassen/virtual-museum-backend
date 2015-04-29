@@ -28,6 +28,8 @@ namespace VirtualMuseumAPI.Controllers
         /// Get all the filters that are assigned to a specific user
         /// </summary>
         /// <returns></returns>
+        [Route("api/ArtWorkFilter/connected")]
+        [HttpGet]
         public ArtWorkFilterResults Get()
         {
             string userID = User.Identity.GetUserId();
@@ -48,7 +50,7 @@ namespace VirtualMuseumAPI.Controllers
         /// </summary>
         /// <param name="pair">Name or Value</param>
         /// <returns>Array of found filters</returns>
-        public ArtWorkFilterResults Get(KeyValuePair pair)
+        public ArtWorkFilterResults Get([FromUri] KeyValuePair pair)
         {
             List<KeyValuePair> filters = new List<KeyValuePair>();
             if ((!String.IsNullOrEmpty(pair.Name)) && String.IsNullOrEmpty(pair.Value))
