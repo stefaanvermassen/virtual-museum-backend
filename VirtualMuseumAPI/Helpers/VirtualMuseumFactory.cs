@@ -248,14 +248,23 @@ namespace VirtualMuseumAPI.Helpers
 
         public ArtworkFiltersXUser AssignArtWorkFilterToUser(int artWorkFilterID, IIdentity user)
         {
-            ArtworkFiltersXUser assignToUser = new ArtworkFiltersXUser()
+            if (!dc.ArtworkFiltersXUsers.Any(a => a.ArtworkFilterID == artWorkFilterID && a.AspNetUser.Id == user.GetUserId()))
             {
-                ArtworkFilterID = artWorkFilterID,
-                UID = user.GetUserId()
-            };
-            dc.ArtworkFiltersXUsers.InsertOnSubmit(assignToUser);
-            dc.SubmitChanges();
-            return assignToUser;
+                ArtworkFiltersXUser assignToUser = new ArtworkFiltersXUser()
+                {
+                    ArtworkFilterID = artWorkFilterID,
+                    UID = user.GetUserId()
+                };
+                dc.ArtworkFiltersXUsers.InsertOnSubmit(assignToUser);
+                dc.SubmitChanges();
+                return assignToUser;
+
+            }
+            else
+            {
+                return dc.ArtworkFiltersXUsers.First(a => a.ArtworkFilterID == artWorkFilterID && a.AspNetUser.Id == user.GetUserId());
+            }
+            
         }
     }
  
