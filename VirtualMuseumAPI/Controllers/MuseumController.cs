@@ -303,6 +303,46 @@ namespace VirtualMuseumAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-        }        
+        }
+
+        //DELETE api/Museum/5
+        public IHttpActionResult Delete(int id)
+        {
+            if (!dc.Museums.Any(m => m.ID == id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                var artWorksInMuseum = dc.MuseumsXArtworks.Where(m => m.MuseumID == id);
+                foreach (var artwork in artWorksInMuseum)
+                {
+                    dc.MuseumsXArtworks.DeleteOnSubmit(artwork);
+                }
+
+                var visits = dc.MuseumUserVisits.Where(m => m.MuseumID == id);
+                foreach (var visit in visits)
+                {
+                    dc.MuseumUserVisits.DeleteOnSubmit(visit);
+                }
+
+                var ratings = dc.MuseumRatings.Where(m => m.MuseumID == id);
+                foreach (var rating in ratings)
+                {
+                    dc.MuseumRatings.DeleteOnSubmit(rating);
+                }
+
+                var metadatas = dc.MuseumMetadatas.Where(m => m.MuseumID == id);
+                foreach (var metadata in metadatas)
+                {
+                    dc.MuseumMetadatas.DeleteOnSubmit(metadata);
+                }
+
+                Museum museum = dc.Museums.First(m => m.ID == id);
+                dc.Museums.DeleteOnSubmit(museum);
+                dc.SubmitChanges();
+                return Ok();
+            }
+        }
     }   
 }

@@ -262,7 +262,7 @@ namespace VirtualMuseumAPI.Controllers
 
         }
 
-         //DELETE api/ArtWork/5
+        //DELETE api/ArtWork/5
         public IHttpActionResult Delete(int id)
         {
             if (!dc.ArtworkRepresentations.Any(a => a.ArtworkID == id))
