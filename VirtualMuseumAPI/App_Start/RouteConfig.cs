@@ -16,7 +16,7 @@ namespace VirtualMuseumAPI
             routes.MapRoute(
                 name: "LinkController",
                 url: "{action}/{id}", 
-                defaults: new { controller = "Link", link = "Museum" }
+                defaults: new { controller = "Link", link = "Museum", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
