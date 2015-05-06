@@ -21,5 +21,17 @@ namespace VirtualMuseumAPI.Controllers
             }
             return HttpNotFound();
         }
+
+        // GET: Filter
+        public ActionResult Filter()
+        {
+            return View();
+        }
+
+        // GET: Art
+        public ActionResult Art()
+        {
+            return View();
+        }
     }
 }
