@@ -56,7 +56,7 @@ namespace VirtualMuseumAPI.Controllers
                 {
                     if (filter.ArtworkID.HasValue)
                     {
-                        filterpredicate = filterpredicate.Or(p => p.ID == filter.ArtworkID);
+                        filterpredicate = filterpredicate.And(p => p.ID == filter.ArtworkID);
                     }
                     else
                     {
