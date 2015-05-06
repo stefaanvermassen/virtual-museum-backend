@@ -56,19 +56,19 @@ namespace VirtualMuseumAPI.Controllers
                 {
                     if (filter.ArtworkID.HasValue)
                     {
-                        filterpredicate = filterpredicate.And(p => p.ID == filter.ArtworkID);
+                        predicate = predicate.Or(p => p.ID == filter.ArtworkID);
                     }
                     else
                     {
-                        filterpredicate = filterpredicate.And(p => p.ArtistID == filter.ArtistID);
-                        foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
-                        {
+                        //filterpredicate = filterpredicate.And(p => p.ArtistID == filter.ArtistID);
+                        //foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
+                        //{
 
-                            filterpredicate = filterpredicate.And(p => p.ArtworkMetadatas.Any(
-                                q => q.ArtworkKey.ID == filtervalue.ArtworkKeyID && q.Value == filtervalue.Value));
-                        }      
+                        //    filterpredicate = filterpredicate.And(p => p.ArtworkMetadatas.Any(
+                        //        q => q.ArtworkKey.ID == filtervalue.ArtworkKeyID && q.Value == filtervalue.Value));
+                        //}      
                     }
-                    predicate = predicate.Or(filterpredicate);
+                    //predicate = predicate.Or(filterpredicate);
                     
                 }
             }
