@@ -47,6 +47,10 @@ namespace VirtualMuseumAPI.Controllers
             {
                 //No filters provided, return the union from all your filters
                 predicate = PredicateBuilder.False<Artwork>();
+                foreach (Artwork w in dc.Artworks.Where(w => w.ArtistID == dc.ArtistsXUsers.First(u => u.UID == userID).ArtistID))
+                {
+                    predicate = predicate.Or(p => p.ID == w.ID);
+                }
                 var filterpredicate = PredicateBuilder.True<Artwork>();
                 foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFiltersXUsers.Any(b => b.UID == userID)))
                 {
