@@ -30,6 +30,7 @@
     <Type Name="ArtworkFilter">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="ArtistID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ArtworkID" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="ModiBy" Type="System.String" DbType="NVarChar(128) NOT NULL" CanBeNull="false" />
       <Column Name="ModiDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
       <Association Name="ArtworkFilter_ArtworkFiltersXUser" Member="ArtworkFiltersXUsers" ThisKey="ID" OtherKey="ArtworkFilterID" Type="ArtworkFiltersXUser" />

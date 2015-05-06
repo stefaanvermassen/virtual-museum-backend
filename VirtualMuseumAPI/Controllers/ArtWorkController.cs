@@ -40,73 +40,79 @@ namespace VirtualMuseumAPI.Controllers
         public ArtworkResults Get([FromUri] ArtWorkSearchModel query)
         {
 
-            //string userID = User.Identity.GetUserId();
+            string userID = User.Identity.GetUserId();
             List<ArtWorkModel> artworks = new List<ArtWorkModel>();
-            //var predicate = PredicateBuilder.True<Artwork>();
-            //if (String.IsNullOrEmpty(query.Name) && query.Filter == null && query.ArtistID == 0 && query.ArtWorkFilterID == 0)
-            //{
-            //    //No filters provided, return the union from all your filters
-            //    predicate = PredicateBuilder.False<Artwork>();
-            //    var filterpredicate = PredicateBuilder.True<Artwork>();
-            //    foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFiltersXUsers.Any(b => b.UID == userID)))
-            //    {
-                   
+            var predicate = PredicateBuilder.True<Artwork>();
+            if (String.IsNullOrEmpty(query.Name) && query.Filter == null && query.ArtistID == 0 && query.ArtWorkFilterID == 0)
+            {
+                //No filters provided, return the union from all your filters
+                predicate = PredicateBuilder.False<Artwork>();
+                var filterpredicate = PredicateBuilder.True<Artwork>();
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFiltersXUsers.Any(b => b.UID == userID)))
+                {
+                    if (filter.ArtworkID.HasValue)
+                    {
+                        filterpredicate = filterpredicate.Or(p => p.ID == filter.ArtworkID);
+                    }
+                    else
+                    {
+                        filterpredicate = filterpredicate.And(p => p.ArtistID == filter.ArtistID);
+                        foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
+                        {
+
+                            filterpredicate = filterpredicate.And(p => p.ArtworkMetadatas.Any(
+                                q => q.ArtworkKey.ID == filtervalue.ArtworkKeyID && q.Value == filtervalue.Value));
+                        }      
+                    }
+                    predicate = predicate.Or(filterpredicate);
                     
-            //        foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
-            //        {
+                }
+            }
+            else
+            {
+                //Search in public art
+                //TODO predicate to public art
 
-            //            filterpredicate = filterpredicate.And(p => p.ArtworkMetadatas.Any(
-            //                q => q.ArtworkKey.ID == filtervalue.ArtworkKeyID && q.Value == filtervalue.Value));
-                        
-            //        }
-            //        predicate = predicate.Or(filterpredicate);
-            //    }
-            //}
-            //else
-            //{
-            //    //Search in public art
-            //    //TODO predicate to public art
+                if (!String.IsNullOrEmpty(query.Name))
+                {
+                    predicate = predicate.And(p => p.name == query.Name);
+                }
 
-            //    if (!String.IsNullOrEmpty(query.Name)) 
-            //    { 
-            //        predicate = predicate.And(p => p.name == query.Name); 
-            //    }
 
-                
-            //    if (query.ArtistID != 0)
-            //    {
-            //        if (!dc.Artists.Any(a => a.ID == query.ArtistID))
-            //        {
-            //            return new ArtworkResults() { ArtWorks = artworks };
-            //        }
-            //        predicate = predicate.And(p => p.ArtistID == query.ArtistID);
-            //    } 
+                if (query.ArtistID != 0)
+                {
+                    if (!dc.Artists.Any(a => a.ID == query.ArtistID))
+                    {
+                        return new ArtworkResults() { ArtWorks = artworks };
+                    }
+                    predicate = predicate.And(p => p.ArtistID == query.ArtistID);
+                }
 
-            //    if (query.Filter != null)
-            //    {
-            //        foreach (KeyValuePair kv in query.Filter.Where(a => a.Name != null
-            //        && dc.ArtworkKeys.Any(k => k.name.ToLower() == a.Name.Trim().ToLower()) && a.Value != null))
-            //        {
-            //            predicate = predicate.And(p => p.ArtworkMetadatas.Any(
-            //                q => q.ArtworkKey.ID == dc.ArtworkKeys.Where(r => r.name == kv.Name).First().ID && q.Value == kv.Value));
-            //        }
-            //    }
-            //    if (query.ArtWorkFilterID != 0)
-            //    {
-            //        if (!dc.ArtworkFilters.Any(f => f.ID == query.ArtWorkFilterID))
-            //        {
-            //            return new ArtworkResults() { ArtWorks = artworks };
-            //        }
-            //        ArtworkFilter filter = dc.ArtworkFilters.Where(f => f.ID == query.ArtWorkFilterID).First();
-            //        foreach (ArtworkFilterValue artworkFilterValue in filter.ArtworkFilterValues)
-            //        {
-            //            predicate = predicate.And(p => p.ArtworkMetadatas.Any(q => q.KeyID == artworkFilterValue.ArtworkKeyID && q.Value == artworkFilterValue.Value));
-            //        }  
-            //    }
-            //}
+                if (query.Filter != null)
+                {
+                    foreach (KeyValuePair kv in query.Filter.Where(a => a.Name != null
+                    && dc.ArtworkKeys.Any(k => k.name.ToLower() == a.Name.Trim().ToLower()) && a.Value != null))
+                    {
+                        predicate = predicate.And(p => p.ArtworkMetadatas.Any(
+                            q => q.ArtworkKey.ID == dc.ArtworkKeys.Where(r => r.name == kv.Name).First().ID && q.Value == kv.Value));
+                    }
+                }
+                if (query.ArtWorkFilterID != 0)
+                {
+                    if (!dc.ArtworkFilters.Any(f => f.ID == query.ArtWorkFilterID))
+                    {
+                        return new ArtworkResults() { ArtWorks = artworks };
+                    }
+                    ArtworkFilter filter = dc.ArtworkFilters.Where(f => f.ID == query.ArtWorkFilterID).First();
+                    foreach (ArtworkFilterValue artworkFilterValue in filter.ArtworkFilterValues)
+                    {
+                        predicate = predicate.And(p => p.ArtworkMetadatas.Any(q => q.KeyID == artworkFilterValue.ArtworkKeyID && q.Value == artworkFilterValue.Value));
+                    }
+                }
+            }
             
             
-            foreach (Artwork work in dc.Artworks)
+            foreach (Artwork work in dc.Artworks.Where(predicate))
             {
                 artworks.Add(createFromArtWork(work));
             }

@@ -800,6 +800,8 @@ namespace VirtualMuseumAPI.Models
 		
 		private int _ArtistID;
 		
+		private System.Nullable<int> _ArtworkID;
+		
 		private string _ModiBy;
 		
 		private System.DateTime _ModiDate;
@@ -820,6 +822,8 @@ namespace VirtualMuseumAPI.Models
     partial void OnIDChanged();
     partial void OnArtistIDChanging(int value);
     partial void OnArtistIDChanged();
+    partial void OnArtworkIDChanging(System.Nullable<int> value);
+    partial void OnArtworkIDChanged();
     partial void OnModiByChanging(string value);
     partial void OnModiByChanged();
     partial void OnModiDateChanging(System.DateTime value);
@@ -875,6 +879,26 @@ namespace VirtualMuseumAPI.Models
 					this._ArtistID = value;
 					this.SendPropertyChanged("ArtistID");
 					this.OnArtistIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ArtworkID", DbType="Int")]
+		public System.Nullable<int> ArtworkID
+		{
+			get
+			{
+				return this._ArtworkID;
+			}
+			set
+			{
+				if ((this._ArtworkID != value))
+				{
+					this.OnArtworkIDChanging(value);
+					this.SendPropertyChanging();
+					this._ArtworkID = value;
+					this.SendPropertyChanged("ArtworkID");
+					this.OnArtworkIDChanged();
 				}
 			}
 		}

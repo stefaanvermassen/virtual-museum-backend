@@ -220,7 +220,7 @@ namespace VirtualMuseumAPI.Helpers
         }
 
        
-        public ArtworkFilter CreateArtWorkFilter(int artistID, IIdentity modiByUser)
+        public ArtworkFilter CreateArtWorkFilter(int artistID, IIdentity modiByUser, int artWorkID = -1)
         {
             ArtworkFilter filter = new ArtworkFilter()
             {
@@ -228,6 +228,10 @@ namespace VirtualMuseumAPI.Helpers
                 ModiBy = modiByUser.GetUserId(),
                 ModiDate = DateTime.Now
             };
+            if (artWorkID != -1)
+            {
+                filter.ArtworkID = artWorkID;
+            }
             dc.ArtworkFilters.InsertOnSubmit(filter);
             dc.SubmitChanges();
             return filter;

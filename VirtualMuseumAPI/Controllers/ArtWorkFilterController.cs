@@ -38,8 +38,10 @@ namespace VirtualMuseumAPI.Controllers
             {
                 ArtWorkFilterModel artworkFilterModel = new ArtWorkFilterModel();
                 artworkFilterModel.ArtistID = filter.ArtistID;
+                artworkFilterModel.ArtWorkID = filter.ArtworkID ?? -1;
                 artworkFilterModel.Pairs = new List<KeyValuePair>();
-                foreach(ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID)){
+                foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
+                {
                     artworkFilterModel.Pairs.Add(new KeyValuePair() { Name = filtervalue.ArtworkKey.name, Value = filtervalue.Value });
                 }
                 filters.Add(artworkFilterModel);
@@ -55,13 +57,16 @@ namespace VirtualMuseumAPI.Controllers
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
-            if (!dc.ArtworkFilters.Any(a => a.ID == id)){
+            if (!dc.ArtworkFilters.Any(a => a.ID == id))
+            {
                 return NotFound();
             }
             ArtworkFilter filter = dc.ArtworkFilters.First(a => a.ID == id);
             ArtWorkFilterModel artworkFilterModel = new ArtWorkFilterModel();
             artworkFilterModel.ArtistID = filter.ArtistID;
+            artworkFilterModel.ArtWorkID = filter.ArtworkID ?? -1;
             artworkFilterModel.Pairs = new List<KeyValuePair>();
+
             foreach (ArtworkFilterValue filtervalue in dc.ArtworkFilterValues.Where(f => f.ArtworkFilterID == filter.ID))
             {
                 artworkFilterModel.Pairs.Add(new KeyValuePair() { Name = filtervalue.ArtworkKey.name, Value = filtervalue.Value });
@@ -79,25 +84,25 @@ namespace VirtualMuseumAPI.Controllers
             List<ArtworkFilter> filters = new List<ArtworkFilter>();
             if ((!String.IsNullOrEmpty(pair.Name)) && String.IsNullOrEmpty(pair.Value))
             {
-                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFilterValues.Any(b=> b.ArtworkKey.name.ToLower() == pair.Name.Trim().ToLower())))
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFilterValues.Any(b => b.ArtworkKey.name.ToLower() == pair.Name.Trim().ToLower())))
                 {
                     filters.Add(filter);
                 }
-       
+
             }
             else if ((!String.IsNullOrEmpty(pair.Value)) && String.IsNullOrEmpty(pair.Name))
             {
-                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFilterValues.Any(b=> b.Value.ToLower() == pair.Value.Trim().ToLower())))
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFilterValues.Any(b => b.Value.ToLower() == pair.Value.Trim().ToLower())))
                 {
                     filters.Add(filter);
                 }
             }
             else if ((!String.IsNullOrEmpty(pair.Value)) && (!String.IsNullOrEmpty(pair.Name)))
             {
-                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFilterValues.Any(b=> b.Value.ToLower() == pair.Value.Trim().ToLower() && b.ArtworkKey.name.ToLower() == pair.Name.Trim().ToLower())))
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtworkFilterValues.Any(b => b.Value.ToLower() == pair.Value.Trim().ToLower() && b.ArtworkKey.name.ToLower() == pair.Name.Trim().ToLower())))
                 {
                     filters.Add(filter);
-                } 
+                }
             }
             List<ArtWorkFilterModel> results = new List<ArtWorkFilterModel>();
             foreach (ArtworkFilter filter in filters)
@@ -111,7 +116,7 @@ namespace VirtualMuseumAPI.Controllers
                 results.Add(artWorkFilterModel);
 
             }
-         
+
             return new ArtWorkFilterResults() { ArtWorkFilters = results };
         }
 
@@ -126,31 +131,46 @@ namespace VirtualMuseumAPI.Controllers
 
             bool exists = false;
             int foundFilterID = -1;
-            foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtistID == filterModel.ArtistID))
+            if (filterModel.ArtWorkID == -1 || filterModel.ArtWorkID == null)
             {
-                bool suitable = true;
-                int suitablefilter = filter.ID;
-                if (filterModel.Pairs.Count == filter.ArtworkFilterValues.Count)
+                if(filterModel.Pairs == null){
+                    return BadRequest();
+                }
+                foreach (ArtworkFilter filter in dc.ArtworkFilters.Where(a => a.ArtistID == filterModel.ArtistID))
                 {
-                    foreach (ArtworkFilterValue value in filter.ArtworkFilterValues)
+                    bool suitable = true;
+                    int suitablefilter = filter.ID;
+                    if (filterModel.Pairs.Count == filter.ArtworkFilterValues.Count)
                     {
-                        if (!filterModel.Pairs.Any(a => a.Name == value.ArtworkKey.name && a.Value == value.Value))
+                        foreach (ArtworkFilterValue value in filter.ArtworkFilterValues)
                         {
-                            suitable = false;
+                            if (!filterModel.Pairs.Any(a => a.Name == value.ArtworkKey.name && a.Value == value.Value))
+                            {
+                                suitable = false;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    suitable = false;
-                }
+                    else
+                    {
+                        suitable = false;
+                    }
 
-                if (suitable)
+                    if (suitable)
+                    {
+                        exists = true;
+                        foundFilterID = suitablefilter;
+                    }
+                }
+            }
+            else
+            {
+                if (dc.ArtworkFilters.Any(f => f.ArtworkID == filterModel.ArtWorkID))
                 {
                     exists = true;
-                    foundFilterID = suitablefilter;
-                }                
+                    foundFilterID = dc.ArtworkFilters.First(f => f.ArtworkID == filterModel.ArtWorkID).ID;
+                }
             }
+
 
             if (exists)
             {
@@ -159,24 +179,29 @@ namespace VirtualMuseumAPI.Controllers
             }
             else
             {
-                ArtworkFilter newFilter = factory.CreateArtWorkFilter(filterModel.ArtistID, User.Identity);
-                foreach (KeyValuePair keyPair in filterModel.Pairs)
+
+                ArtworkFilter newFilter = factory.CreateArtWorkFilter(filterModel.ArtistID, User.Identity, filterModel.ArtWorkID);
+                if (filterModel.Pairs != null)
                 {
-                    //If key does not exist, make a new
-                    ArtworkKey key = null;
-                    if (!dc.ArtworkKeys.Any(a => a.name.ToLower() == keyPair.Name.Trim().ToLower()))
+                    foreach (KeyValuePair keyPair in filterModel.Pairs)
                     {
-                        key = factory.CreateArtworkKey(keyPair.Name.ToLower().Trim());
+                        //If key does not exist, make a new
+                        ArtworkKey key = null;
+                        if (!dc.ArtworkKeys.Any(a => a.name.ToLower() == keyPair.Name.Trim().ToLower()))
+                        {
+                            key = factory.CreateArtworkKey(keyPair.Name.ToLower().Trim());
+                        }
+                        else
+                        {
+                            key = dc.ArtworkKeys.First(a => a.name.ToLower() == keyPair.Name.Trim().ToLower());
+                        }
+                        factory.CreateArtWorkFilterValue(newFilter.ID, key.ID, keyPair.Value);
                     }
-                    else
-                    {
-                        key = dc.ArtworkKeys.First(a => a.name.ToLower() == keyPair.Name.Trim().ToLower());
-                    }
-                    factory.CreateArtWorkFilterValue(newFilter.ID, key.ID, keyPair.Value);
                 }
+                
                 factory.AssignArtWorkFilterToUser(newFilter.ID, User.Identity);
                 return Get(newFilter.ID);
-            } 
+            }
         }
 
         /// <summary>
@@ -187,14 +212,17 @@ namespace VirtualMuseumAPI.Controllers
         public IHttpActionResult Delete(int id)
         {
             String userId = User.Identity.GetUserId();
-            if(!dc.ArtworkFilters.Any(a=> a.ID == id))
+            if (!dc.ArtworkFilters.Any(a => a.ID == id))
             {
                 return NotFound();
             }
-            if (dc.ArtworkFiltersXUsers.Any(a => a.UID == userId && a.ArtworkFilterID == id)){
+            if (dc.ArtworkFiltersXUsers.Any(a => a.UID == userId && a.ArtworkFilterID == id))
+            {
                 dc.ArtworkFiltersXUsers.DeleteOnSubmit(dc.ArtworkFiltersXUsers.First(a => a.UID == userId && a.ArtworkFilterID == id));
                 dc.SubmitChanges();
-            }else{
+            }
+            else
+            {
                 return NotFound();
             }
 
