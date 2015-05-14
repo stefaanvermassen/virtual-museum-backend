@@ -7,6 +7,14 @@ namespace VirtualMuseumAPI.Helpers
 {
     public class CreditActionType
     {
-        public enum Actions { ENTERMUSEUM, BUILDEDMUSEUM };
+        public enum Actions
+        {
+            ENTERMUSEUM, 
+            BUILDEDMUSEUM, 
+            ADDEDARTWORK, 
+            SCANNEDARTWORK, 
+            SHAREDLINK,
+            EDITEDMUSEUM
+        };
     }
 }
