@@ -82,10 +82,10 @@ namespace VirtualMuseumAPI.Tests
             var testfilters = new List<ArtWorkFilterModel>();
             var pairs = new List<KeyValuePair>();
             pairs.Add((new KeyValuePair() { Name = "testkey1", Value = "testvalue1" }));
-            testfilters.Add(new ArtWorkFilterModel() { ArtistID = 1, Pairs = pairs }); 
+            testfilters.Add(new ArtWorkFilterModel() { ArtWorkID=-1, ArtistID = 1, Pairs = pairs }); 
             var pairs2 = new List<KeyValuePair>();
             pairs2.Add((new KeyValuePair() { Name = "testkey1", Value = "testvalue2" }));
-            testfilters.Add(new ArtWorkFilterModel() { ArtistID = 1, Pairs = pairs2 }); 
+            testfilters.Add(new ArtWorkFilterModel() { ArtWorkID=-1, ArtistID = 1, Pairs = pairs2 }); 
             return testfilters;
         }
 
